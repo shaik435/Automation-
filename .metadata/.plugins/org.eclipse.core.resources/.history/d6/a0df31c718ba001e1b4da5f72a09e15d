@@ -1,0 +1,127 @@
+ @eayTimePro_9.0.8
+ Feature: easyTimePro_9.0.8
+ 
+#Author: Ashwini H S
+
+  Background: Navigate to easyTimePro login page
+	Given Enter easyTimePro URl in browser
+  Then Login Page should display
+  Then Below mentioned components should display in login page
+  #Username textfield,Password textfield,login button,ZkTecoLogo,easyTimeProLogo,adminTab,employeeTab
+
+@ETP_TC_01 @Login  @Admin   
+Scenario: Verify user is able to login to application as an admin by entering Default username and password
+Given Enter username and password into username and password text field respectively
+When Click on login button
+#Validations
+Then Easytimelogo should display in top left corner
+Then Personnel, Device, Attendance, Access, System modules should display in top bar
+Then Guide and Userprofile icon should display in top right corner
+
+
+
+#Module: Employee Management(ETP_TC_213 to ETP_TC_314)
+#Author: Dadapeer
+@ETP_TC_213 @Login  @Admin   
+Scenario: Verify Departments in Dropdown List
+Given Enter username and password into username and password text field respectively
+And Click on login button
+And Add multiple departments in department page
+And Navigate to Employee management page
+
+
+@ETP_TC_214 @Login  @Admin   
+Scenario: Verify Positions added in Position page are reflecting in Position* dropdown list
+Given Enter username and password into username and password text field respectively
+And Click on login button
+And Add position in position page
+Then Navigate to Employee management drop down page
+
+@ETP_TC_215 @Login @Admin
+Scenario: Verify Holiday Location page are reflecting in Holiday Location dropdown list
+Given Enter username and password into username and password text field respectively
+And Click on login button
+And Add holiday in holiday page
+Then Naviagte Employee management holiday drop down page
+
+@ETP_TC_216 @Login @Admin
+Scenario: Verify Areas added in Area page are reflecting in Area dropdown list
+Given Enter username and password into username and password text field respectively
+And Click on login button
+And Add Area in Area page
+Then Naviagte Employee management Area drop down page
+
+@ETP_TC_217 @Login @Admin
+Scenario Outline: User adds an employee with specific details
+Given Enter username and password into username and password text field respectively
+And Click on login button
+When Navigate to employee page
+When Click on the add button
+And Enter "<Employee_Data>" in the fields
+And Click on the confirm button
+#Validations 
+Then a success message should be displayed
+Then the created employee should be visible in the employee list
+Examples:
+|Employee_Data|
+|OnlyMandatoryDetails|
+|AllData|
+
+
+@ETP_TC_218 @Login @Admin
+Scenario: Verify error message is displayed or not when user try to add employee without mandatory field.
+Given Enter username and password into username and password text field respectively
+And  Click on login button
+When Naviagte Employee management page 
+And  Click on the confirm button
+Then Error message should display 
+
+@ETP_TC_220 @Login @Admin
+Scenario: Verify user is able to create a employee as Permanent employee
+Given Enter username and password into username and password text field respectively
+And  Click on login button
+When Iam in employee page 
+When Iam clicking on add button
+When Enter Employee_permanent in the fields
+When submits the employee creation form
+Then the employee with the provided details should be created successfully
+
+@ETP_TC_221 @Login @Admin
+Scenario: Verify user is able to create a employee as Permanent employee
+Given Enter username and password into username and password text field respectively
+And  Click on login button
+When Iam in employee page 
+When Iam clicking on add button
+When Enter Employee_temporary in the fields
+When submits the employee creation form
+Then the employee with the provided details should be created successfully
+
+@ETP_TC_222 @Login @Admin
+Scenario: Verify whether user able to Enable Outdoor Mng in Employee page 
+Given Enter username and password into username and password text field respectively
+And  Click on login button
+When the user is on the Employee page
+When the user attempts to enable Outdoor Management
+Then Succesfull message should be display 
+
+@ETP_TC_223 @Login @Admin
+Scenario: Verify user is able to Upload user photo in the application
+Given Enter username and password into username and password text field respectively
+And  Click on login button
+When Click on add button 
+When Enter Employee details 
+When the user attempts to upload a user photo
+Then Succesfull message display 
+
+
+
+
+
+
+
+
+
+
+
+
+

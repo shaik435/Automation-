@@ -1,0 +1,8 @@
+
+Feature: Validation for login page scenerio  
+
+  Scenario: Verify whether user able to login the application 
+    Given Navigate to url 
+    When User enters username and password
+    And Clicks on login button
+    Then Easytimepro logo should be display 

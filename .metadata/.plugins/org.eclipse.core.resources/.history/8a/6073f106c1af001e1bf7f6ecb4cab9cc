@@ -1,0 +1,26 @@
+ @eayTimePro_9.0.8
+ Feature: easyTimePro_9.0.8
+ 
+#Author: Ashwini H S
+
+  Background: Navigate to easyTimePro login page
+	Given Enter easyTimePro URl in browser
+  Then Login Page should display
+  Then Below mentioned components should display in login page
+  #Username textfield,Password textfield,login button,ZkTecoLogo,easyTimeProLogo,adminTab,employeeTab
+
+@ETP_TC_213 @Login  @Admin   
+Scenario: Verify Departments in Dropdown List
+Given Enter username and password into username and password text field respectively
+When Click on login button
+Given the user is on the Department page
+When they add a department with the name "Engineering"
+And they add a department with the name "Sales"
+Then the Department dropdown list should include "Engineering"
+And the Department dropdown list should include "Sales"
+
+
+
+ 
+ 
+

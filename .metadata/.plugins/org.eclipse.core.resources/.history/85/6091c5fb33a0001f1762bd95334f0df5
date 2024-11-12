@@ -1,0 +1,26 @@
+package StepDefinitations;
+
+import io.cucumber.java.en.And;
+import io.cucumber.java.en.Given;
+import io.cucumber.java.en.Then;
+import io.cucumber.java.en.When;
+
+public class LoginDemoSteps {
+	
+    @Given("browser is open")
+    public void browser_is_open() {
+        
+    }
+
+    @And("user is on login page")
+    public void user_is_on_login_page() {
+        
+    }
+
+    @Then("user is navigated to home page")
+    public void user_is_navigated_to_home_page() {
+     
+    }
+
+
+}

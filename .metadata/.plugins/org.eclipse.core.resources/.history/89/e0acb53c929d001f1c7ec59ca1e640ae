@@ -1,0 +1,63 @@
+package StepDefinitations;
+
+import java.time.Duration;
+
+import org.openqa.selenium.By;
+import org.openqa.selenium.Keys;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.chrome.ChromeDriver;
+
+import io.cucumber.java.en.And;
+import io.cucumber.java.en.Given;
+import io.cucumber.java.en.Then;
+import io.cucumber.java.en.When;
+
+
+
+
+
+public class Loginsteps {
+
+	WebDriver driver=null;
+
+	@Given("Navigate to url")
+	public void user_is_on_login_page() {
+
+		String projectpath = System.getProperty("user.dir");
+		System.out.println("project path is:"+"projectpath");
+		System.getProperty("webdriver.chrome.driver",projectpath+"\\src\\test\\resources\\Drivers.exe");	
+		driver = new ChromeDriver();
+		driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(10));
+		driver.manage().window().maximize();
+		driver.navigate().to("http://10.10.21.81/login/");
+
+		//driver.manage().window().maximize();
+
+	}
+
+
+	@When("user enters username and password")
+	public void user_enters_username_and_password(){
+		WebElement usernameInput = driver.findElement(By.xpath("//input[@id='id_username']"));
+	     usernameInput.click();
+	     usernameInput.sendKeys("admin");
+	     WebElement passwordInput = driver.findElement(By.id("admin_password"));
+	     passwordInput.click();
+	     passwordInput.sendKeys("admin");
+
+
+	}
+
+	@And("Clicks on login button")
+	public void clicks_on_login_button() {
+		driver.findElement(By.id("id_login")).sendKeys(Keys.ENTER);
+
+	}
+
+//	@Then("Easytimepro logo should be display")
+//	public void user_is_navigated_to_the_home_page() {
+//
+//	}
+
+}

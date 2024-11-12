@@ -1,0 +1,43 @@
+package StepDefinitations;
+
+import io.cucumber.java.en.Given;
+import io.cucumber.java.en.Then;
+import io.cucumber.java.en.When;
+
+public class GoogleStepsSearch {
+	
+	 @Given("browser is open")
+	    public void browser_is_open() {
+	        // Set the path to the ChromeDriver executable
+	        System.setProperty("webdriver.chrome.driver", "path_to_chromedriver"); // replace with your actual path
+	        driver = new ChromeDriver();
+	        driver.manage().window().maximize();
+	    }
+
+	    @Given("user is on google search page")
+	    public void user_is_on_google_search_page() {
+	        driver.get("https://www.google.com");
+	    }
+
+	    @When("user enters a text in search box")
+	    public void user_enters_a_text_in_search_box() {
+	        WebElement searchBox = driver.findElement(By.name("q"));
+	        searchBox.sendKeys("text to search"); // replace with your actual search term if necessary
+	    }
+
+	    @When("hits enter")
+	    public void hits_enter() {
+	        WebElement searchBox = driver.findElement(By.name("q"));
+	        searchBox.submit(); // submitting the form to simulate pressing Enter
+	    }
+
+	    @Then("user is navigated to search results")
+	    public void user_is_navigated_to_search_results() {
+	        String title = driver.getTitle();
+	        Assert.assertTrue("Title does not contain the search term.", title.contains("text to search"));
+	        
+	        // Close the browser after verification
+	        driver.quit();
+	    }
+
+}

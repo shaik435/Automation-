@@ -1,0 +1,496 @@
+ @eayTimePro_9.0.8
+ Feature: easyTimePro_9.0.8
+ 
+#Author: Ashwini H S 
+#(Assigned task: Login ->  ETP_TC_01 To ETP_TC_39,Organization -> ETP_TC_77 To ETP_TC_212)
+
+  Background: Navigate to easyTimePro login page
+	Given Enter easyTimePro URl in browser
+  Then Login Page should display
+  Then Below mentioned components should display in login page
+  #Username textfield,Password textfield,login button,ZkTecoLogo,easyTimeProLogo,adminTab,employeeTab
+
+@ETP_TC_01 @Admin_Login_01 @Login  @Admin   
+Scenario: Verify user is able to login to application as an admin by entering Default username and password
+Given Enter username and password into username and password text field respectively
+When Click on login button
+#Validations
+Then Easytimelogo should display in top left corner
+Then Personnel, Device, Attendance, Access, System modules should display in top bar
+Then Guide and Userprofile icon should display in top right corner
+
+@ETP_TC_02 @Admin_Login_02 @Login  @Admin
+Scenario: Verify user is not able to login to application as an admin by entering invalid username and password
+Given Enter invalid username and password into username and password text field respectively
+When Click on login button
+#Validations
+Then Error message should display as "Login failed, username or password is wrong."
+
+@ETP_TC_03 @Admin_Login_03 @Login  @Admin
+Scenario: Verify user is not able to login to application as an admin without entering username and password
+When Click on login button
+#Validations
+Then Error message should display as Please fill in this field
+
+@ETP_TC_04_to_14 @Admin_Login_04_to_14 @Login  @Admin
+Scenario Outline: Verify clicking on the below mentioned icons in Operation guide page is redirecting to respective page
+#Add Area, Add Department, Add Position, Add Employee, Add Device, Time Table, Assign Shift, Schedule Shift, Add Leave, Calculate Attendance,Reports
+Given Enter username and password into username and password text field respectively
+When Click on login button
+When Click on Guide link
+When Click on "<icon>" icon
+#Validation
+Then It should redirect to the respective "<page>" page
+Examples:
+|icon|page|
+|Add Area|area|
+|Add Department|department|
+|Add Position|position|
+|Add Employee|employee|
+|Add Device|device|
+|Time Table|time Table|
+|Assign Shift|shift|
+|Schedule Shift|employee Schedule|
+|Add Leave|leave|
+|Calculate Attendance|Calculate|
+|Reports|Reports|
+
+@ETP_TC_15_to_19 @Admin_Login_05_to_19 @Login  @Admin
+Scenario Outline: Clicking on below mentioned modules in homepage is redirecting to respective page
+#Personnel,Device,Attendance,Access,System
+Given Enter username and password into username and password text field respectively
+When Click on login button
+When Click on "<moduleName>" module
+#Validation
+Then It should redirect to the "<page>" module page
+Examples:
+|moduleName|page|
+|Personnel|department|
+|Device|device|
+|Attendance|globalrule|
+|Access|device_acc|
+|System|group|
+
+@ETP_TC_20 @Admin_Login_20 @Login  @Admin
+Scenario: Verify below listed options are displayed  when user click on user profile icon
+#About,Help,Language,Password,Logout
+Given Enter username and password into username and password text field respectively
+When Click on login button
+When Click on user profile
+#Validation
+Then Above mentioned options should display in userprofile list
+
+@ETP_TC_21 @Admin_Login_21 @Login  @Admin
+Scenario: Verify help document is displayed in new tab when user click on help option
+Given Enter username and password into username and password text field respectively
+When Click on login button
+When Click on user profile
+When Click on Help option
+#Validation
+Then Help document should display in new tab
+
+@ETP_TC_22 @Admin_Login_22 @Login  @Admin
+Scenario: Verify user is able to reset password
+Given Enter username and password into username and password text field respectively
+When Click on login button
+When Click on user profile
+When Click on Password option
+When Enter Old Password, New Password and Confirm Password
+When Click on Confirm button
+#Validation
+Then Pop-up should display as "Auto logout after 3 seconds"
+Then Login Page should display after 3 seconds
+
+@ETP_TC_23_to_24 @Admin_Login_23_to_24 @Login  @Admin
+Scenario Outline: Verify user is able to login with updated password and not able to login with old password
+Given Enter username and password into username and "<PasswordType>" text field respectively
+When Click on login button
+#Validations
+Then User should be able to login with new password and should not be able to login with old password "<PasswordType>" 
+Examples:
+|PasswordType|
+|old|
+|new|
+
+@ETP_TC_25 @Admin_Login_25 @Login  @Admin
+Scenario: Verify user is able to set old password as new password
+Given Enter username and new password into username and password text field respectively
+When Click on login button
+When Click on user profile
+When Click on Password option
+When Change old password as new password
+When Click on Confirm button
+#Validation
+Then Pop-up should display as "Auto logout after 3 seconds"
+Then Login Page should display after 3 seconds
+
+@ETP_TC_26 @Admin_Login_26 @Login  @Admin
+Scenario: Verify user is able to logout
+Given Enter username and password into username and password text field respectively
+When Click on login button
+When Click on user profile
+When Click on Logout option
+When Click on Confirm button
+#Validation
+Then Below mentioned components should display in login page
+#Username textfield,Password textfield,login button,ZkTecoLogo,easyTimeProLogo,adminTab,employeeTab
+
+
+@ETP_TC_27 @Emp_Login_01 @Login  @Employee
+Scenario: Verify user is able to login to application as an employee by entering default username and password
+When Click on Employee login tab
+When Enter employee username and default password
+When Click on emp_login button
+#Validation
+Then Easytimelogo should display in top left corner in home page
+Then Attendance module should display in top bar
+Then Userprofile icon should display in top right corner
+
+@ETP_TC_28 @Emp_Login_02 @Login  @Employee
+Scenario: Verify user is able to login to application as an employee by entering username and password set by the admin
+When Login as an admin
+When Change the employee password in employee page
+When Logout as an admin
+When Click on Employee login tab
+When Enter employee username and password set by the admin
+When Click on emp_login button
+#Validation
+Then Easytimelogo should display in top left corner in home page
+Then Attendance module should display in top bar
+Then Userprofile icon should display in top right corner
+
+@ETP_TC_29 @Emp_Login_03 @Login  @Employee
+Scenario: Verify user is not able to login to application as an employee by entering invalid username and password 
+When Click on Employee login tab
+When Enter Invalid username and password in employee tab
+When Click on emp_login button
+#Validation
+Then Error message should display as Login failed, username or password is wrong.in employee tab
+
+@ETP_TC_30 @Emp_Login_04 @Login  @Employee
+Scenario: Verify user is not able to login to application as an employee without entering username and password 
+When Click on Employee login tab
+When Click on emp_login button
+#Validation
+Then Error message should display as Please fill in this field
+
+@ETP_TC_31&32 @Emp_Login_05&06 @Login  @Employee
+Scenario Outline: Verify user is able to login to application as an employee by entering employee email Id as username
+When Click on Employee login tab
+When Enter employee "<username>" and password set by the admin
+When Click on emp_login button
+#Validation
+Then Easytimelogo should display in top left corner in home page
+Then Attendance module should display in top bar
+Then Userprofile icon should display in top right corner
+Examples:
+|username|
+|EmpEmail|
+|EmpPhoneNumber|
+
+@ETP_TC_33 @Emp_Login_07 @Login  @Employee
+Scenario: Verify below listed options are displayed  when user click on user profile icon
+#Help,Language,Password,Logout
+When Click on Employee login tab
+When Enter employee username and password set by the admin
+When Click on emp_login button
+When Click on empProfile Icon
+#Validation
+Then Above mentioned options should display in empProfile Icon
+
+@ETP_TC_34 @Emp_Login_08 @Login  @Employee
+Scenario: Verify help document is displayed in new tab when user click on help option
+When Click on Employee login tab
+When Enter employee username and password set by the admin
+When Click on emp_login button
+When Click on empProfile Icon
+When Click on Help option
+#Validation
+Then Employee Help document should display in new tab
+
+@ETP_TC_35 @Emp_Login_09 @Login  @Employee
+Scenario: Verify user is able reset employee password 
+When Click on Employee login tab
+When Enter employee username and password set by the admin
+When Click on emp_login button
+When Click on empProfile Icon
+When Click on Password option
+When Enter Old Password, new Password and confirm Password of employee
+When Click on Confirm button
+#Validation
+Then Pop-up should display as "Auto logout after 3 seconds"
+Then Login Page should display after 3 seconds
+
+@ETP_TC_36&37 @Emp_Login_10&11 @Login  @Employee
+Scenario Outline: Verify user is able to login with updated password and not able to login with old password
+When Click on Employee login tab
+When Enter employee username and "<password>"
+When Click on emp_login button
+#Validations
+Then User should be able to login with new password and should not be able to login with old "<password>" 
+Examples:
+|password|
+|PWSetByTheAdmin|
+|PWSetByTheEmp|
+
+@ETP_TC_38 @Emp_Login_12 @Login  @Employee
+Scenario: Verify user is able to set old password as new password
+When Click on Employee login tab
+When Enter employee username and password set by the employee
+When Click on emp_login button
+When Click on empProfile Icon
+When Click on Password option
+When Set old password as new password
+When Click on Confirm button
+#Validation
+Then Pop-up should display as "Auto logout after 3 seconds"
+Then Login Page should display after 3 seconds
+
+@ETP_TC_39 @Emp_Login_13 @Login  @Employee
+Scenario: Verify user is able reset employee password 
+When Click on Employee login tab
+When Enter employee username and password set by the admin
+When Click on emp_login button
+When Click on empProfile Icon
+When Click on Logout button
+#Validation
+Then Below mentioned components should display in login page
+#Username textfield,Password textfield,login button,ZkTecoLogo,easyTimeProLogo,adminTab,employeeTab
+
+#Department
+@ETP_TC_77 @Department_01 @Department @Organization
+Scenario Outline: Verify user is able to add department
+Given Login to easyTimePro application
+Given Navigate to department module
+When Click on Add button
+And Enter Department details according to below mentioned "<Case>"
+When Click on Confirm button in Add department page
+#Validation
+Then Success message should display
+Then Added department should display in department list
+Examples:
+|Case|
+|Case1_OnlyMandatoryData|
+#|Case2_BothMandatoryAndOptionalData|
+#|Case3_ToCreatemultipledepartments|
+#|Case3_ToCreatemultipledepartments|
+#|Case3_ToCreatemultipledepartments|
+
+
+@ETP_TC_78 @Department_02 @Department @Organization
+Scenario Outline: Verify error message is displayed or not when user try to add department without mandatory field
+Given Login to easyTimePro application
+Given Navigate to department module
+When Click on Add button
+And Enter only optional Department details "<Case>"
+When Click on Confirm button in Add department page
+#Validation
+Then Error message should display as "Please fill in all required fields."
+Examples:
+|Case|
+|Case1_Without_mandatory_data|
+|Case2_Without_mandatory_and_optional_data|
+
+#Department
+@ETP_TC_79 @Department_03 @Department @Organization
+Scenario: Verify user is able to Cancel adding department
+Given Login to easyTimePro application
+Given Navigate to department module
+When Click on Add button
+And Enter Department details according to below mentioned "<Case>"
+When Click on Cancel button in Add department page
+#Validation
+Then Department should not be added and should not display in department list
+
+#Department
+@ETP_TC_80 @Department_04 @Department @Organization
+Scenario Outline: Verify Department ID is disabled in edit popup
+Given Login to easyTimePro application
+Given Navigate to department module
+When Click on Edit button of department "<Case>"
+#Validation
+Then Department ID should be disabled in Edit button
+Examples:
+|Case|
+|Case1_UsingEditButton|
+|Case2_UsingEditlink|
+
+@ETP_TC_81 @Department_04 @Department @Organization
+Scenario Outline: Verify user is able to edit department
+Given Login to easyTimePro application
+Given Navigate to department module
+When Click on Edit button of department "<Case>"
+When Change the department name
+When Click on Confirm button
+#Validation
+Then Success message should display
+Then Edited department name should display in department list
+Examples:
+|Case|
+|Case1_UsingEditButton|
+|Case2_UsingEditlink|
+
+#-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+#Author: Dadapeer 
+
+
+#-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+#-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+#Author: Avinash 
+
+#-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+#Author: Suryaprasad 
+#Employee Document in Personnel module
+
+@ETP_TC_357 @Personnel_Employee_Document
+Scenario: Verify user is able to add Employee Document
+Given Enter username and password into username and password text field respectively
+When Click on login button
+Then User should be navigate to personnel module and click on personnel module
+And click on Employee document
+And Click on Add button
+And Enter Document No and Document Title in the Document No and Document Title text fields
+And click on Emp confirm button
+Then User should be able to create employee document and successful message should be display
+
+@ETP_TC_358 @Personnel_Employee_Document
+Scenario: Verify user is able to add Employee Document
+Given Enter username and password into username and password text field respectively
+When Click on login button
+Then User should be navigate to personnel module and click on personnel module
+And click on Employee document
+Then User should be able to create multiple employee document and successful message should be display
+
+
+@ETP_TC_359 @Personnel_Employee_Document
+Scenario: Verify user is able to cancel adding Employee Document
+Given Enter username and password into username and password text field respectively
+When Click on login button
+Then User should be navigate to personnel module and click on personnel module
+And click on Employee document
+And Click on Add button
+Then click on cancel button
+ 
+
+@ETP_TC_360 @Personnel_Employee_Document
+Scenario: Verify user is able to edit the Document
+Given Enter username and password into username and password text field respectively
+When Click on login button
+Then User should be navigate to personnel module and click on personnel module
+And click on Employee document
+And Click on Edit button
+Then clear the data from Document No text field
+And Enter Document No in Document No text field
+And click on Emp confirm button
+Then User should be able to  employee document and successful message should be display
+
+ 
+#@ETP_TC_361 @Personnel_Employee_Document
+#Scenario: Verify user is able to delete the Document
+#Given Enter username and password into username and password text field respectively
+#When Click on login button
+#Then User should be navigate to personnel module and click on personnel module
+#And click on Employee document
+#And select empdoc check box
+#Then click on empdoc delete button
+#And click on empd confirm button
+#Then User should be able to Delete employee document and successful message should be display
+#Then click on individual delete button
+#And click on indconfirm button
+#Then User should be able to Delete employee document and successful message should be display
+#Then Select multiple check boxs
+#And click on empdoc delete button
+#And click on mulempd confirm button
+#Then User should be able to Delete employee document and successful message should be display
+
+#----------------------------------------------------------------------------------------------------------------------------
+
+@ETP_TC_217 @Login @Admin
+Scenario Outline: User adds an employee with specific details
+Given Enter username and password into username and password text field respectively
+And Click on login button
+When Navigate to employee page
+When Click on the add button
+And Enter "<Employee_Data>" in the fields
+And Click on the confirm button
+#Validations 
+Then a success message should be displayed
+Then the created employee should be visible in the employee list
+Examples:
+|Employee_Data|
+|OnlyMandatoryDetails|
+|AllData|
+
+
+@ETP_TC_218 @Login @Admin
+Scenario: Verify error message is displayed or not when user try to add employee without mandatory field.
+Given Enter username and password into username and password text field respectively
+And  Click on login button
+When Naviagte Employee management page 
+And  Click on the confirm button
+Then Error message should display 
+
+@ETP_TC_220 @Login @Admin
+Scenario: Verify user is able to create a employee as Permanent employee
+Given Enter username and password into username and password text field respectively
+And  Click on login button
+When Iam in employee page 
+When Iam clicking on add button
+When Enter Employee_permanent in the fields
+When submits the employee creation form
+Then the employee with the provided details should be created successfully
+
+@ETP_TC_221 @Login @Admin
+Scenario: Verify user is able to create a employee as Permanent employee
+Given Enter username and password into username and password text field respectively
+And  Click on login button
+When Iam in employee page 
+When Iam clicking on add button
+When Enter Employee_temporary in the fields
+When submits the employee creation form
+Then the employee with the provided details should be created successfully
+
+@ETP_TC_222 @Login @Admin
+Scenario: Verify whether user able to Enable Outdoor Mng in Employee page 
+Given Enter username and password into username and password text field respectively
+And  Click on login button
+When the user is on the Employee page
+When the user attempts to enable Outdoor Management
+Then Succesfull message should be display 
+
+@ETP_TC_223 @Login @Admin
+Scenario: Verify user is able to Upload user photo in the application
+Given Enter username and password into username and password text field respectively
+And  Click on login button
+When Enter Employee details 
+When the user attempts to upload a user photo
+Then Succesfull message display 
+
+@ETP_TC_224 @Login @Admin
+Scenario: Verify Error message is displayed or not when user tries to upload photo with unsupported format
+Given Enter username and password into username and password text field respectively
+And  Click on login button
+When Iam creating the employee 
+When Iam trying to upload pdf photo
+#Then Error message display 
+
+@ETP_TC_225 @Login @Admin
+Scenario: Verify Admin is able to set Device Password
+Given Enter username and password into username and password text field respectively
+And  Click on login button
+When Iam creating the employee in employee page 
+When admin navigates to the device settings
+And  admin sets a new password for the device
+Then device password should be updated successfully
+
+@ETP_TC_226 @Login @Admin
+Scenario: Verify user is able to Set employee password
+Given Enter username and password into username and password text field respectively
+And  Click on login button
+When Adding the Employee in Employee login page 
+When admin navigates to the Attendance settings
+And  user clears the old password for the employee and add new password
+Then Employee password should be updated successfully

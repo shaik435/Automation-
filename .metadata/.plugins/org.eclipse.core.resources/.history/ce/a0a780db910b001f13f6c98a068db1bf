@@ -1,0 +1,19 @@
+package day2;
+
+public class VariablesDemo {
+
+	public static void main(String[] args) {
+		float iteam_price =4.5F;
+		float iteam_pricea =4.5F;
+		System.out.println(iteam_price);
+		
+				
+	        
+
+	    
+	
+	
+
+	}
+
+}

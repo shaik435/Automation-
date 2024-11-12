@@ -1,0 +1,620 @@
+package stepDefinition;
+
+import static org.junit.Assert.assertEquals;
+
+import java.awt.AWTException;
+import java.awt.Robot;
+import java.awt.Toolkit;
+import java.awt.datatransfer.StringSelection;
+import java.awt.event.KeyEvent;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.time.Duration;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.NoSuchElementException;
+import java.util.Properties;
+import java.util.concurrent.TimeUnit;
+
+import org.apache.commons.lang3.RandomStringUtils;
+import org.junit.Assert;
+import org.openqa.selenium.By;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.interactions.Actions;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.FluentWait;
+import org.openqa.selenium.support.ui.WebDriverWait;
+
+import com.aventstack.extentreports.cucumber.adapter.ExtentCucumberAdapter;
+
+import io.cucumber.datatable.DataTable;
+import io.cucumber.java.After;
+import io.cucumber.java.Before;
+import io.cucumber.java.Scenario;
+import io.cucumber.java.en.And;
+import io.cucumber.java.en.Given;
+import io.cucumber.java.en.Then;
+import io.cucumber.java.en.When;
+import pageObjects.loginObject;
+import pageObjects.personnelObject;
+import utils.Base;
+
+@SuppressWarnings("unused")
+public class easyTimePro extends Base {
+	public WebDriver driver;
+	private Properties properties;
+	public WebDriverWait wait;
+
+	//Page Objects
+	private loginObject login;
+	private String Department_Name_Text;
+	private personnelObject personnel;
+
+	//
+	String EmployeeId1="";
+	String EmployeeId2="";
+
+
+
+	@Before("@eayTimePro_9.0.8")
+	public void setup() throws IOException, InterruptedException, AWTException {
+		FileInputStream fis1 = new FileInputStream(
+				System.getProperty("user.dir") + "/src/main/resources/data.properties");
+		properties = new Properties();
+		properties.load(fis1);
+		//driver.manage().timeouts().implicitlyWait(java.time.Duration.ofSeconds(5));
+		//driver = initializeDriver("chrome", "x64", "windows");
+		driver = initializeDriver("Edge", "x64", "windows");
+		driver.manage().window().maximize();
+		ExtentCucumberAdapter.addTestStepLog("Driver Initialized");
+
+
+		//Wait 
+		wait = new WebDriverWait(driver, Duration.ofSeconds(10L));
+
+
+		//PageObjects
+		login = new loginObject(driver);
+		personnel = new personnelObject(driver);
+	}
+
+
+	@After("@eayTimePro_9.0.8")
+	public void teardown(Scenario scenario) throws IOException {
+		if (scenario.isFailed()) {
+			scenario.attach(getByteScreenshot(driver), "image/png", "screenshot name");
+		}
+		//		driver.quit();
+	}
+
+
+	// Background
+
+	@Given("^Enter easyTimePro URl in browser$")
+	public void enter_easyTimePro_URl_in_browser() throws InterruptedException {
+		driver.get(properties.getProperty("URL"));
+
+		WebElement loginPage = driver.findElement(login.getLoginPage());
+		wait.until(ExpectedConditions.visibilityOf(loginPage));
+	}
+
+	@Then("^Login Page should display$")
+	public void login_Page_should_display() {
+		String ExpectedURL=properties.getProperty("ExpectedURL");
+		String ActualURL=driver.getCurrentUrl();
+		Assert.assertEquals(ExpectedURL, ActualURL);
+	}
+
+	@Then("Below mentioned components should display in login page")
+	public void below_mentioned_components_should_display_in_login_page() {
+		Assert.assertTrue(driver.findElement(login.getusername()).isDisplayed());
+		Assert.assertTrue(driver.findElement(login.getpassword()).isDisplayed());
+		Assert.assertTrue(driver.findElement(login.getloginButton()).isDisplayed());
+		Assert.assertTrue(driver.findElement(login.getZkTecoLogo()).isDisplayed());
+		Assert.assertTrue(driver.findElement(login.geteasyTimeProLogo()).isDisplayed());
+		Assert.assertTrue(driver.findElement(login.getadminTab()).isDisplayed());
+		Assert.assertTrue(driver.findElement(login.getemployeeTab()).isDisplayed());
+	}
+
+	//ETP_TC_01
+	@When("Enter username and password into username and password text field respectively")
+	public void enter_username_and_password_into_username_and_password_text_field_respectively() {
+		driver.findElement(login.getusername()).sendKeys(properties.getProperty("AdminUsername"));
+		driver.findElement(login.getpassword()).sendKeys(properties.getProperty("AdminPassword"));
+	}
+
+	@When("Click on login button")
+	public void click_on_login_button() throws Exception {
+		driver.findElement(login.getloginButton()).click();    	
+		windowMinimize(4);
+	}
+
+	@Then("Easytimelogo should display in top left corner")
+	public void easytimelogo_should_display_in_top_left_corner() {
+		Assert.assertTrue(driver.findElement(login.getetpLogoWithDashboardLink()).isDisplayed());
+	}
+
+	@Then("Personnel, Device, Attendance, Access, System modules should display in top bar")
+	public void personnel_device_attendance_access_system_modules_should_display_in_top_bar() {
+		Assert.assertTrue(driver.findElement(login.getPersonnelModule()).isDisplayed());
+		Assert.assertTrue(driver.findElement(login.getDeviceModule()).isDisplayed());
+		Assert.assertTrue(driver.findElement(login.getAttendanceModule()).isDisplayed());
+		Assert.assertTrue(driver.findElement(login.getAccessModule()).isDisplayed());
+		Assert.assertTrue(driver.findElement(login.getSystemModule()).isDisplayed());
+	}
+
+	@Then("Guide and Userprofile icon should display in top right corner")
+	public void guide_and_userprofile_icon_should_display_in_top_right_corner() {
+		Assert.assertTrue(driver.findElement(login.getGuidelink()).isDisplayed());
+		Assert.assertTrue(driver.findElement(login.getUserprofile()).isDisplayed());
+	} 
+
+
+	//ETP_TC_213
+	@And("Add multiple departments in department page")
+	public void add_multiple_departments_in_department_page() throws InterruptedException {
+		driver.findElement(login.getPersonnel()).click();
+		driver.findElement(personnel.getDepartmentsection()).click();
+		driver.findElement(personnel.Deptadd()).click();
+		WebElement deptname  = driver.findElement(personnel.Deptname());
+		deptname.click();
+		deptname.sendKeys(properties.getProperty("Department"));
+		driver.findElement(login.getConfirmbutton()).click();		    
+	}
+
+	@When("Navigate to Employee management page")
+	public void navigate_to_employee_management_page() throws InterruptedException {
+		driver.findElement(personnel.getPersonnelEmployee()).click();
+		driver.findElement(personnel.getEmployee()).click();
+		driver.findElement(personnel.getaddEmployee()).click();
+		driver.findElement(personnel.Deptdropdown()).click();
+		String Expected ="testing";
+		String Actual= driver.findElement(personnel.Deptcrtdown()).getText();
+		Assert.assertEquals(Expected, Actual);
+
+	}	    
+
+	//ETP_TC_214
+	@And ("Add position in position page")
+	public void Add_position_in_position_page() throws InterruptedException { 
+		driver.findElement(login.getPersonnel()).click();
+		driver.findElement(login.getPersonnelposition()).click();
+		driver.findElement(login.getAddbutton()).click();
+		WebElement add= driver.findElement(login.getAddposition());
+		add.click();
+		add.sendKeys("tester");
+		driver.findElement(login.getConfirmbutton()).click();		    
+	}
+
+	@Then ("Navigate to Employee management drop down page") 		    
+	public void Navigate_to_in_Employee_Management_drop_page() throws InterruptedException { 
+		driver.findElement(personnel.getPersonnelEmployee()).click();
+		driver.findElement(personnel.getEmployee()).click();
+		driver.findElement(personnel.getaddEmployee()).click();
+		driver.findElement(personnel.getPersonnelemployeedropdown()).click();
+		String Expected="tester";
+		String Actual=driver.findElement(personnel.getPersonnelemployeecreatedposition()).getText();
+		Assert.assertEquals(Expected, Actual);
+	}
+
+
+	//ETP_TC_215
+	@And("Add holiday in holiday page")
+	public void Add_holiday_in_holiday_page() throws InterruptedException {
+		driver.findElement(login.getPersonnel()).click();
+		WebDriverWait wait=new WebDriverWait(driver,Duration.ofSeconds(10));
+		//driver.findElement(personnel.getPersonnelorganisation()).click();        
+		driver.findElement(personnel.getHolidaylocation()).click();
+		driver.findElement(personnel.getPersonnelholidayaddbutton()).click();
+		WebElement clickElement = driver.findElement(personnel.getPersonnelholidayname());
+		clickElement.click();
+		clickElement.sendKeys(properties.getProperty("HolidayLocation"));
+		WebElement clickconfirmbutton = driver.findElement(personnel.getPersonnelholidayconfirmbutton());
+		clickconfirmbutton.click();                      
+	}
+
+	@Then("Naviagte Employee management holiday drop down page")
+	public void Naviagte_Employee_management_holiday_drop_down_page() {
+		driver.findElement(personnel.getPersonnelEmployee()).click();
+		driver.findElement(personnel.getEmployee()).click();
+		driver.findElement(personnel.getaddEmployee()).click();
+		driver.findElement(personnel.getPersonnelholidaydropdown()).click();
+		String Expected="bangalore";
+		String Actual=driver.findElement(personnel.getPersonnelholidaydrop()).getText();
+		Assert.assertEquals(Expected, Actual);
+	}
+	//@ETP_TC_216
+	@And("Add Area in Area page")
+	public void Add_Area_in_Area_page() {
+		driver.findElement(login.getPersonnel()).click();
+		//driver.findElement(personnel.getPersonnelorganisation()).click();
+		driver.findElement(personnel.getPersonnelArea()).click();
+		driver.findElement(personnel.getPersonnelAreaAddbutton()).click();
+		WebElement clickElement = driver.findElement(personnel.getPersonnelareaname());
+		clickElement.click();
+		clickElement.sendKeys(properties.getProperty("AreaName"));
+		WebElement clickconfirmbutton = driver.findElement(personnel.getPersonnelholidayconfirmbutton());
+		clickconfirmbutton.click();
+
+	}
+	@Then("Naviagte Employee management Area drop down page")
+	public void Naviagte_Employee_management_Area_drop_down_page() {
+		driver.findElement(personnel.getPersonnelEmployee()).click();
+		driver.findElement(personnel.getEmployee()).click();
+		driver.findElement(personnel.getaddEmployee()).click();
+		driver.findElement(personnel.getPersonnelareadropdown()).click();
+		String Expected ="hyderbad";
+		String Actual= driver.findElement(personnel.getPersonneldropdown()).getText();
+		Assert.assertEquals(Expected, Actual);
+
+	}
+
+	//ETP_TC_217
+
+	@When("Navigate to employee page")
+	public void navigate_to_employee_page() {
+		driver.findElement(personnel.getPersonnelmanagement()).click();
+		driver.findElement(personnel.getEmployee()).click();
+	}
+	@When("Click on the add button")
+	public void click_on_the_add_button() {
+		driver.findElement(personnel.getaddEmployee()).click();	
+	}
+	@When("Enter {string} in the fields")
+	public void enter_in_the_fields(String empData) {           	
+		if(empData.equalsIgnoreCase("OnlyMandatoryDetails")) {
+
+			String EmployeeId1 = RandomStringUtils.randomAlphabetic(5);
+			String FirstName1 = RandomStringUtils.randomAlphabetic(5);
+			//String LastName1 = RandomStringUtils.randomAlphabetic(5);
+
+			driver.findElement(personnel.getEmployeeid()).sendKeys(EmployeeId1);
+			driver.findElement(personnel.getEmployeefirstname()).sendKeys(FirstName1); 
+
+			//Selecting department
+			driver.findElement(personnel.getdepartmentDD()).click();
+			driver.findElement(personnel.getDepartmentdown()).click();
+
+			//Selecting position
+			driver.findElement(personnel.getpositionDD()).click();
+			driver.findElement(personnel.getpositiondown()).click();
+
+			//Selecting Area
+			driver.findElement(personnel.getareaDD()).click();
+			driver.findElement(personnel.getareadown()).click();
+		}
+
+
+
+
+
+		else if(empData.equalsIgnoreCase("AllData")) {
+			String EmployeeId2 = RandomStringUtils.randomAlphabetic(5);
+			String FirstName2 = RandomStringUtils.randomAlphabetic(5);
+			String LastName2 = RandomStringUtils.randomAlphabetic(5);
+
+
+			driver.findElement(personnel.getEmployeeid()).sendKeys(EmployeeId2);
+			driver.findElement(personnel.getEmployeefirstname()).sendKeys(FirstName2);
+
+			//Selecting department
+			driver.findElement(personnel.getdepartmentDD()).click();
+			driver.findElement(personnel.getDepartmentdown()).click();
+			driver.findElement(personnel.getemployeelastname()).sendKeys(LastName2);
+
+			//Selecting position
+			driver.findElement(personnel.getpositionDD()).click();
+			driver.findElement(personnel.getpositiondown()).click();
+
+			//Selecting Area
+			driver.findElement(personnel.getareaDD()).click();
+			driver.findElement(personnel.getareadown()).click();
+
+			//Selecting EmployeeType
+			driver.findElement(personnel.getEmploymentType()).click();
+			driver.findElement(personnel.getEmployeeTypedropdown()).click(); 
+
+			//Selecting holiday location
+			driver.findElement(personnel.getHolidaylocationexisted()).click();
+			driver.findElement(personnel.getHolidaydrop()).click();
+
+			//Selecting OutdoorMng
+			driver.findElement(personnel.getOutdoormng()).click();
+			driver.findElement(personnel.getOutdoormngdropdown()).click();
+
+		}  
+	}
+
+	@When("Click on the confirm button")
+	public void click_on_the_confirm_button() {
+		driver.findElement(personnel.getConfirmbutton()).click();
+
+
+	}
+
+	@Then("a success message should be displayed")
+	public void validateSuccessMessage() {
+		// Implementation for validating the success message
+		WebElement successMessage = driver.findElement(personnel.getSuccesfullmessage());
+		WebDriverWait wait=new WebDriverWait(driver,Duration.ofSeconds(20));
+		Assert.assertTrue(successMessage.isDisplayed());
+	}
+
+	@Then("the created employee should be visible in the employee list")
+	public void validateEmployeeVisibility(DataTable employeeData) {
+		WebElement ele1=driver.findElement(By.xpath("//div[text()='"+EmployeeId1+"']"));
+		wait.until(ExpectedConditions.visibilityOf(ele1));
+		Assert.assertTrue(ele1.isDisplayed());
+
+		WebElement ele2=driver.findElement(By.xpath("//div[text()='"+EmployeeId2+"']"));
+		wait.until(ExpectedConditions.visibilityOf(ele2));
+		Assert.assertTrue(ele2.isDisplayed());
+
+	} 
+
+
+	//@ETP_TC_218 @Login @Admin
+
+	@When("Naviagte Employee management page")
+	public void naviagte_employee_management_page() {
+		driver.findElement(login.getPersonnel()).click();
+		driver.findElement(personnel.getPersonnelEmployee()).click();
+		driver.findElement(personnel.getEmployee()).click();
+		driver.findElement(personnel.getaddEmployee()).click();
+	}
+	@Then("Error message should display")
+	public void error_message_should_display() {
+		//driver.findElement(personnel.getConfirmbutton()).click();               
+		WebElement errorMessagelocator = driver.findElement(personnel.getErrormessage());
+		WebDriverWait wait=new WebDriverWait(driver,Duration.ofSeconds(20));
+		Assert.assertTrue(errorMessagelocator.isDisplayed());
+
+	}
+
+	//@ETP_TC_220 @Login @Admin
+	@When("Iam in employee page")
+	public void iam_in_employee_page() {
+		driver.findElement(login.getPersonnel()).click();
+		driver.findElement(personnel.getPersonnelEmployee()).click();
+		driver.findElement(personnel.getEmployee()).click();
+	}
+	@When("Iam clicking on add button")
+	public void iam_clicking_on_add_button() {
+		driver.findElement(personnel.getaddEmployee()).click();	
+
+	}
+	@When("Enter Employee_permanent in the fields")
+	public void enter_employee_permanent_in_the_fields() {
+		driver.findElement(personnel.getEmployeeid()).sendKeys(properties.getProperty("Employeeid"));
+		driver.findElement(personnel.getEmployeefirstname()).sendKeys(properties.getProperty("FirstName")); 
+		driver.findElement(personnel.getDepartment()).click();
+		driver.findElement(personnel.getDepartmentdown()).click();
+		driver.findElement(personnel.getPosition()).click();
+		driver.findElement(personnel.getPostiondropdown()).click();
+		driver.findElement(personnel.getArea()).click();
+		WebDriverWait wait=new WebDriverWait(driver,Duration.ofSeconds(20));
+		driver.findElement(personnel.getAreadropdown()).click();
+		driver.findElement(personnel.getEmploymentType()).click();
+		driver.findElement(personnel.getEmployeeTypedropdown()).click(); 
+
+	}
+	@When("submits the employee creation form")
+	public void submits_the_employee_creation_form() {
+		driver.findElement(personnel.getConfirmbutton()).click();
+	}
+	@Then("the employee with the provided details should be created successfully")
+	public void the_employee_with_the_provided_details_should_be_created_successfully() {
+		WebElement successMessage = driver.findElement(personnel.getSuccesfullmessage());
+		WebDriverWait wait=new WebDriverWait(driver,Duration.ofSeconds(20));
+		Assert.assertTrue(successMessage.isDisplayed());
+	}
+
+	//@ETP_TC_221 @Login @Admin
+	@When("Enter Employee_temporary in the fields")
+	public void enter_employee_temporary_in_the_fields() {
+		driver.findElement(personnel.getEmployeeid()).sendKeys(properties.getProperty("OutdoorEmployeeid"));
+		driver.findElement(personnel.getEmployeefirstname()).sendKeys(properties.getProperty("FirstName")); 
+		driver.findElement(personnel.getDepartment()).click();
+		driver.findElement(personnel.getDepartmentdown()).click();
+		driver.findElement(personnel.getPosition()).click();
+		driver.findElement(personnel.getPostiondropdown()).click();
+		driver.findElement(personnel.getArea()).click();
+		WebDriverWait wait=new WebDriverWait(driver,Duration.ofSeconds(20));
+		driver.findElement(personnel.getAreadropdown()).click();
+		driver.findElement(personnel.getEmploymentType()).click();
+		driver.findElement(personnel.getTemporaryEmployee()).click(); 
+
+	}
+	//@ETP_TC_222 @Login @Admin
+	@Given("the user is on the Employee page")
+	public void userIsOnEmployeePage() {
+		driver.findElement(login.getPersonnel()).click();
+		driver.findElement(personnel.getPersonnelEmployee()).click();
+		driver.findElement(personnel.getEmployee()).click();
+		driver.findElement(personnel.getaddEmployee()).click();
+
+	}
+	@When("the user attempts to enable Outdoor Management")
+	public void userAttemptsToEnableOutdoorManagement() {
+		driver.findElement(personnel.getEmployeeid()).sendKeys(properties.getProperty("OutdoorMng"));
+		driver.findElement(personnel.getEmployeefirstname()).sendKeys(properties.getProperty("FirstName")); 
+		driver.findElement(personnel.getDepartment()).click();
+		driver.findElement(personnel.getDepartmentdown()).click();
+		driver.findElement(personnel.getPosition()).click();
+		driver.findElement(personnel.getPostiondropdown()).click();
+		driver.findElement(personnel.getArea()).click();
+		WebDriverWait wait=new WebDriverWait(driver,Duration.ofSeconds(20));
+		driver.findElement(personnel.getAreadropdown()).click();
+		driver.findElement(personnel.getOutdoormng()).click();
+		driver.findElement(personnel.getOutdoormngdropdown()).click();
+		driver.findElement(personnel.getConfirmbutton()).click();
+	}
+
+
+	@Then("Succesfull message should be display")
+	public void  Succesfull_message_should_be_display () {
+		WebElement successMessage = driver.findElement(personnel.getSuccesfullmessage());
+		WebDriverWait wait=new WebDriverWait(driver,Duration.ofSeconds(20));
+		Assert.assertTrue(successMessage.isDisplayed());
+	}
+
+	//ETP_TC_223 @Login @Admin
+	@When("Enter Employee details")
+	public void EnterEmployeedetails() throws InterruptedException{
+		driver.findElement(login.getPersonnel()).click();
+		driver.findElement(personnel.getPersonnelEmployee()).click();
+		driver.findElement(personnel.getEmployee()).click();
+		driver.findElement(personnel.getaddEmployee()).click();
+		driver.findElement(personnel.getEmployeeid()).sendKeys(properties.getProperty("EmployeeProfile"));
+		driver.findElement(personnel.getEmployeefirstname()).sendKeys(properties.getProperty("FirstName")); 
+		driver.findElement(personnel.getDepartment()).click();
+		driver.findElement(personnel.getDepartmentdown()).click();
+		driver.findElement(personnel.getPosition()).click();
+		driver.findElement(personnel.getPostiondropdown()).click();
+		driver.findElement(personnel.getArea()).click();
+		WebDriverWait wait=new WebDriverWait(driver,Duration.ofSeconds(20));
+		driver.findElement(personnel.getAreadropdown()).click();
+		Thread.sleep(2000);
+
+	}
+
+	@When("the user attempts to upload a user photo")
+	public void userAttemptsToUploadPhoto() throws InterruptedException, AWTException {
+		Robot robot = new Robot();
+		Actions builder = new Actions(driver);
+		String path = System.getProperty("user.dir");
+		Thread.sleep(1000);
+		robot.delay(1000);
+		String filename = "D:\\EsyTimePro\\src\\main\\resources\\pexels-pixabay.jpg";
+		Thread.sleep(2000);
+		System.out.println(filename);
+		//wait1.until(ExpectedConditions.visibilityOfElementLocated(browse_map));
+		//driver.findElement(browse_map).click();
+		driver.findElement(personnel.getUserprofilepic()).click();
+		StringSelection filepath = new StringSelection(filename);
+		Thread.sleep(1000);
+		Toolkit.getDefaultToolkit().getSystemClipboard().setContents(filepath, null);
+		Thread.sleep(2000);
+		robot.keyPress(KeyEvent.VK_CONTROL);
+		robot.keyPress(KeyEvent.VK_V);
+		Thread.sleep(1000);
+		robot.keyRelease(KeyEvent.VK_V);
+		robot.keyRelease(KeyEvent.VK_CONTROL);
+		robot.delay(2000);
+		robot.keyPress(KeyEvent.VK_ENTER);
+		robot.delay(2000);
+		robot.keyRelease(KeyEvent.VK_ENTER);
+		robot.delay(2000);
+		Thread.sleep(10000);
+		System.out.println("File Uploaded Successfully");
+		driver.findElement(personnel.getConfirmbutton()).click();
+	}
+	@Then("Succesfull message display")
+	public void successfulMessageIsDisplay() {
+		WebElement successMessage = driver.findElement(personnel.getSuccesfullmessage());
+		WebDriverWait wait=new WebDriverWait(driver,Duration.ofSeconds(20));
+		Assert.assertTrue(successMessage.isDisplayed());
+
+	}	
+
+	//ETP_TC_224 @Login @Admin
+	@When("Iam creating the employee")
+	public void Iamcreatingtheemployee () throws InterruptedException{
+		driver.findElement(login.getPersonnel()).click();
+		driver.findElement(personnel.getPersonnelEmployee()).click();
+		driver.findElement(personnel.getEmployee()).click();
+		driver.findElement(personnel.getaddEmployee()).click();
+		driver.findElement(personnel.getEmployeeid()).sendKeys(properties.getProperty("EmployeePicture"));
+		driver.findElement(personnel.getEmployeefirstname()).sendKeys(properties.getProperty("FirstName")); 
+		driver.findElement(personnel.getDepartment()).click();
+		driver.findElement(personnel.getDepartmentdown()).click();
+		driver.findElement(personnel.getPosition()).click();
+		driver.findElement(personnel.getPostiondropdown()).click();
+		driver.findElement(personnel.getArea()).click();
+		WebDriverWait wait=new WebDriverWait(driver,Duration.ofSeconds(20));
+		driver.findElement(personnel.getAreadropdown()).click();
+		Thread.sleep(2000);
+	}
+	@When("Iam trying to upload pdf photo")
+	public void Iamtryingtouploadpdfphoto() throws InterruptedException, AWTException {
+		Robot robot = new Robot();
+		Actions builder = new Actions(driver);
+		String path = System.getProperty("user.dir");
+		Thread.sleep(1000);
+		robot.delay(1000);
+		String filename = "D:\\EsyTimePro\\src\\main\\resources\\HolidayList.pdf";
+		Thread.sleep(2000);
+		System.out.println(filename);
+		//wait1.until(ExpectedConditions.visibilityOfElementLocated(browse_map));
+		//driver.findElement(browse_map).click();
+		driver.findElement(personnel.getUserprofilepic()).click();
+		StringSelection filepath = new StringSelection(filename);
+		Thread.sleep(1000);
+		Toolkit.getDefaultToolkit().getSystemClipboard().setContents(filepath, null);
+		Thread.sleep(2000);
+		robot.keyPress(KeyEvent.VK_CONTROL);
+		robot.keyPress(KeyEvent.VK_V);
+		Thread.sleep(1000);
+		robot.keyRelease(KeyEvent.VK_V);
+		robot.keyRelease(KeyEvent.VK_CONTROL);
+		robot.delay(2000);
+		robot.keyPress(KeyEvent.VK_ENTER);
+		robot.delay(2000);
+		robot.keyRelease(KeyEvent.VK_ENTER);
+		robot.delay(2000);
+		Thread.sleep(10000);
+		System.out.println("ErrorMessageshoulddisplay");
+	}
+
+	@Then("Error message display")
+	public void Errormessagedisplay () {
+		WebElement ErrorMessage = driver.findElement(personnel.getUserprofileerrormsg());
+		WebDriverWait wait=new WebDriverWait(driver,Duration.ofSeconds(20));
+		Assert.assertTrue(ErrorMessage.isDisplayed());
+
+	}	
+
+	//ETP_TC_225 @Login @Admin
+	@When("Iam creating the employee in employee page") 
+	public void Iamcreatingtheemployeeinemployeepage () {
+		driver.findElement(login.getPersonnel()).click();
+		driver.findElement(personnel.getPersonnelEmployee()).click();
+		driver.findElement(personnel.getEmployee()).click();
+		driver.findElement(personnel.getaddEmployee()).click();
+		driver.findElement(personnel.getEmployeeid()).sendKeys(properties.getProperty("EmployeePicture"));
+		driver.findElement(personnel.getEmployeefirstname()).sendKeys(properties.getProperty("FirstName")); 
+		driver.findElement(personnel.getDepartment()).click();
+		driver.findElement(personnel.getDepartmentdown()).click();
+		driver.findElement(personnel.getPosition()).click();
+		driver.findElement(personnel.getPostiondropdown()).click();
+		driver.findElement(personnel.getArea()).click();
+		WebDriverWait wait=new WebDriverWait(driver,Duration.ofSeconds(20));
+		driver.findElement(personnel.getAreadropdown()).click();
+	}
+
+
+	@When("admin navigates to the device settings")
+	public void adminnavigatestothedevicesettings () {
+		driver.findElement(personnel.getDevicesettings()).click();
+	}
+
+
+	@And("admin sets a new password for the device")
+	public void adminsetsanewpasswordforthedevice () {
+		driver.findElement(personnel.getDevicepassword()).sendKeys(properties.getProperty("Devicepassword");				);
+		driver.findElement(personnel.getConfirmbutton()).click();
+	}
+
+
+	@Then("device password should be updated successfully")
+	public void devicepasswordshouldbeupdatedsuccessfully  () {
+		WebElement successMessage = driver.findElement(personnel.getSuccesfullmessage());
+		WebDriverWait wait=new WebDriverWait(driver,Duration.ofSeconds(20));
+		Assert.assertTrue(successMessage.isDisplayed());
+	}
+
+}
+

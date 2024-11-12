@@ -1,0 +1,38 @@
+package pageObjects;
+
+import org.openqa.selenium.By;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.support.PageFactory;
+
+public class CommonFeatures {
+	public CommonFeatures(WebDriver driver) 
+    {	     
+        PageFactory.initElements(driver,this);
+    }
+	
+	private final By AddButton=By.linkText("Add");
+	public By AddButton() {
+		return AddButton;
+	}
+	
+	private final By AddPopUp=By.xpath("//div[text()='Add']/..");
+	public By AddPopUp() {
+		return AddPopUp;
+	}
+	
+	private final By Confirmbutton=By.linkText("Confirm");
+	public By Confirmbutton() {
+		return Confirmbutton;
+	}
+	
+	private final By Cancelbutton=By.linkText("Cancel");
+	public By Cancelbutton() {
+		return Cancelbutton;
+	}
+	
+	private final By Deletebutton=By.linkText("Delete");
+	public By Deletebutton() {
+		return Deletebutton;
+	}
+qasdfghjk
+}

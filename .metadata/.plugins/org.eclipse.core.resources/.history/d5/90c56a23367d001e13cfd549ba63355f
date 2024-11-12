@@ -1,0 +1,23 @@
+package testRunner;
+
+import io.cucumber.junit.CucumberOptions;
+import io.cucumber.junit.Cucumber;
+import org.junit.runner.RunWith;
+
+@RunWith(Cucumber.class)
+@CucumberOptions(
+//	plugin = {"com.aventstack.extentreports.cucumber.adapter.ExtentCucumberAdapter:"},
+    features = "src/test/java/features",
+    glue = {"stepDefinations"},
+    tags="@ETP_Emp_Request",
+    plugin = {"pretty", "html:target/cucumber-html-report","json:cucumber.json"}
+   
+)
+
+ 
+public class TestRunner 
+{
+	
+}
+
+

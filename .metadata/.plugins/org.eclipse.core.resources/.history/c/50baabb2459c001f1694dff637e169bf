@@ -1,0 +1,8 @@
+
+Feature: Verify whether user able login easytimepro application 
+
+  Scenario: Check login is successful with valid credentials
+    Given user is on login page
+    When user enters username and password
+    And Clicks on login button
+    Then User is navigated to the home page

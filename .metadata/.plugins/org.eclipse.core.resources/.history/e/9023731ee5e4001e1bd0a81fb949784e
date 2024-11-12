@@ -1,0 +1,195 @@
+package pageObjects;
+
+import org.openqa.selenium.By;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.support.PageFactory;
+
+public class systemObject {
+	private WebDriver driver;
+	public systemObject(WebDriver driver) {
+		this.driver = driver;
+		PageFactory.initElements(driver, this);
+	
+	}
+	
+	//@ETP_TC_448
+	
+	private final By Sysmo=By.xpath("//a[text()='System']");
+	public By getSysmo(){
+		return Sysmo;
+
+	}
+	private final By Sysmoadd=By.xpath("//a[text()='Add']");
+	public By getSysmoadd(){
+		return Sysmoadd;
+
+	}
+	private final By Addname=By.cssSelector("[class='layui-form-label required']");
+	public By getAddname(){
+	 return Addname;
+	}
+	private final By AddPerson=By.cssSelector("[lay-id=personnel]");
+	public By getAddPerson(){
+	 return AddPerson;
+	}
+	private final By AddDevi=By.cssSelector("[lay-id='device']");
+	public By getAddDevi(){
+	 return AddDevi;
+	}
+	private final By AddAttend=By.cssSelector("[lay-id='att']");
+	public By getAddAttend(){
+	 return AddAttend;
+	}
+	private final By AddAccess=By.cssSelector("[lay-id='acc']");
+	public By getAddAccess(){
+	 return AddAccess;
+	}
+	private final By AddSys=By.cssSelector("[lay-id='system']");
+	public By getAddSys(){
+	 return AddSys;
+	}
+	
+	
+	//@ETP_TC_449
+		private final By clickAddcompany=By.id("LAY-auth-tree-personnel_2_switch");
+		public By getclickAddcompany(){
+		 return clickAddcompany;
+		}
+		private final By viewAdd=By.xpath("//*[@id='LAY-auth-tree-personnel_3_span']");
+		public By getviewAdd(){
+		 return viewAdd;
+		}
+		private final By viewEdit=By.xpath("//*[@id='LAY-auth-tree-personnel_4_span']");
+		public By getviewEdit(){
+		 return viewEdit;
+		}
+		private final By viewDeleteF=By.xpath("//*[@id='LAY-auth-tree-personnel_5_span']");
+		public By getviewDeleteF(){
+		 return viewDeleteF;
+		}
+		private final By viewInComp=By.xpath("//*[@id='LAY-auth-tree-personnel_6_span']");
+		public By getviewInComp(){
+		 return viewInComp;
+		}
+		private final By viewDeleteS=By.xpath("//*[@id='LAY-auth-tree-personnel_7_span']");
+		public By getviewDeleteS(){
+		 return viewDeleteS;
+		}
+		
+		//@ETP_TC_450
+		private final By clickEmpAdd=By.id("LAY-auth-tree-personnel_8_switch");
+		public By getclickEmpAdd(){
+		 return clickEmpAdd;
+		}
+		private final By viewImportEmp=By.xpath("//span[@id='LAY-auth-tree-personnel_13_span']");
+		public By getviewImportEmp(){
+		 return viewImportEmp;
+		}
+		private final By viewImportDocument=By.xpath("//span[@id='LAY-auth-tree-personnel_14_span']");
+		public By getviewImportDocument(){
+		 return viewImportDocument;
+		}
+		private final By viewImportPhoto=By.xpath("//span[@id='LAY-auth-tree-personnel_15_span']");
+		public By getviewImportPhoto(){
+		 return viewImportPhoto;
+		}
+		private final By viewDepartmentTransfe=By.xpath("//span[@id='LAY-auth-tree-personnel_15_span']");
+		public By getviewDepartmentTransfe(){
+		 return viewDepartmentTransfe;
+		}
+	
+	
+		
+	 
+		
+		//@ETP_TC_451
+		private final By clickDepAdd=By.id("LAY-auth-tree-personnel_28_switch");
+		public By getclickDepAdd(){
+		 return clickDepAdd;
+		}
+		private final By viewImportDept=By.xpath("//span[@id='LAY-auth-tree-personnel_33']");
+		public By getviewImportDept(){
+		 return viewImportDept;
+		}
+		private final By viewPerDept=By.xpath("//span[@id='LAY-auth-tree-personnel_34_span']");
+		public By getviewPerDept(){
+		 return viewPerDept;
+		}
+		
+		
+		//@ETP_TC_452
+		private final By clickPostAdd=By.id("LAY-auth-tree-personnel_36_switch");
+		public By getclickPostAdd(){
+		 return clickPostAdd;
+		}
+		private final By clickPersoAdd=By.xpath("//span[@id='LAY-auth-tree-personnel_42_span']");
+		public By getclickPersoAdd(){
+		return clickPersoAdd;
+		}
+		
+		
+		//@ETP_TC_453
+		private final By clickAreaAdd=By.id("LAY-auth-tree-personnel_43_switch");
+		public By getclickAreaAdd(){
+		return clickAreaAdd;
+		}
+		private final By AreaPersAdd=By.xpath("//span[@id='LAY-auth-tree-personnel_49_span']");
+		public By getAreaPersAdd(){
+		return AreaPersAdd;
+		}
+		
+
+	    //@ETP_TC_454
+		private final By clickHolidayAdd=By.id("LAY-auth-tree-personnel_50_switch");
+		public By getclickHolidayAdd(){
+		return clickHolidayAdd;
+		}
+		private final By HoliPersAdd=By.xpath("//span[@id='LAY-auth-tree-personnel_56_span']");
+		public By getHoliPersAdd(){
+		return HoliPersAdd;
+		}
+		
+		//@ETP_TC_455
+		private final By clickResignAdd=By.id("LAY-auth-tree-personnel_57_switch");
+		public By getclickResignAdd(){
+		return clickResignAdd;
+		}
+		private final By RehireAdd=By.xpath("//span[@id='LAY-auth-tree-personnel_62_span']");
+		public By getRehireAdd(){
+		return RehireAdd;
+		}
+		private final By DisableAttendanceAdd=By.xpath("//span[@id='LAY-auth-tree-personnel_64_span']");
+		public By getDisableAttendanceAdd(){
+		return DisableAttendanceAdd;
+		}
+		//@ETP_TC_456
+		private final By clickDocumentAdd=By.id("LAY-auth-tree-personnel_65_switch");
+		public By getclickDocumentAdd(){
+		return  clickDocumentAdd;
+		}
+		private final By DocView=By.xpath("//span[@id='LAY-auth-tree-personnel_69_span']");
+		public By getDocView(){
+		return DocView;
+		}
+		private final By DocImport =By.xpath("//span[@id='LAY-auth-tree-personnel_70_span']");
+		public By getDocImport(){
+		return DocImport ;
+		}
+		//@ETP_TC_457
+		private final By clickWorkflownodeAdd=By.id("LAY-auth-tree-personnel_71_switch");
+		public By getclickWorkflownodeAdd(){
+		return  clickWorkflownodeAdd;
+		}
+		private final By DeleteWorkflownode=By.xpath("//span[@id='LAY-auth-tree-personnel_74_span']");
+		public By getDeleteWorkflownode(){
+		return DeleteWorkflownode;
+		}
+		private final By ViewWorkflownode =By.xpath("//span[@id='LAY-auth-tree-personnel_75_span']");
+		public By getViewWorkflownode(){
+		return  ViewWorkflownode;
+		}
+	
+
+	
+	
+}

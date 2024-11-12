@@ -1,0 +1,24 @@
+ @eayTimePro_9.0.8
+ Feature: easyTimePro_9.0.8
+ 
+#Author: Ashwini H S
+
+  Background: Navigate to easyTimePro login page
+	Given Enter easyTimePro URl in browser
+  Then Login Page should display
+  Then Below mentioned components should display in login page
+  #Username textfield,Password textfield,login button,ZkTecoLogo,easyTimeProLogo,adminTab,employeeTab
+
+@ETP_TC_01 @Login  @Admin   
+Scenario: Verify user is able to login to application as an admin by entering Default username and password
+Given Enter username and password into username and password text field respectively
+When Click on login button
+#Validations
+Then Easytimelogo should display in top left corner
+Then Personnel, Device, Attendance, Access, System modules should display in top bar
+Then Guide and Userprofile icon should display in top right corner
+
+
+ 
+ 
+

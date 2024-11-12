@@ -1,0 +1,3195 @@
+package stepDefinition;
+
+import static org.junit.Assert.assertEquals;
+
+import java.awt.AWTException;
+import java.awt.Robot;
+import java.awt.Toolkit;
+import java.awt.datatransfer.StringSelection;
+import java.awt.event.KeyEvent;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.time.Duration;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+import java.util.NoSuchElementException;
+import java.util.Properties;
+import java.util.Set;
+
+import org.apache.commons.lang3.RandomStringUtils;
+import org.junit.Assert;
+import org.openqa.selenium.Alert;
+import org.openqa.selenium.By;
+import org.openqa.selenium.JavascriptExecutor;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.interactions.Actions;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.FluentWait;
+import org.openqa.selenium.support.ui.WebDriverWait;
+
+import com.aventstack.extentreports.cucumber.adapter.ExtentCucumberAdapter;
+import com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility;
+import com.google.common.io.Files;
+
+import io.cucumber.datatable.DataTable;
+import io.cucumber.java.After;
+import io.cucumber.java.Before;
+import io.cucumber.java.Scenario;
+import io.cucumber.java.en.And;
+import io.cucumber.java.en.Given;
+import io.cucumber.java.en.Then;
+import io.cucumber.java.en.When;
+import pageObjects.CommonFeatures;
+import pageObjects.EmpDocument;
+//import pageObjects.EmpDocument;
+import pageObjects.Organization;
+import pageObjects.loginObject;
+import pageObjects.personnelObject;
+import pageObjects.systemObject;
+import utils.Base;
+import com.aventstack.extentreports.gherkin.model.ScenarioOutline;
+
+@SuppressWarnings("unused")
+public class easyTimePro extends Base {
+	public WebDriver driver;
+	private Properties properties;
+	public WebDriverWait wait;
+	public Actions Act;
+
+	//Page Objects
+	private loginObject login;
+	private CommonFeatures common;
+	//	private EmpDocument empdoc;
+	private Organization Org;
+	private personnelObject personnel;
+	private EmpDocument empdoc;
+	private systemObject sysmod;
+
+	//
+	String comp1="";
+	String comp2="";
+	String EmployeeId1="";
+	String EmployeeId2="";
+	int Depcount;
+	String path="";
+	String EmpCountBefore;
+	String EmpCountAfter;
+	int EmployeeCount;
+	String ExpectedCount;
+	String DepNameInDepPage;
+	public int Yday;
+	int Positioncount;
+
+	@Before("@eayTimePro_9.0.8")
+	public void setup() throws IOException, InterruptedException, AWTException {
+		FileInputStream fis1 = new FileInputStream(
+				System.getProperty("user.dir") + "/src/main/resources/data.properties");
+		properties = new Properties();
+		properties.load(fis1);
+		// driver.manage().timeouts().implicitlyWait(java.time.Duration.ofSeconds(5));
+		driver = initializeDriver("chrome", "x64", "windows");
+		driver.manage().window().maximize();
+		ExtentCucumberAdapter.addTestStepLog("Driver Initialized");
+
+
+		//Wait 
+		wait = new WebDriverWait(driver, Duration.ofSeconds(10L));
+
+		//Action Class
+		Act=new Actions(driver);
+
+		//PageObjects
+		login = new loginObject(driver);	
+		common = new CommonFeatures(driver);
+		//		empdoc= new EmpDocument(driver);
+		Org= new Organization(driver);
+		personnel=new personnelObject(driver);
+		empdoc=new EmpDocument(driver);
+		sysmod=new systemObject(driver);
+	}
+
+
+	@After("@eayTimePro_9.0.8")
+	public void teardown(Scenario scenario) throws IOException {
+		if (scenario.isFailed()) {
+			scenario.attach(getByteScreenshot(driver), "image/png", "screenshot name");
+		}
+		driver.quit();
+	}
+
+
+	// Background
+
+	@Given("^Enter easyTimePro URl in browser$")
+	public void enter_easyTimePro_URl_in_browser() throws InterruptedException {
+		driver.get(properties.getProperty("URL"));
+
+		WebElement loginPage = driver.findElement(login.getLoginPage());
+		wait.until(ExpectedConditions.visibilityOf(loginPage));
+	}
+
+	@Then("^Login Page should display$")
+	public void login_Page_should_display() {
+		String ExpectedURL=properties.getProperty("ExpectedURL");
+		String ActualURL=driver.getCurrentUrl();
+		Assert.assertEquals(ExpectedURL, ActualURL);
+	}
+
+	@Then("Below mentioned components should display in login page")
+	public void below_mentioned_components_should_display_in_login_page() {
+		wait.until(ExpectedConditions.visibilityOf(driver.findElement(login.getusername())));
+		Assert.assertTrue(driver.findElement(login.getusername()).isDisplayed());
+		Assert.assertTrue(driver.findElement(login.getpassword()).isDisplayed());
+		Assert.assertTrue(driver.findElement(login.getloginButton()).isDisplayed());
+		Assert.assertTrue(driver.findElement(login.getZkTecoLogo()).isDisplayed());
+		Assert.assertTrue(driver.findElement(login.geteasyTimeProLogo()).isDisplayed());
+		Assert.assertTrue(driver.findElement(login.getadminTab()).isDisplayed());
+		Assert.assertTrue(driver.findElement(login.getemployeeTab()).isDisplayed());
+	}
+
+	//ETP_TC_01
+	@When("Enter username and password into username and password text field respectively")
+	public void enter_username_and_password_into_username_and_password_text_field_respectively() {
+		driver.findElement(login.getusername()).sendKeys(properties.getProperty("AdminUsername"));
+		driver.findElement(login.getpassword()).sendKeys(properties.getProperty("AdminPassword"));
+	}
+
+	@When("Click on login button")
+	public void click_on_login_button() throws Exception {
+		driver.findElement(login.getloginButton()).click();    	
+		windowMinimize(4);
+	}
+
+	@Then("Easytimelogo should display in top left corner")
+	public void easytimelogo_should_display_in_top_left_corner() {
+		Assert.assertTrue(driver.findElement(login.getetpLogoWithDashboardLink()).isDisplayed());
+	}
+
+	@Then("Personnel, Device, Attendance, Access, System modules should display in top bar")
+	public void personnel_device_attendance_access_system_modules_should_display_in_top_bar() {
+		Assert.assertTrue(driver.findElement(login.getPersonnelModule()).isDisplayed());
+		Assert.assertTrue(driver.findElement(login.getDeviceModule()).isDisplayed());
+		Assert.assertTrue(driver.findElement(login.getAttendanceModule()).isDisplayed());
+		Assert.assertTrue(driver.findElement(login.getAccessModule()).isDisplayed());
+		Assert.assertTrue(driver.findElement(login.getSystemModule()).isDisplayed());
+	}
+
+	@Then("Guide and Userprofile icon should display in top right corner")
+	public void guide_and_userprofile_icon_should_display_in_top_right_corner() {
+		Assert.assertTrue(driver.findElement(login.getGuidelink()).isDisplayed());
+		Assert.assertTrue(driver.findElement(login.getUserprofile()).isDisplayed());
+	}
+
+	//ETP_TC_02
+	@Given("Enter invalid username and password into username and password text field respectively")
+	public void enter_invalid_username_and_password_into_username_and_password_text_field_respectively() {
+		driver.findElement(login.getusername()).sendKeys(properties.getProperty("InvalidUsername"));
+		driver.findElement(login.getpassword()).sendKeys(properties.getProperty("InvalidPassword"));
+	}
+
+	@Then("Error message should display as {string}")
+	public void error_message_should_display_as(String Message) {
+		WebElement errorMessage=driver.findElement(By.xpath("//*[text()='"+Message+"']"));
+		wait.until(ExpectedConditions.visibilityOf(errorMessage));
+		Assert.assertTrue(errorMessage.isDisplayed());
+	}
+
+	//	   ETP_TC_03
+	@Then("Error message should display as Please fill in this field")
+	public void error_message_should_display_as_please_fill_in_this_field() {	  
+		WebElement element = driver.findElement (By.xpath ("//*[contains(text(),'Please fill in this field.')]"));
+		wait.until(ExpectedConditions.visibilityOf(element));
+		Assert.assertTrue(element.isDisplayed());
+	}
+
+	//		ETP_TC_04
+
+	@When("Click on Guide link")
+	public void click_on_Guide_link() throws InterruptedException {
+		driver.findElement(login.getGuidelink()).click();
+	}
+
+	@When("Click on {string} icon")
+	public void click_on_icon(String icon) {
+		if(icon.equalsIgnoreCase("Calculate Attendance")) {
+			WebElement ele=driver.findElement(By.xpath("(//p[text()='Calculate Attendance']/../../..)[2]"));
+			wait.until(ExpectedConditions.visibilityOf(ele));
+			ele.click();
+		}
+		else {
+			WebElement ele=driver.findElement(By.xpath("//p[text()='"+icon+"']/../../.."));
+			wait.until(ExpectedConditions.visibilityOf(ele));
+			ele.click();
+		}
+
+	}	    
+
+	@Then("It should redirect to the respective {string} page")
+	public void it_should_redirect_to_the_respective_page(String pageName) {
+		if(pageName.equalsIgnoreCase("device")) {
+			pageName="terminal";
+			WebElement ele=driver.findElement(By.xpath("//div[@id='tab_"+pageName+"']")); 
+			wait.until(ExpectedConditions.visibilityOf(ele));
+			Assert.assertTrue(ele.isDisplayed());
+		}
+		else if(pageName.equalsIgnoreCase("time Table")) {
+			pageName="timeinterval";
+			WebElement ele=driver.findElement(By.xpath("//div[@id='tab_"+pageName+"']")); 
+			wait.until(ExpectedConditions.visibilityOf(ele));
+			Assert.assertTrue(ele.isDisplayed());
+		}
+		else if(pageName.equalsIgnoreCase("shift")) {
+			pageName="attshift";
+			WebElement ele=driver.findElement(By.xpath("//div[@id='tab_"+pageName+"']")); 
+			wait.until(ExpectedConditions.visibilityOf(ele));
+			Assert.assertTrue(ele.isDisplayed());
+		}
+		else if(pageName.equalsIgnoreCase("employee Schedule")) {
+			pageName="attschedule";
+			WebElement ele=driver.findElement(By.xpath("//div[@id='tab_"+pageName+"']")); 
+			wait.until(ExpectedConditions.visibilityOf(ele));
+			Assert.assertTrue(ele.isDisplayed());
+		}	    	
+
+		else if(pageName.equalsIgnoreCase("Calculate")) {
+			pageName="calculation_view";
+			WebElement ele=driver.findElement(By.xpath("//div[@id='tab_"+pageName+"']")); 
+			wait.until(ExpectedConditions.visibilityOf(ele));
+			Assert.assertTrue(ele.isDisplayed());
+		}
+		else if(pageName.equalsIgnoreCase("Reports")) {
+			pageName="attschedule";
+			WebElement ele=driver.findElement(By.xpath("//div[text()='Transaction Reports']")); 
+			wait.until(ExpectedConditions.visibilityOf(ele));
+			Assert.assertTrue(ele.isDisplayed());
+		}
+
+		else {
+			WebElement ele=driver.findElement(By.xpath("//div[@id='tab_"+pageName+"']")); 
+			wait.until(ExpectedConditions.visibilityOf(ele));
+			Assert.assertTrue(ele.isDisplayed());
+		}
+
+	}
+
+	//ETP_TC_15 to 19
+
+	@When("Click on {string} module")
+	public void click_on_module(String modulename) {
+		WebElement ele=driver.findElement(By.linkText(modulename));
+		wait.until(ExpectedConditions.visibilityOf(ele));
+		javaScriptClick(ele);
+		//	    	ele.click();
+	}
+	@Then("It should redirect to the {string} module page")
+	public void it_should_redirect_to_the_module_page(String pageName) {
+
+		if(pageName.equalsIgnoreCase("globalrule")) {
+			WebElement ele=driver.findElement(By.xpath("//div[@id='attrule_edit_form']")); 
+			wait.until(ExpectedConditions.visibilityOf(ele));
+			Assert.assertTrue(ele.isDisplayed());
+		}
+		else {
+			if(pageName.equalsIgnoreCase("device")) {
+				pageName="terminal";
+			}
+			else if(pageName.equalsIgnoreCase("device_acc")) {
+				pageName="accterminal";
+			}
+			else if(pageName.equalsIgnoreCase("group")) {
+				pageName="groupprofile";
+			}	    	
+
+			WebElement ele=driver.findElement(By.xpath("//div[@id='tab_"+pageName+"']")); 
+			wait.until(ExpectedConditions.visibilityOf(ele));
+			Assert.assertTrue(ele.isDisplayed());
+		}           
+
+	}
+
+	//		ETP_TC_20
+
+	@When("Click on user profile")
+	public void click_on_user_profile() {
+		driver.findElement(login.getUserprofile()).click();
+		WebElement ele=driver.findElement(login.gethelpIcon());
+		wait.until(ExpectedConditions.visibilityOf(ele));
+	}
+	@Then("Above mentioned options should display in userprofile list")
+	public void above_mentioned_options_should_display_in_userprofile_list() {Assert.assertTrue(driver.findElement(login.getaboutIcon()).isDisplayed());
+	Assert.assertTrue(driver.findElement(login.gethelpIcon()).isDisplayed());
+	Assert.assertTrue(driver.findElement(login.getchangeLanguage()).isDisplayed());
+	Assert.assertTrue(driver.findElement(login.getchangePassword()).isDisplayed());
+	Assert.assertTrue(driver.findElement(login.getlogout()).isDisplayed());
+	}
+
+	//ETP_TC_21
+	@When("Click on Help option")
+	public void click_on_help_option() {
+		javaScriptClick(driver.findElement(login.gethelpIcon()));
+	}
+	@Then("Help document should display in new tab")
+	public void help_document_should_display_in_new_tab() {
+		String ExpectedURL=properties.getProperty("HelpDocumentURL");
+		System.out.println("ExpectedURL: "+ExpectedURL);   
+
+		ArrayList<String> tabs = new ArrayList<String> (driver.getWindowHandles());
+		driver.switchTo().window(tabs.get(1));  
+		String ActualURL=driver.getCurrentUrl();
+		System.out.println("ActualURL: "+ActualURL);
+
+		Assert.assertEquals(ExpectedURL, ActualURL);
+		driver.close();
+		driver.switchTo().window(tabs.get(0));
+	}
+
+	//ETP_TC_22
+	@When("Click on Password option")
+	public void click_on_password_option() {
+		javaScriptClick(driver.findElement(login.getchangePassword()));
+		//	    	Actions Act=new Actions(driver);
+		//	    	Act.moveToElement(driver.findElement(login.getchangePassword())).click().perform();
+	}
+
+	@When("Enter Old Password, New Password and Confirm Password")
+	public void enter_old_password_new_password_and_confirm_password() {
+		driver.findElement(login.getoldPassword()).sendKeys(properties.getProperty("AdminPassword"));
+		driver.findElement(login.getnewPassword()).sendKeys(properties.getProperty("NewPassword"));
+		driver.findElement(login.getconfirmPassword()).sendKeys(properties.getProperty("NewPassword"));
+	}
+
+	@When("Click on Confirm button")
+	public void click_on_confirm_button() throws InterruptedException {
+		WebElement ele=driver.findElement(common.Confirmbutton());
+		wait.until(ExpectedConditions.elementToBeClickable(ele));
+		javaScriptClick(ele);
+		//			ele.click();
+	}
+	@Then("Pop-up should display as {string}")
+	public void pop_up_should_display_as(String string) {
+		wait.until(ExpectedConditions.visibilityOf(driver.findElement(login.getAutoLogout())));
+		Assert.assertTrue(driver.findElement(login.getAutoLogout()).isDisplayed());
+	}
+
+	@Then("Login Page should display after {int} seconds")
+	public void login_page_should_display_after_seconds(Integer int1) throws InterruptedException {
+		wait.until(ExpectedConditions.visibilityOf(driver.findElement(login.getusername())));
+		Assert.assertTrue(driver.findElement(login.getusername()).isDisplayed());
+		Assert.assertTrue(driver.findElement(login.getpassword()).isDisplayed());
+		Assert.assertTrue(driver.findElement(login.getloginButton()).isDisplayed());
+	}
+
+
+	//	    ETP_TC_23_to_24
+	@Given("Enter username and password into username and {string} text field respectively")
+	public void enter_username_and_password_into_username_and_text_field_respectively(String PW) {
+		driver.findElement(login.getusername()).sendKeys(properties.getProperty("AdminUsername"));
+		if(PW.equalsIgnoreCase("new")) {
+			driver.findElement(login.getpassword()).sendKeys(properties.getProperty("NewPassword"));
+		}
+
+		if(PW.equalsIgnoreCase("old")) {
+			driver.findElement(login.getpassword()).sendKeys(properties.getProperty("AdminPassword"));
+		}
+	}
+
+	@Then("User should be able to login with new password and should not be able to login with old password {string}")
+	public void user_should_be_able_to_login_with_new_password_and_should_not_be_able_to_login_with_old_password(String PW) {
+		if(PW.equalsIgnoreCase("new")) {
+			Assert.assertTrue(driver.findElement(login.getetpLogoWithDashboardLink()).isDisplayed());
+			Assert.assertTrue(driver.findElement(login.getPersonnelModule()).isDisplayed());
+			Assert.assertTrue(driver.findElement(login.getDeviceModule()).isDisplayed());
+			Assert.assertTrue(driver.findElement(login.getAttendanceModule()).isDisplayed());
+			Assert.assertTrue(driver.findElement(login.getAccessModule()).isDisplayed());
+			Assert.assertTrue(driver.findElement(login.getSystemModule()).isDisplayed());
+			Assert.assertTrue(driver.findElement(login.getGuidelink()).isDisplayed());
+			Assert.assertTrue(driver.findElement(login.getUserprofile()).isDisplayed());
+		}
+
+		if(PW.equalsIgnoreCase("old")) {
+			WebElement errorMsg=driver.findElement(login.geterrorMessage());
+			wait.until(ExpectedConditions.visibilityOf(errorMsg));
+			Assert.assertTrue(errorMsg.isDisplayed());
+		}
+
+	}
+
+	//	    ETP_TC_25   
+	@Given("Enter username and new password into username and password text field respectively")
+	public void enter_username_and_new_password_into_username_and_password_text_field_respectively() {
+		driver.findElement(login.getusername()).sendKeys(properties.getProperty("AdminUsername"));
+		driver.findElement(login.getpassword()).sendKeys(properties.getProperty("NewPassword"));
+	}
+
+	@When("Change old password as new password")
+	public void change_old_password_as_new_password() {
+		driver.findElement(login.getoldPassword()).sendKeys(properties.getProperty("NewPassword"));
+		driver.findElement(login.getnewPassword()).sendKeys(properties.getProperty("AdminPassword"));
+		driver.findElement(login.getconfirmPassword()).sendKeys(properties.getProperty("AdminPassword"));
+	}
+
+	//	    ETP_TC_26   
+	@When("Click on Logout option")
+	public void click_on_logout_option() {
+		javaScriptClick(driver.findElement(login.getlogout()));
+	}
+
+	//ETP_TC_27
+	@When("Click on Employee login tab")
+	public void click_on_Employee_login_tab() throws Exception {
+		driver.findElement(login.getemployeeTab()).click();
+		windowMinimize(4);
+	}
+
+	@When("Enter employee username and default password")
+	public void enter_employee_username_and_default_password() {
+		driver.findElement(login.getempusername()).sendKeys(properties.getProperty("EmpUN"));
+		driver.findElement(login.getemppassword()).sendKeys(properties.getProperty("EmpDefaultPW"));
+	}
+
+	@When("Click on emp_login button")
+	public void click_on_emp_login_button() throws InterruptedException {
+		driver.findElement(login.getemploginButton()).click();
+
+	}	   
+
+	@Then("Easytimelogo should display in top left corner in home page")
+	public void easytimelogo_should_display_in_top_left_corner_in_home_page() {
+		Assert.assertTrue(driver.findElement(login.getlogoInempL()).isDisplayed());	    	
+	}    
+
+	@Then("Attendance module should display in top bar")
+	public void attendance_module_should_display_in_top_bar() {
+		driver.navigate().refresh();
+		wait.until(ExpectedConditions.visibilityOf(driver.findElement(login.getAttendanceModule())));
+		Assert.assertTrue(driver.findElement(login.getAttendanceModule()).isDisplayed());
+	}
+
+	@Then("Userprofile icon should display in top right corner")
+	public void userprofile_icon_should_display_in_top_right_corner() {
+		Assert.assertTrue(driver.findElement(login.getempUserProfile()).isDisplayed());
+	}
+
+	//ETP_TC_28
+
+	@When("Login as an admin")
+	public void login_as_an_admin() throws Exception {
+		driver.findElement(login.getusername()).sendKeys(properties.getProperty("AdminUsername"));
+		driver.findElement(login.getpassword()).sendKeys(properties.getProperty("AdminPassword"));
+		driver.findElement(login.getloginButton()).click();    	
+		windowMinimize(4);
+	}
+
+	@When("Change the employee password in employee page")
+	public void change_the_employee_password_in_employee_page() {
+		driver.findElement(login.getPersonnelModule()).click();
+		driver.findElement(login.getemployeeSubMod()).click();
+
+		WebElement emp1=driver.findElement(login.getemployee1());
+		emp1.click();
+
+		WebElement attendanceSettings=driver.findElement(login.getattendanceSettings());
+		attendanceSettings.click();	        
+		driver.findElement(login.getsetPassword()).clear();
+		driver.findElement(login.getsetPassword()).sendKeys(properties.getProperty("PWSetByTheAdmin"));
+
+		driver.findElement(common.Confirmbutton()).click();
+
+	}
+
+	@When("Enter employee username and password set by the admin")
+	public void enter_employee_username_and_password_set_by_the_admin() {
+		driver.findElement(login.getempusername()).sendKeys("1");
+		driver.findElement(login.getemppassword()).sendKeys(properties.getProperty("PWSetByTheAdmin"));
+	}
+
+	@When("Logout as an admin")
+	public void logout_as_an_admin() {
+		driver.findElement(login.getUserprofile()).click();
+		WebElement ele=driver.findElement(login.getlogout());
+		wait.until(ExpectedConditions.visibilityOf(ele));
+		javaScriptClick(ele);
+		driver.findElement(common.Confirmbutton()).click();
+	}
+
+	//ETP_TC_29
+
+	@When("Enter Invalid username and password in employee tab")
+	public void enter_Invalid_username_and_password_in_employee_tab() {
+		driver.findElement(login.getempusername()).sendKeys("XYZ");
+		driver.findElement(login.getemppassword()).sendKeys("ABC");
+	}
+
+	@Then("Error message should display as Login failed, username or password is wrong.in employee tab")
+	public void error_message_should_display_as_Login_failed_username_or_password_is_wrong_in_employee_tab() {
+		Assert.assertTrue(driver.findElement(login.invalidCredentialError_Emp()).isDisplayed());
+	}
+
+	//ETP_TC_31&32
+	@When("Enter employee {string} and password set by the admin")
+	public void enter_employee_and_password_set_by_the_admin(String UN) {
+		driver.findElement(login.getempusername()).sendKeys(properties.getProperty(UN));
+		driver.findElement(login.getemppassword()).sendKeys(properties.getProperty("PWSetByTheAdmin"));
+	}
+
+	//ETP_TC_33
+	@When("Click on empProfile Icon")
+	public void click_on_empProfile_Icon() throws InterruptedException {
+		//	    	driver.navigate().refresh();
+		wait.until(ExpectedConditions.visibilityOf(driver.findElement(login.getAttendanceModule())));
+		driver.findElement(login.getempUserProfile()).click();
+		wait.until(ExpectedConditions.visibilityOf(driver.findElement(login.gethelpIcon())));
+	}
+
+	@Then("Above mentioned options should display in empProfile Icon")
+	public void above_mentioned_options_should_display_in_empProfile_Icon() {
+		Assert.assertTrue(driver.findElement(login.gethelpIcon()).isDisplayed());
+		Assert.assertTrue(driver.findElement(login.getchangeLanguage()).isDisplayed());
+		Assert.assertTrue(driver.findElement(login.getchangePassword()).isDisplayed());
+		Assert.assertTrue(driver.findElement(login.getlogout()).isDisplayed());
+	}
+
+	//ETP_TC_34
+	@Then("Employee Help document should display in new tab")
+	public void employee_Help_document_should_display_in_new_tab() {
+
+		String ExpectedURL=properties.getProperty("EmpHelpDocumentURL");
+		System.out.println("ExpectedURL: "+ExpectedURL);   
+
+		ArrayList<String> tabs = new ArrayList<String> (driver.getWindowHandles());
+		driver.switchTo().window(tabs.get(1));  
+		String ActualURL=driver.getCurrentUrl();
+		System.out.println("ActualURL: "+ActualURL);
+
+		Assert.assertEquals(ExpectedURL, ActualURL);
+		driver.close();
+		driver.switchTo().window(tabs.get(0));
+
+	}
+
+	@When("Enter Old Password, new Password and confirm Password of employee")
+	public void enter_Old_Password_new_Password_and_confirm_Password_of_employee() {
+		driver.findElement(login.getEmpoldPassword()).sendKeys(properties.getProperty("PWSetByTheAdmin"));
+		driver.findElement(login.getEmpnewPassword()).sendKeys(properties.getProperty("PWSetByTheEmp"));
+		driver.findElement(login.getEmpconfirmPassword()).sendKeys(properties.getProperty("PWSetByTheEmp"));
+	}
+
+	//	    //ETP_TC_36&37
+	@When("Enter employee username and {string}")
+	public void enter_employee_username_and(String PW) {
+
+		driver.findElement(login.getempusername()).sendKeys("1");
+
+		if(PW.equalsIgnoreCase("PWSetByTheEmp")) {
+			driver.findElement(login.getemppassword()).sendKeys(properties.getProperty("PWSetByTheEmp"));
+		}
+
+		if(PW.equalsIgnoreCase("PWSetByTheAdmin")) {
+			driver.findElement(login.getemppassword()).sendKeys(properties.getProperty("PWSetByTheAdmin"));
+		}
+	}
+
+	@Then("User should be able to login with new password and should not be able to login with old {string}")
+	public void user_should_be_able_to_login_with_new_password_and_should_not_be_able_to_login_with_old(String PW) {
+		if(PW.equalsIgnoreCase("PWSetByTheEmp")) {
+			wait.until(ExpectedConditions.visibilityOf(driver.findElement(login.getAttendanceModule())));
+			Assert.assertTrue(driver.findElement(login.getlogoInempL()).isDisplayed());	 
+			Assert.assertTrue(driver.findElement(login.getAttendanceModule()).isDisplayed());
+			Assert.assertTrue(driver.findElement(login.getempUserProfile()).isDisplayed());
+		}
+
+		if(PW.equalsIgnoreCase("PWSetByTheAdmin")) {
+			Assert.assertTrue(driver.findElement(login.invalidCredentialError_Emp()).isDisplayed());
+		}
+	}
+
+	//ETP_TC_38
+
+	@When("Enter employee username and password set by the employee")
+	public void enter_employee_username_and_password_set_by_the_employee() {
+		driver.findElement(login.getempusername()).sendKeys(properties.getProperty("EmpUN"));
+		driver.findElement(login.getemppassword()).sendKeys(properties.getProperty("PWSetByTheEmp"));
+	}
+	@When("Set old password as new password")
+	public void set_old_password_as_new_password() {
+		driver.findElement(login.getEmpoldPassword()).sendKeys(properties.getProperty("PWSetByTheEmp"));
+		driver.findElement(login.getEmpnewPassword()).sendKeys(properties.getProperty("PWSetByTheAdmin"));
+		driver.findElement(login.getEmpconfirmPassword()).sendKeys(properties.getProperty("PWSetByTheAdmin"));
+	}
+
+	//ETP_TC_39
+	@When("Click on Logout button")
+	public void click_on_logout_button() {
+		driver.findElement(login.getlogout()).click();
+		driver.findElement(common.Confirmbutton()).click();
+	}
+
+	//ETP_TC_77
+
+	@Given("Login to easyTimePro application")
+	public void login_to_easy_time_pro_application() throws Exception {
+		driver.findElement(login.getusername()).sendKeys(properties.getProperty("AdminUsername"));
+		driver.findElement(login.getpassword()).sendKeys(properties.getProperty("AdminPassword"));
+		driver.findElement(login.getloginButton()).click();    	
+		windowMinimize(4);	
+	}
+	@Given("Navigate to department module")
+	public void navigate_to_department_module() {
+		driver.findElement(login.getPersonnelModule()).click();
+		driver.findElement(Org.OrganizationModule()).click();
+		driver.findElement(Org.DepartmentModule()).click();	
+	}
+
+	@Given("User should be present in department module")
+	public void user_should_be_present_in_department_module() {
+		driver.findElement(login.getPersonnelModule()).click();
+	}
+
+
+	@When("Click on Add button")
+	public void click_on_add_button() {
+		//	    	Using relative xpath
+		wait.until(ExpectedConditions.visibilityOf(driver.findElement(common.AddButton())));
+		driver.findElement(common.AddButton()).click();	
+
+		//	    	Using Absolute xpath
+		//	    	wait.until(ExpectedConditions.visibilityOf(driver.findElement(Org.DepAddButton())));
+		//	    	driver.findElement(Org.DepAddButton()).click();	  	    	
+	}
+
+
+	@When("Enter Department details according to below mentioned {string}")
+	public void enter_department_details_according_to_below_mentioned(String Case) throws AWTException {
+		comp1="";
+		comp2="";
+		comp1=RandomStringUtils.randomAlphabetic(3);
+		comp2=RandomStringUtils.randomAlphabetic(6);
+
+		WebElement deptID=driver.findElement(Org.DepartmentIdtextfield());
+		WebElement deptName=driver.findElement(Org.DepartmentNametextfiled());     	
+
+
+		wait.until(ExpectedConditions.visibilityOf(deptID));	    	
+		Clear(deptID);
+		deptID.sendKeys(comp1);
+		deptName.sendKeys(comp2);
+
+		if(Case.equalsIgnoreCase("Case2_BothMandatoryAndOptionalData")) {
+			wait.until(ExpectedConditions.visibilityOf(driver.findElement(Org.ParentDepartmentDropdown())));
+			driver.findElement(Org.ParentDepartmentDropdown()).click();
+			driver.findElement(Org.DefaultDepartmentDropdown()).click();
+		}
+	}
+
+	@Then("Success message should display")
+	public void success_message_should_display() {
+		wait.until(ExpectedConditions.visibilityOf(driver.findElement(Org.successMessage())));
+		Assert.assertTrue(driver.findElement(Org.successMessage()).isDisplayed()); 
+	}
+
+	@Then("Added department should display in department list")
+	public void added_department_should_display_in_department_list() {
+		wait.until(ExpectedConditions.visibilityOf(driver.findElement(By.xpath("//div[text()='"+comp2+"']"))));
+		Assert.assertTrue(driver.findElement(By.xpath("//div[text()='"+comp2+"']")).isDisplayed());
+	}
+
+
+	//ETP_TC_78
+
+	@When("Enter only optional Department details {string}")
+	public void enter_only_optional_department_details(String Case) {
+		if(Case.equalsIgnoreCase("Case1_Without_mandatory_data")) {
+			wait.until(ExpectedConditions.visibilityOf(driver.findElement(Org.ParentDepartmentDropdown())));
+			driver.findElement(Org.ParentDepartmentDropdown()).click();
+			driver.findElement(Org.DefaultDepartmentDropdown()).click();
+		}
+
+	}
+
+	//ETP_TC_79
+
+
+	@Then("Department should not be added and should not display in department list")
+	public void department_should_not_be_added_and_should_not_display_in_department_list() {
+		try {
+			if(driver.findElement(By.xpath("//div[text()='"+comp2+"']")).isDisplayed()) {
+				assert false;
+			}
+		}catch (Exception e) {
+			System.out.println("User is able to cancel adding department");
+		}
+
+	}
+
+	//ETP_TC_80
+	@When("Click on Edit button of department {string}")
+	public void click_on_edit_button_of_department(String Case) {
+		if(Case.equalsIgnoreCase("Case1_UsingEditButton")) {
+			driver.findElement(Org.DepEditButton()).click();
+		}if(Case.equalsIgnoreCase("Case2_UsingEditlink")) {
+			driver.findElement(Org.DepEditLink()).click();
+		}    		
+	}
+
+
+	@Then("Department ID should be disabled in Edit button")
+	public void department_id_should_be_disabled_in_edit_button() {
+		WebElement ele=driver.findElement(Org.readonlyDepartmentIdtextfield());
+		wait.until(ExpectedConditions.visibilityOf(ele));
+		Assert.assertTrue(ele.isDisplayed());	    	
+	}
+
+	@When("Change the department name")
+	public void change_the_department_name() throws AWTException {	    	
+		comp2="";
+		comp2=RandomStringUtils.randomAlphabetic(6);			
+
+		WebElement deptName=driver.findElement(Org.DepartmentNametextfiled());   
+		wait.until(ExpectedConditions.visibilityOf(deptName));	    	
+		Clear(deptName);
+		deptName.sendKeys(comp2);
+	}
+	@Then("Edited department name should display in department list")
+	public void edited_department_name_should_display_in_department_list() {
+		WebElement ele=driver.findElement(By.xpath("//div[text()='"+comp2+"']"));
+		wait.until(ExpectedConditions.visibilityOf(ele));
+		Assert.assertTrue(ele.isDisplayed());
+	}
+
+	//ETP_TC_82
+
+	@When("Click on Cancel button")
+	public void click_on_cancel_button() {
+		wait.until(ExpectedConditions.visibilityOf(driver.findElement(common.Cancelbutton())));
+		driver.findElement(common.Cancelbutton()).click();
+	}
+
+	@Then("Edited department name should not display in department list")
+	public void edited_department_name_should_not_display_in_department_list() {
+		try {
+			if(driver.findElement(By.xpath("//div[text()='"+comp2+"']")).isDisplayed()) {
+				assert false;
+			}
+		}catch (Exception e) {
+			System.out.println("User is able to cancel editing department");
+		}
+
+
+	}
+
+	//ETP_TC_83
+
+	@Given("Count the departments present in department page")
+	public void count_the_departments_present_in_department_page() {
+		List<WebElement> DepartmentList=driver.findElements(Org.DepCount());
+		Depcount=DepartmentList.size();
+	}
+
+	@When("Click on {string} button")
+	public void click_on_button(String Case) {
+		if(Case.equalsIgnoreCase("Case1_EditButton")) {
+			driver.findElement(Org.DepEditButton()).click();
+		}
+		if(Case.equalsIgnoreCase("Case2_AddButton")) {
+			driver.findElement(common.AddButton()).click();
+		}
+		if(Case.equalsIgnoreCase("PersonnelTransfter")) {
+			driver.findElement(common.PersonnelTransfter()).click();
+		}
+		if(Case.equalsIgnoreCase("Delete")) {
+			driver.findElement(common.Deletebutton()).click();
+		}  			
+	}
+
+
+
+	@When("Click on parent dropdown")
+	public void click_on_parent_dropdown() {
+		driver.findElement(Org.ParentDepartmentDropdown()).click();
+	}
+
+	@Then("Department count should be equal parent dropdown options count")
+	public void department_count_should_be_equal_parent_dropdown_options_count() {
+		List<WebElement> partDrpList=driver.findElements(Org.parentDropdownList());
+		int parentDrpList=partDrpList.size();
+		Assert.assertEquals(Depcount-1,parentDrpList);
+	}
+
+	@Then("Department count should be equal parent dropdown options count <{string}>")
+	public void department_count_should_be_equal_parent_dropdown_options_count(String Case) {
+		List<WebElement> partDrpList=driver.findElements(Org.parentDropdownList());
+		int parentDrpList=partDrpList.size();
+		if(Case.equalsIgnoreCase("Case1_EditButton")) {
+			Assert.assertEquals(Depcount-1,parentDrpList);
+		}
+		if(Case.equalsIgnoreCase("Case2_AddButton")) {
+			Assert.assertEquals(Depcount,parentDrpList);
+		}
+	}
+
+	//ETP_TC_84
+
+	@When("Click on {string} delete button in department page")
+	public void click_on_delete_button_in_department_page(String delete) {
+		if(delete.equalsIgnoreCase("Usingdeletebuttonofparticulardepartment")) {
+			driver.findElement(Org.DepDelButton()).click();
+		}
+		if(delete.equalsIgnoreCase("Usingcommondeletebutton")) {
+			driver.findElement(Org.depCheckbox()).click();
+			driver.findElement(common.Deletebutton()).click();
+		}  
+	}
+
+	@Then("Department should not be deleted from department page")
+	public void department_should_not_be_deleted_from_department_page() {
+		List<WebElement> DepartmentList=driver.findElements(Org.DepCount());
+		int DepartmentListAfter=DepartmentList.size();
+		Assert.assertEquals(Depcount,DepartmentListAfter);
+	}
+
+	//ETP_TC_85
+	@Then("Department should be deleted from department page")
+	public void department_should_be_deleted_from_department_page() {
+		List<WebElement> DepartmentList=driver.findElements(Org.DepCount());
+		int DepartmentListAfter=DepartmentList.size();
+		Assert.assertEquals(Depcount-1,DepartmentListAfter);
+	}
+
+	//ETP_TC_86
+	@When("Click on {string} default delete button in department page")
+	public void click_on_default_delete_button_in_department_page(String defaultdep) {
+		if(defaultdep.equalsIgnoreCase("UsingParticularDeleteButtonofDefaultDepartment")) {
+			driver.findElement(Org.DefaultDepDelButton()).click();
+		}
+		if(defaultdep.equalsIgnoreCase("UsingCommonDeleteButtonofDefaultDepartment")) {
+			driver.findElement(Org.defaultdepCheckbox()).click();
+			driver.findElement(common.Deletebutton()).click();
+		}  
+	}
+
+	//ETP_TC_87
+
+	@When("Click on Import button")
+	public void click_on_import_button() {
+		driver.findElement(Org.Import()).click();
+	}
+	@When("Click on Download Template")
+	public void click_on_download_template() {
+		driver.findElement(Org.downloadtemplateLink()).click();
+	}
+	@Then("Department import template should be present in download directory")
+	public void department_import_template_should_be_present_in_download_directory() throws InterruptedException {	
+		String filepath=System.getProperty("user.dir")+"\\Downloads\\DownloadETPReports\\department_Import_Template.xlsx";
+		File f = new File(filepath);
+
+		//			synchronized(this) {
+		//			    while (f.exists()) { this.wait(); }
+		//			}
+
+		//			Test case is failing while checking file existence, Using thread.sleep to wait		
+		Thread.sleep(3000);
+		Assert.assertTrue(f.exists());
+	}
+
+	//ETP_TC_88	
+
+	@When("Select the department import file {string}")
+	public void select_the_department_import_file(String Case) {
+		if(Case.equalsIgnoreCase("txtFile")){
+			path="\\Department\\department_Import_Template_txt.txt";
+		}else if(Case.equalsIgnoreCase("xlsFile")){
+			path="\\Department\\department_Import_Template_xls.xls";
+		}else if(Case.equalsIgnoreCase("csvFile")){
+			path="\\Department\\department_Import_Template_csv.csv";
+		}else if(Case.equalsIgnoreCase("xlsxFile")){
+			path="\\Department\\department_Import_Template_xlsx.xlsx";
+		}
+
+		driver.findElement(Org.chooseFileButton()).sendKeys(uploadpath+path);
+	}
+
+	@Then("Imported departments should display in department list {string}")
+	public void imported_departments_should_display_in_department_list(String Case) {
+		if(Case.equalsIgnoreCase("txtFile")){
+			comp1="Dep_501";
+		}else if(Case.equalsIgnoreCase("xlsFile")){
+			comp1="Dep_503";
+		}else if(Case.equalsIgnoreCase("csvFile")){
+			comp1="Dep_505";
+		}else if(Case.equalsIgnoreCase("xlsxFile")){
+			comp1="Dep_507";
+		}
+		wait.until(ExpectedConditions.visibilityOf(driver.findElement(By.xpath("//div[text()='"+comp2+"']"))));
+		Assert.assertTrue(driver.findElement(By.xpath("//div[text()='"+comp2+"']")).isDisplayed());
+	}
+
+	//ETP_TC_89
+	@When("Select department import file")
+	public void select_department_import_file() {
+		path="\\Department\\department_Import_Template_Cancel.xlsx";
+		driver.findElement(Org.chooseFileButton()).sendKeys(uploadpath+path);			    
+	}
+	@Then("Departments should not be imported and should not display in department list")
+	public void departments_should_not_be_imported_and_should_not_display_in_department_list() {
+		comp2="Dep509";
+		try {
+			wait.until(ExpectedConditions.visibilityOf(driver.findElement(By.xpath("//div[text()='"+comp2+"']"))));
+			Assert.assertFalse(driver.findElement(By.xpath("//div[text()='"+comp2+"']")).isDisplayed());	
+		}catch (Exception e) {
+			assert true;
+		}
+
+	}
+
+	//ETP_TC_90
+
+	@When("Select the {string} department file")
+	public void select_the_department_file(String Case) {
+		if(Case.equalsIgnoreCase("Empty")){
+			path="\\Department\\department_Import_Template_Empty.xlsx";
+		}else if(Case.equalsIgnoreCase("OnlyHeaders")){
+			path="\\Department\\department_Import_Template_OnlyHeaders.xlsx";
+		}else if(Case.equalsIgnoreCase("OnlyMandatoryHeadersAndData")){
+			path="\\Department\\department_Import_Template_OnlyMandatoryHeadersAndData.xlsx";
+		}else if(Case.equalsIgnoreCase("WithoutDepartmentIDColumn")){
+			path="\\Department\\department_Import_Template_WithoutDepartmentIDColumn.xlsx";
+		} else if(Case.equalsIgnoreCase("WithoutDepartmentNameColumn")){
+			path="\\Department\\department_Import_Template_WithoutDepartmentNameColumn.xlsx";
+		}else if(Case.equalsIgnoreCase("WithoutDepartmentIDDetails")){
+			path="\\Department\\department_Import_Template_WithoutDepartmentIDDetails.xlsx";
+		}else if(Case.equalsIgnoreCase("WithoutDepartmentNameDetails")){
+			path="\\Department\\department_Import_Template_WithoutDepartmentNameDetails.xlsx";
+		}else if(Case.equalsIgnoreCase("Image")){
+			path="\\Department\\department_Import_Template_png.png";
+		}else if(Case.equalsIgnoreCase("Pdf")){
+			path="\\Department\\department_Import_Template_pdf.pdf";
+		}
+
+		driver.findElement(Org.chooseFileButton()).sendKeys(uploadpath+path);
+	}
+
+	//ETP_TC_98
+	@When("Select ignore option and import new file")
+	public void select_ignore_option_and_import_new_file() {
+		driver.findElement(Org.existingDataDropdown()).click();
+		driver.findElement(Org.IgnoreOption()).click();
+
+		path="\\Department\\Ignore_NewData.xlsx";
+		driver.findElement(Org.chooseFileButton()).sendKeys(uploadpath+path);
+	}
+
+	@Then("Imported department should display in department list {string}")
+	public void imported_department_should_display_in_department_list(String DeptName) {
+		wait.until(ExpectedConditions.visibilityOf(driver.findElement(By.xpath("//div[text()='"+DeptName+"']"))));
+		Assert.assertTrue(driver.findElement(By.xpath("//div[text()='"+DeptName+"']")).isDisplayed());	    
+	}
+
+	//ETP_TC_99
+	@When("Select Overwrite option and import new file")
+	public void select_overwrite_option_and_import_new_file() {
+		driver.findElement(Org.existingDataDropdown()).click();
+		driver.findElement(Org.OverWriteOption()).click();
+
+		path="\\Department\\Overwrite_NewData.xlsx";
+		driver.findElement(Org.chooseFileButton()).sendKeys(uploadpath+path);
+	}
+
+	//ETP_TC_100
+	@When("Select Ignore option and import existing data")
+	public void select_ignore_option_and_import_existing_data() {
+		driver.findElement(Org.existingDataDropdown()).click();
+		driver.findElement(Org.IgnoreOption()).click();
+
+		path="\\Department\\ExistingData.xlsx";
+		driver.findElement(Org.chooseFileButton()).sendKeys(uploadpath+path);
+	}
+
+	//ETP_TC_101
+	@When("Select Overwrite option and import existing data")
+	public void select_overwrite_option_and_import_existing_data() {
+		driver.findElement(Org.existingDataDropdown()).click();
+		driver.findElement(Org.OverWriteOption()).click();
+
+		path="\\Department\\ExistingData.xlsx";
+		driver.findElement(Org.chooseFileButton()).sendKeys(uploadpath+path);
+	}
+
+	//ETP_TC_102
+	@When("Select Overwrite option and import new+existing data")
+	public void select_overwrite_option_and_import_new_existing_data() {
+		driver.findElement(Org.existingDataDropdown()).click();
+		driver.findElement(Org.OverWriteOption()).click();
+
+		path="\\Department\\ExistingData+New.xlsx";
+		driver.findElement(Org.chooseFileButton()).sendKeys(uploadpath+path);	    
+	}
+
+
+	//ETP_TC_103
+	@When("Select any one department checkbox")
+	public void select_any_one_department_checkbox() {
+		//EmployeeCountBeforeSelectingEmployee
+		WebElement ele=driver.findElement(Org.EmployeeCount());
+		wait.until(ExpectedConditions.visibilityOf(ele));
+		EmpCountBefore=ele.getText();
+
+		//Select second emp
+		javaScriptClick(driver.findElement(Org.SelectSecondEmployee()));	    
+	}
+
+	@When("Click on Personnel Transfer")
+	public void click_on_personnel_transfer() {
+		driver.findElement(common.PersonnelTransfter()).click();
+	}
+	@When("Select {string} employee in Personnel Transfer popup")
+	public void select_employee_in_personnel_transfer_popup(String NoOfEmp) {
+		if(NoOfEmp.equalsIgnoreCase("Single")) {
+			WebElement ele=driver.findElement(Org.selectOneEmployee());
+			wait.until(ExpectedConditions.visibilityOf(ele));
+			javaScriptClick(ele);
+		}else if(NoOfEmp.equalsIgnoreCase("Multiple")) {
+			WebElement ele=driver.findElement(Org.selectOneEmployee());
+			wait.until(ExpectedConditions.visibilityOf(ele));
+			List<WebElement> elelist=driver.findElements(Org.selectMultipleeEmployees());
+			for(int i=1;i<=3;i++) {
+				javaScriptClick(elelist.get(i));												
+			}			
+		}
+		driver.findElement(By.xpath("//a[@class='layui-layer-btn0' and text()='Confirm']")).click();
+	}
+
+	@Then("Employee count of the department should be equal to {string} selected")
+	public void employee_count_of_the_department_should_be_equal_to_selected(String NoOfEmp) {
+		if(NoOfEmp.equalsIgnoreCase("Single")) {
+			EmployeeCount=Integer.parseInt(EmpCountBefore);
+			EmployeeCount=EmployeeCount+1;
+			ExpectedCount=Integer.toString(EmployeeCount);			
+			EmpCountAfter=driver.findElement(Org.EmployeeCount()).getText();		    
+			Assert.assertEquals(ExpectedCount,EmpCountAfter);				
+		}else if(NoOfEmp.equalsIgnoreCase("Multiple")) {
+			EmployeeCount=Integer.parseInt(EmpCountBefore);
+			EmployeeCount=EmployeeCount+3;
+			ExpectedCount=Integer.toString(EmployeeCount);			
+			EmpCountAfter=driver.findElement(Org.EmployeeCount()).getText();		    
+			Assert.assertEquals(ExpectedCount,EmpCountAfter);
+		}
+	}
+
+
+	//ETP_TC_104
+	@When("Select department {string} checkbox")
+	public void select_department_checkbox(String depType) {
+		if(depType.equalsIgnoreCase("TransferingFromDefaultToUserAdded")) {
+			javaScriptClick(driver.findElement(Org.SelectSecondEmployee()));
+		}else {
+			javaScriptClick(driver.findElement(Org.SelectDefaultEmployee()));
+		}
+	}
+
+
+	//ETP_TC_105
+
+	@When("Select any one department")
+	public void select_any_one_department() {
+		//DepartmentName
+		WebElement ele=driver.findElement(Org.DepNameBeforeSelecting());
+		wait.until(ExpectedConditions.visibilityOf(ele));
+		DepNameInDepPage=ele.getText();
+
+		//Select second emp
+		WebElement ele1=driver.findElement(Org.SelectSecondEmployee());
+		wait.until(ExpectedConditions.visibilityOf(ele1));
+		javaScriptClick(ele1);	    
+	}
+	@When("Select a employee in Personnel Transfer popup")
+	public void select_a_employee_in_personnel_transfer_popup() {
+		WebElement ele=driver.findElement(Org.selectOneEmployee());
+		wait.until(ExpectedConditions.visibilityOf(ele));
+		javaScriptClick(ele);					    
+	}
+	@Then("Department name of selected employee should display in employee page")
+	public void department_name_of_selected_employee_should_display_in_employee_page() {
+		WebElement ele=driver.findElement(Org.DepNameInEmpPage());
+		wait.until(ExpectedConditions.visibilityOf(ele));
+		String DepNameInEmpPage=ele.getText();
+
+		Assert.assertEquals(DepNameInDepPage, DepNameInEmpPage);
+
+	}
+
+	@When("Navigate to emp page")
+	public void navigate_to_emp_page() {
+		driver.findElement(login.getPersonnelModule()).click();
+		driver.findElement(Org.EmpModule()).click();
+	}
+
+	//ETP_TC_106
+
+	@Given("Verify the employee count of department before deleting employee")
+	public void verify_the_employee_count_of_department_before_deleting_employee() {
+		WebElement ele=driver.findElement(Org.EmployeeCount());
+		wait.until(ExpectedConditions.visibilityOf(ele));
+		EmpCountBefore=ele.getText();
+	}
+
+	@When("Delete a employee in employee page")
+	public void delete_a_employee_in_employee_page() {
+		WebElement ele= driver.findElement(common.Deletebutton());
+		wait.until(ExpectedConditions.visibilityOf(ele));
+		javaScriptClick(driver.findElement(Org.selectFirstEmp()));		   
+		ele.click();
+		driver.findElement(common.Confirmbutton()).click();
+	}
+	@Then("Verify the employee count of department after deleting employee")
+	public void verify_the_employee_count_of_department_after_deleting_employee() {
+		WebElement ele=driver.findElement(Org.EmployeeCount());
+		wait.until(ExpectedConditions.visibilityOf(ele));
+		EmpCountAfter=ele.getText();		    
+		Assert.assertEquals(EmpCountBefore, EmpCountAfter);
+	}
+
+	//ETP_TC_110
+	@Given("Click on SelectAll checkbox in department module")
+	public void click_on_select_all_checkbox_in_department_module() {
+		//*[@id='department_fluid']//div[2]/div[1]/table/thead/tr/th[1]
+	}
+
+	//ETP_TC_107
+
+	@Given("Verify the employee count of department before employee resignation")
+	public void verify_the_employee_count_of_department_before_employee_resignation() {
+		WebElement ele=driver.findElement(Org.EmployeeCount());
+		wait.until(ExpectedConditions.visibilityOf(ele));
+		EmpCountBefore=ele.getText();
+	}
+	@When("Navigate to resign page")
+	public void navigate_to_resign_page() {
+		driver.findElement(login.getPersonnelModule()).click();
+		driver.findElement(Org.ResignModule()).click();
+	}
+	@When("Add an employee as resigned in resign page")
+	public void add_an_employee_as_resigned_in_resign_page() {
+		driver.findElement(common.AddButton()).click();
+		WebElement ele=driver.findElement(Org.selectOneEmployee());
+		wait.until(ExpectedConditions.visibilityOf(ele));
+		javaScriptClick(ele);	
+		driver.findElement(common.Confirmbutton()).click();
+	}
+	@Given("Verify the employee count of department after employee resignation")
+	public void verify_the_employee_count_of_department_after_employee_resignation() {
+		WebElement ele=driver.findElement(Org.EmployeeCount());
+		wait.until(ExpectedConditions.visibilityOf(ele));
+		EmpCountAfter=ele.getText();		    
+		Assert.assertEquals(EmpCountBefore, EmpCountAfter);		    
+	}
+
+	//
+	@When("Add an employee as resigned in resign page with Yesterday")
+	public void add_an_employee_as_resigned_in_resign_page_with_yesterday() {
+		driver.findElement(common.AddButton()).click();
+
+		WebElement ele=driver.findElement(Org.selectOneEmployee());
+		wait.until(ExpectedConditions.visibilityOf(ele));
+		javaScriptClick(ele);	
+
+		driver.findElement(Org.ResignDateTextfield()).click();	
+
+		String currentDate=driver.findElement(Org.currentDate()).getText();
+		int Today=Integer.parseInt(currentDate);
+		Yday=Today-1;	
+
+		driver.findElement(By.xpath("//*[@id='layui-laydate7']/div[1]/div[2]/table/tbody/tr[2]/td[text()='"+Yday+"']")).click();	
+
+		driver.findElement(common.Confirmbutton()).click();
+	}
+
+	//ETP_TC_111
+	@Given("User should be present in Position module")
+	public void user_should_be_present_in_position_module() {
+		driver.findElement(login.getPersonnelModule()).click();
+		driver.findElement(Org.OrganizationModule()).click();
+		driver.findElement(Org.PositionModule()).click();	
+	}
+
+	@When("Enter Position details according to below mentioned {string}")
+	public void enter_position_details_according_to_below_mentioned(String Case) throws AWTException {
+		comp1="";
+		comp2="";
+		comp1=RandomStringUtils.randomAlphabetic(3);
+		comp2=RandomStringUtils.randomAlphabetic(6);
+
+		WebElement PositionID=driver.findElement(Org.Positioncodetextfield());
+		WebElement PositionName=driver.findElement(Org.PositionNametextfiled());     	
+
+
+		wait.until(ExpectedConditions.visibilityOf(PositionID));	    	
+		Clear(PositionID);
+		PositionID.sendKeys(comp1);
+		PositionName.sendKeys(comp2);
+
+		if(Case.equalsIgnoreCase("Case2_BothMandatoryAndOptionalData")) {
+			wait.until(ExpectedConditions.visibilityOf(driver.findElement(Org.ParentPositionDropdown())));
+			driver.findElement(Org.ParentPositionDropdown()).click();
+			driver.findElement(Org.DefaultPositionDropdown()).click();
+		}
+
+	}
+
+	@Then("Added Position should display in Position list")
+	public void added_position_should_display_in_position_list() {
+		WebElement ele=driver.findElement(By.xpath("//div[text()='"+comp2+"']"));
+		wait.until(ExpectedConditions.visibilityOf(ele));
+		Assert.assertTrue(ele.isDisplayed());		
+	}
+
+	//ETP_TC_112
+	@When("Enter only optional Position details {string}")
+	public void enter_only_optional_position_details(String Case) {
+		if(Case.equalsIgnoreCase("Case1_Without_mandatory_data")) {
+			wait.until(ExpectedConditions.visibilityOf(driver.findElement(Org.ParentPositionDropdown())));
+			driver.findElement(Org.ParentPositionDropdown()).click();
+			driver.findElement(Org.DefaultPositionDropdown()).click();
+		}
+	}
+
+	//ETP_TC_113
+	@Then("Position should not be added and should not display in Position list")
+	public void position_should_not_be_added_and_should_not_display_in_position_list() {
+		try {
+			if(driver.findElement(By.xpath("//div[text()='"+comp2+"']")).isDisplayed()) {
+				assert false;
+			}
+		}catch (Exception e) {
+			System.out.println("User is able to cancel adding position");
+		}
+
+	}
+
+	//ETP_TC_114
+	@When("Click on Edit button of Position {string}")
+	public void click_on_edit_button_of_position(String Case) {
+		if(Case.equalsIgnoreCase("Case1_UsingEditButton")) {
+			driver.findElement(Org.PositionEditButton()).click();
+		}if(Case.equalsIgnoreCase("Case2_UsingEditlink")) {
+			driver.findElement(Org.PositionEditLink()).click();
+		}  
+	}
+
+	@Then("Position ID should be disabled in Edit button")
+	public void position_id_should_be_disabled_in_edit_button() {
+		WebElement ele=driver.findElement(Org.readonlyPositionCodetextfield());
+		wait.until(ExpectedConditions.visibilityOf(ele));
+		Assert.assertTrue(ele.isDisplayed());		    
+	}
+
+	//ETP_TC_115
+	@When("Change the Position name")
+	public void change_the_position_name() throws AWTException {
+		comp2="";
+		comp2=RandomStringUtils.randomAlphabetic(6);			
+
+		WebElement positionName=driver.findElement(Org.PositionNametextfiled());   
+		wait.until(ExpectedConditions.visibilityOf(positionName));	    	
+		Clear(positionName);
+		positionName.sendKeys(comp2);
+	}
+	@Then("Edited Position name should display in Position list")
+	public void edited_position_name_should_display_in_position_list() {
+		WebElement ele=driver.findElement(By.xpath("//div[text()='"+comp2+"']"));
+		wait.until(ExpectedConditions.visibilityOf(ele));
+		Assert.assertTrue(ele.isDisplayed());
+	}
+
+	//ETP_TC_116
+	@Then("Edited Position name should not display in Position list")
+	public void edited_position_name_should_not_display_in_position_list() {
+		try {
+			if(driver.findElement(By.xpath("//div[text()='"+comp2+"']")).isDisplayed()) {
+				assert false;
+			}
+		}catch (Exception e) {
+			System.out.println("User is able to cancel editing position");
+		}}
+
+	//ETP_TC_117
+	@Given("Count the Positions present in Position page")
+	public void count_the_positions_present_in_position_page() {
+		List<WebElement> PositionList=driver.findElements(Org.PositionCount());
+		Positioncount=PositionList.size();
+	}
+
+	@When("Click on {string} button in position page")
+	public void click_on_button_in_position_page(String Case) {
+		if(Case.equalsIgnoreCase("Case1_EditButton")) {
+			driver.findElement(Org.PositionEditButton()).click();
+		}
+		if(Case.equalsIgnoreCase("Case2_AddButton")) {
+			driver.findElement(common.AddButton()).click();
+		}
+		if(Case.equalsIgnoreCase("PersonnelTransfter")) {
+			driver.findElement(common.PersonnelTransfter()).click();
+		}
+		if(Case.equalsIgnoreCase("Delete")) {
+			driver.findElement(common.Deletebutton()).click();
+		} 
+	}
+
+	@When("Click on parent dropdown in position page")
+	public void click_on_parent_dropdown_in_position_page() {
+		driver.findElement(Org.ParentPositionDropdown()).click();
+	}
+
+	@Then("Position count should be equal parent dropdown options count <{string}>")
+	public void position_count_should_be_equal_parent_dropdown_options_count(String Case) {
+		List<WebElement> partDrpList=driver.findElements(Org.parentDropdownList());
+		int parentDrpList=partDrpList.size();
+
+		if(Case.equalsIgnoreCase("Case1_EditButton")) {
+			Assert.assertEquals(Positioncount-1,parentDrpList);
+		}
+		if(Case.equalsIgnoreCase("Case2_AddButton")) {
+			Assert.assertEquals(Positioncount,parentDrpList);
+		}
+	}
+
+	//ETP_TC_118
+	@When("Click on {string} delete button in Position page")
+	public void click_on_delete_button_in_position_page(String delete) {
+		if(delete.equalsIgnoreCase("UsingdeletebuttonofparticularPosition")) {
+			driver.findElement(Org.PositionDelButton()).click();
+		}
+
+		if(delete.equalsIgnoreCase("Usingcommondeletebutton")) {
+			driver.findElement(Org.PositionCheckbox()).click();
+			driver.findElement(common.Deletebutton()).click();
+		}  
+	}
+	@Then("Position should not be deleted from Position page")
+	public void position_should_not_be_deleted_from_position_page() {
+		List<WebElement> PositionList=driver.findElements(Org.PositionCount());
+		int PositionListAfter=PositionList.size();
+		Assert.assertEquals(Positioncount,PositionListAfter);
+	}
+
+	//ETP_TC_119		
+	@Then("Position should be deleted from Position page")
+	public void position_should_be_deleted_from_position_page() {
+		List<WebElement> PositionList=driver.findElements(Org.PositionCount());
+		int PositionListAfter=PositionList.size();
+		Assert.assertEquals(Positioncount-1,PositionListAfter);								   
+	}		
+
+	//ETP_TC_120
+	@When("Click on {string} default delete button in Position page")
+	public void click_on_default_delete_button_in_position_page(String defaultposition) {
+		if(defaultposition.equalsIgnoreCase("UsingParticularDeleteButtonofDefaultPosition")) {
+			driver.findElement(Org.DefaultPositionDelButton()).click();
+		}
+		if(defaultposition.equalsIgnoreCase("UsingCommonDeleteButtonofDefaultPosition")) {
+			driver.findElement(Org.DefaultPositionDelButton()).click();
+			driver.findElement(common.Deletebutton()).click();
+		}  
+	}
+
+	//ETP_TC_121
+	@Then("Position import template should be present in download directory")
+	public void position_import_template_should_be_present_in_download_directory() throws InterruptedException {
+		String filepath=System.getProperty("user.dir")+"\\Downloads\\DownloadETPReports\\position_Import_Template.xlsx";
+		File f = new File(filepath);
+
+		//			Test case is failing while checking file existence, Using thread.sleep to wait		
+		Thread.sleep(3000);
+		Assert.assertTrue(f.exists());
+	}
+
+	//ETP_TC_122
+	@When("Select the Position import file {string}")
+	public void select_the_position_import_file(String Case) {
+		if(Case.equalsIgnoreCase("txtFile")){
+			path="\\Position\\position_Import_Template_txt.txt";
+		}else if(Case.equalsIgnoreCase("xlsFile")){
+			path="\\Position\\position_Import_Template_xls.xls";
+		}else if(Case.equalsIgnoreCase("csvFile")){
+			path="\\Position\\position_Import_Template_csv.csv";
+		}else if(Case.equalsIgnoreCase("xlsxFile")){
+			path="\\Position\\position_Import_Template_xlsx.xlsx";
+		}
+
+		driver.findElement(Org.chooseFileButton()).sendKeys(uploadpath+path);
+
+	}
+
+	@Then("Imported Positions should display in Position list {string}")
+	public void imported_positions_should_display_in_position_list(String Case) {
+		if(Case.equalsIgnoreCase("txtFile")){
+			comp1="Position_501";
+		}else if(Case.equalsIgnoreCase("xlsFile")){
+			comp1="Position_503";
+		}else if(Case.equalsIgnoreCase("csvFile")){
+			comp1="Position_505";
+		}else if(Case.equalsIgnoreCase("xlsxFile")){
+			comp1="Position_507";
+		}
+		wait.until(ExpectedConditions.visibilityOf(driver.findElement(By.xpath("//div[text()='"+comp2+"']"))));
+		Assert.assertTrue(driver.findElement(By.xpath("//div[text()='"+comp2+"']")).isDisplayed());
+
+
+	}
+
+
+
+
+
+
+
+	//DADAPEER------------------------------------------------------------------------------------	    
+	//ETP_TC_213
+	@And("Add multiple departments in department page")
+	public void add_multiple_departments_in_department_page() throws InterruptedException {
+		driver.findElement(login.getPersonnelModule()).click();
+		driver.findElement(personnel.getDepartmentsection()).click();
+		driver.findElement(personnel.Deptadd()).click();
+		WebElement deptname  = driver.findElement(personnel.Deptname());
+		deptname.click();
+		deptname.sendKeys(properties.getProperty("Department"));
+		driver.findElement(common.Confirmbutton()).click();		    
+	}
+
+	@When("Navigate to Employee management page")
+	public void navigate_to_employee_management_page() throws InterruptedException {
+		driver.findElement(personnel.getPersonnelEmployee()).click();
+		driver.findElement(personnel.getEmployee()).click();
+		driver.findElement(personnel.getaddEmployee()).click();
+		driver.findElement(personnel.Deptdropdown()).click();
+		String Expected ="testing";
+		String Actual= driver.findElement(personnel.Deptcrtdown()).getText();
+		Assert.assertEquals(Expected, Actual);
+
+	}	    
+
+	//ETP_TC_214
+	@And ("Add position in position page")
+	public void Add_position_in_position_page() throws InterruptedException { 
+		driver.findElement(login.getPersonnelModule()).click();
+		driver.findElement(personnel.getPersonnelposition()).click();
+		driver.findElement(common.AddButton()).click();
+		WebElement add= driver.findElement(personnel.getAddposition());
+		add.click();
+		add.sendKeys(properties.getProperty("Position"));
+		driver.findElement(common.Confirmbutton()).click();		    
+	}
+
+	@Then ("Navigate to Employee management drop down page") 		    
+	public void Navigate_to_in_Employee_Management_drop_page() throws InterruptedException { 
+		driver.findElement(personnel.getPersonnelEmployee()).click();
+		driver.findElement(personnel.getEmployee()).click();
+		driver.findElement(personnel.getaddEmployee()).click();
+		driver.findElement(personnel.getPersonnelemployeedropdown()).click();
+		String Expected="tester";
+		String Actual=driver.findElement(personnel.getPersonnelemployeecreatedposition()).getText();
+		Assert.assertEquals(Expected, Actual);
+	}
+
+
+	//ETP_TC_215
+	@And("Add holiday in holiday page")
+	public void Add_holiday_in_holiday_page() throws InterruptedException {
+		driver.findElement(login.getPersonnelModule()).click();
+		WebDriverWait wait=new WebDriverWait(driver,Duration.ofSeconds(10));
+		//driver.findElement(personnel.getPersonnelorganisation()).click();        
+		driver.findElement(personnel.getHolidaylocation()).click();
+		driver.findElement(personnel.getPersonnelholidayaddbutton()).click();
+		WebElement clickElement = driver.findElement(personnel.getPersonnelholidayname());
+		clickElement.click();
+		clickElement.sendKeys(properties.getProperty("HolidayLocation"));
+		WebElement clickconfirmbutton = driver.findElement(personnel.getPersonnelholidayconfirmbutton());
+		clickconfirmbutton.click();                      
+	}
+
+
+	@Then("Naviagte Employee management holiday drop down page")
+	public void Naviagte_Employee_management_holiday_drop_down_page() {
+		driver.findElement(personnel.getPersonnelEmployee()).click();
+		driver.findElement(personnel.getEmployee()).click();
+		driver.findElement(personnel.getaddEmployee()).click();
+		driver.findElement(personnel.getPersonnelholidaydropdown()).click();
+		String Expected="bangalore";
+		String Actual=driver.findElement(personnel.getPersonnelholidaydrop()).getText();
+		Assert.assertEquals(Expected, Actual);
+	}
+
+	//@ETP_TC_216
+
+	@And("Add Area in Area page")
+	public void Add_Area_in_Area_page() {
+		driver.findElement(login.getPersonnelModule()).click();
+		//driver.findElement(personnel.getPersonnelorganisation()).click();
+		driver.findElement(personnel.getPersonnelArea()).click();
+		driver.findElement(personnel.getPersonnelAreaAddbutton()).click();
+		WebElement clickElement = driver.findElement(personnel.getPersonnelareaname());
+		clickElement.click();
+		clickElement.sendKeys(properties.getProperty("AreaName"));
+		WebElement clickconfirmbutton = driver.findElement(personnel.getPersonnelholidayconfirmbutton());
+		clickconfirmbutton.click();
+
+	}
+	@Then("Naviagte Employee management Area drop down page")
+	public void Naviagte_Employee_management_Area_drop_down_page() {
+		driver.findElement(personnel.getPersonnelEmployee()).click();
+		driver.findElement(personnel.getEmployee()).click();
+		driver.findElement(personnel.getaddEmployee()).click();
+		driver.findElement(personnel.getPersonnelareadropdown()).click();
+		String Expected ="hyderbad";
+		String Actual= driver.findElement(personnel.getPersonneldropdown()).getText();
+		Assert.assertEquals(Expected, Actual);
+
+	}
+
+	//ETP_TC_217
+
+	@When("Navigate to employee page")
+	public void navigate_to_employee_page() {
+		driver.findElement(personnel.getPersonnelmanagement()).click();
+		driver.findElement(personnel.getEmployee()).click();
+	}
+	@When("Click on the add button")
+	public void click_on_the_add_button() {
+		driver.findElement(personnel.getaddEmployee()).click();	
+	}
+	@When("Enter {string} in the fields")
+	public void enter_in_the_fields(String empData) {           	
+		if(empData.equalsIgnoreCase("OnlyMandatoryDetails")) {
+
+			String EmployeeId1 = RandomStringUtils.randomAlphabetic(5);
+			String FirstName1 = RandomStringUtils.randomAlphabetic(5);
+			//String LastName1 = RandomStringUtils.randomAlphabetic(5);
+
+			driver.findElement(personnel.getEmployeeid()).sendKeys(EmployeeId1);
+			driver.findElement(personnel.getEmployeefirstname()).sendKeys(FirstName1); 
+
+			//Selecting department
+			driver.findElement(personnel.getdepartmentDD()).click();
+			driver.findElement(personnel.getDepartmentdown()).click();
+
+			//Selecting position
+			driver.findElement(personnel.getpositionDD()).click();
+			driver.findElement(personnel.getpositiondown()).click();
+
+			//Selecting Area
+			driver.findElement(personnel.getareaDD()).click();
+			driver.findElement(personnel.getareadown()).click();
+		}
+		else if(empData.equalsIgnoreCase("AllData")) {
+			String EmployeeId2 = RandomStringUtils.randomAlphabetic(5);
+			String FirstName2 = RandomStringUtils.randomAlphabetic(5);
+			String LastName2 = RandomStringUtils.randomAlphabetic(5);
+
+
+			driver.findElement(personnel.getEmployeeid()).sendKeys(EmployeeId2);
+			driver.findElement(personnel.getEmployeefirstname()).sendKeys(FirstName2);
+
+			//Selecting department
+			driver.findElement(personnel.getdepartmentDD()).click();
+			driver.findElement(personnel.getDepartmentdown()).click();
+			driver.findElement(personnel.getemployeelastname()).sendKeys(LastName2);
+
+			//Selecting position
+			driver.findElement(personnel.getpositionDD()).click();
+			driver.findElement(personnel.getpositiondown()).click();
+
+			//Selecting Area
+			driver.findElement(personnel.getareaDD()).click();
+			driver.findElement(personnel.getareadown()).click();
+
+			//Selecting EmployeeType
+			driver.findElement(personnel.getEmploymentType()).click();
+			driver.findElement(personnel.getEmployeeTypedropdown()).click(); 
+
+			//Selecting holiday location
+			driver.findElement(personnel.getHolidaylocationexisted()).click();
+			driver.findElement(personnel.getHolidaydrop()).click();
+
+			//Selecting OutdoorMng
+			driver.findElement(personnel.getOutdoormng()).click();
+			driver.findElement(personnel.getOutdoormngdropdown()).click();
+
+		}  
+	}
+
+	@When("Click on the confirm button")
+	public void click_on_the_confirm_button() {
+		driver.findElement(personnel.getConfirmbutton()).click();
+
+
+	}
+
+	@Then("a success message should be displayed")
+	public void validateSuccessMessage() {
+		// Implementation for validating the success message
+		WebElement successMessage = driver.findElement(personnel.getSuccesfullmessage());
+		WebDriverWait wait=new WebDriverWait(driver,Duration.ofSeconds(30));
+		Assert.assertTrue(successMessage.isDisplayed());
+	}
+
+	@Then("the created employee should be visible in the employee list")
+	public void validateEmployeeVisibility(DataTable employeeData) {
+		WebElement ele1=driver.findElement(By.xpath("//div[text()='"+EmployeeId1+"']"));
+		wait.until(ExpectedConditions.visibilityOf(ele1));
+		Assert.assertTrue(ele1.isDisplayed());
+		WebElement ele2=driver.findElement(By.xpath("//div[text()='"+EmployeeId2+"']"));
+		wait.until(ExpectedConditions.visibilityOf(ele2));
+		Assert.assertTrue(ele2.isDisplayed());
+
+	} 
+
+
+	//@ETP_TC_218 @Login @Admin
+	@When("Naviagte Employee management page")
+	public void naviagte_employee_management_page() {
+		driver.findElement(login.getPersonnelModule()).click();
+		driver.findElement(personnel.getPersonnelEmployee()).click();
+		driver.findElement(personnel.getEmployee()).click();
+		WebDriverWait wait=new WebDriverWait(driver,Duration.ofSeconds(30));
+		driver.findElement(personnel.getaddEmployee()).click();
+	}
+	@Then("Error message should display")
+	public void error_message_should_display() {
+		//driver.findElement(personnel.getConfirmbutton()).click();               
+		WebElement errorMessagelocator = driver.findElement(personnel.getErrormessage());
+		WebDriverWait wait=new WebDriverWait(driver,Duration.ofSeconds(30));
+		Assert.assertTrue(errorMessagelocator.isDisplayed());
+
+	}
+
+	//@ETP_TC_220 @Login @Admin
+	@When("Iam in employee page")
+	public void iam_in_employee_page() {
+		driver.findElement(login.getPersonnelModule()).click();
+		driver.findElement(personnel.getPersonnelEmployee()).click();
+		driver.findElement(personnel.getEmployee()).click();
+	}
+	@When("Iam clicking on add button")
+	public void iam_clicking_on_add_button() {
+		driver.findElement(personnel.getaddEmployee()).click();	
+
+	}
+	@When("Enter Employee_permanent in the fields")
+	public void enter_employee_permanent_in_the_fields() {
+		driver.findElement(personnel.getEmployeeid()).sendKeys(properties.getProperty("Employeeid"));
+		driver.findElement(personnel.getEmployeefirstname()).sendKeys(properties.getProperty("FirstName")); 
+		driver.findElement(personnel.getDepartment()).click();
+		driver.findElement(personnel.getDepartmentdown()).click();
+		driver.findElement(personnel.getPosition()).click();
+		driver.findElement(personnel.getPostiondropdown()).click();
+		driver.findElement(personnel.getArea()).click();
+		WebDriverWait wait=new WebDriverWait(driver,Duration.ofSeconds(20));
+		driver.findElement(personnel.getAreadropdown()).click();
+		driver.findElement(personnel.getEmploymentType()).click();
+		driver.findElement(personnel.getEmployeeTypedropdown()).click(); 
+
+	}
+	@When("submits the employee creation form")
+	public void submits_the_employee_creation_form() {
+		driver.findElement(personnel.getConfirmbutton()).click();
+	}
+	@Then("the employee with the provided details should be created successfully")
+	public void the_employee_with_the_provided_details_should_be_created_successfully() {
+		WebElement successMessage = driver.findElement(personnel.getSuccesfullmessage());
+		WebDriverWait wait=new WebDriverWait(driver,Duration.ofSeconds(30));
+		Assert.assertTrue(successMessage.isDisplayed());
+	}
+
+	//@ETP_TC_221 @Login @Admin
+	@When("Enter Employee_temporary in the fields")
+	public void enter_employee_temporary_in_the_fields() {
+		driver.findElement(personnel.getEmployeeid()).sendKeys(properties.getProperty("OutdoorEmployeeid"));
+		driver.findElement(personnel.getEmployeefirstname()).sendKeys(properties.getProperty("FirstName")); 
+		driver.findElement(personnel.getDepartment()).click();
+		driver.findElement(personnel.getDepartmentdown()).click();
+		driver.findElement(personnel.getPosition()).click();
+		driver.findElement(personnel.getPostiondropdown()).click();
+		driver.findElement(personnel.getArea()).click();
+		WebDriverWait wait=new WebDriverWait(driver,Duration.ofSeconds(20));
+		driver.findElement(personnel.getAreadropdown()).click();
+		driver.findElement(personnel.getEmploymentType()).click();
+		driver.findElement(personnel.getTemporaryEmployee()).click(); 
+
+	}
+	//@ETP_TC_222 @Login @Admin
+	@Given("the user is on the Employee page")
+	public void userIsOnEmployeePage() {
+		driver.findElement(login.getPersonnelModule()).click();
+		driver.findElement(personnel.getPersonnelEmployee()).click();
+		driver.findElement(personnel.getEmployee()).click();
+		driver.findElement(personnel.getaddEmployee()).click();
+
+	}
+	@When("the user attempts to enable Outdoor Management")
+	public void userAttemptsToEnableOutdoorManagement() {
+		driver.findElement(personnel.getEmployeeid()).sendKeys(properties.getProperty("OutdoorMng"));
+		driver.findElement(personnel.getEmployeefirstname()).sendKeys(properties.getProperty("FirstName")); 
+		driver.findElement(personnel.getDepartment()).click();
+		driver.findElement(personnel.getDepartmentdown()).click();
+		driver.findElement(personnel.getPosition()).click();
+		driver.findElement(personnel.getPostiondropdown()).click();
+		driver.findElement(personnel.getArea()).click();
+		WebDriverWait wait=new WebDriverWait(driver,Duration.ofSeconds(20));
+		driver.findElement(personnel.getAreadropdown()).click();
+		driver.findElement(personnel.getEmployeefirstname()).click();
+		driver.findElement(personnel.getOutdoormng()).click();
+		driver.findElement(personnel.getOutdoormngdropdown()).click();
+		driver.findElement(personnel.getConfirmbutton()).click();
+	}
+
+
+	@Then("Succesfull message should be display")
+	public void  Succesfull_message_should_be_display () {
+		WebElement successMessage = driver.findElement(personnel.getSuccesfullmessage());
+		WebDriverWait wait=new WebDriverWait(driver,Duration.ofSeconds(40));
+		Assert.assertTrue(successMessage.isDisplayed());
+	}
+
+	//ETP_TC_223 @Login @Admin
+	@When("Enter Employee details")
+	public void EnterEmployeedetails() throws InterruptedException{
+		driver.findElement(login.getPersonnelModule()).click();
+		driver.findElement(personnel.getPersonnelEmployee()).click();
+		driver.findElement(personnel.getEmployee()).click();
+		driver.findElement(personnel.getaddEmployee()).click();
+		driver.findElement(personnel.getEmployeeid()).sendKeys(properties.getProperty("EmployeeProfile"));
+		driver.findElement(personnel.getEmployeefirstname()).sendKeys(properties.getProperty("FirstName")); 
+		driver.findElement(personnel.getDepartment()).click();
+		driver.findElement(personnel.getDepartmentdown()).click();
+		driver.findElement(personnel.getPosition()).click();
+		driver.findElement(personnel.getPostiondropdown()).click();
+		driver.findElement(personnel.getArea()).click();
+		WebDriverWait wait=new WebDriverWait(driver,Duration.ofSeconds(20));
+		driver.findElement(personnel.getAreadropdown()).click();
+		Thread.sleep(2000);
+
+	}
+
+	@When("the user attempts to upload a user photo")
+	public void userAttemptsToUploadPhoto() throws InterruptedException, AWTException, IOException {
+		Robot robot = new Robot();
+		Actions builder = new Actions(driver);
+		String path = System.getProperty("user.dir");
+		Thread.sleep(1000);
+		robot.delay(1000);
+		String filename = "C:\\New_ETP\\29Jan\\29Jan\\easytimepro\\src\\main\\resources\\pexels-pixabay.jpg";
+		Thread.sleep(2000);
+		System.out.println(filename);
+		driver.findElement(personnel.getUserprofilepic()).click();
+		StringSelection filepath = new StringSelection(filename);
+		Thread.sleep(1000);
+		Toolkit.getDefaultToolkit().getSystemClipboard().setContents(filepath, null);
+		Thread.sleep(2000);
+		robot.keyPress(KeyEvent.VK_CONTROL);
+		robot.keyPress(KeyEvent.VK_V);
+		Thread.sleep(1000);
+		robot.keyRelease(KeyEvent.VK_V);
+		robot.keyRelease(KeyEvent.VK_CONTROL);
+		robot.delay(2000);
+		robot.keyPress(KeyEvent.VK_ENTER);
+		robot.delay(2000);
+		robot.keyRelease(KeyEvent.VK_ENTER);
+		robot.delay(2000);
+		Thread.sleep(10000);
+		System.out.println("File Uploaded Successfully");
+		driver.findElement(personnel.getConfirmbutton()).click();
+	}
+	@Then("Succesfull message display")
+	public void successfulMessageIsDisplay() {
+		WebElement successMessage = driver.findElement(personnel.getSuccesfullmessage());
+		WebDriverWait wait=new WebDriverWait(driver,Duration.ofSeconds(30));
+		Assert.assertTrue(successMessage.isDisplayed());
+
+	}	
+
+	//ETP_TC_224 @Login @Admin
+	@When("Iam creating the employee")
+	public void Iamcreatingtheemployee () throws InterruptedException{
+		driver.findElement(login.getPersonnelModule()).click();
+		driver.findElement(personnel.getPersonnelEmployee()).click();
+		driver.findElement(personnel.getEmployee()).click();
+		driver.findElement(personnel.getaddEmployee()).click();
+		driver.findElement(personnel.getEmployeeid()).sendKeys(properties.getProperty("EmployeePicture"));
+		driver.findElement(personnel.getEmployeefirstname()).sendKeys(properties.getProperty("FirstName")); 
+		driver.findElement(personnel.getDepartment()).click();
+		driver.findElement(personnel.getDepartmentdown()).click();
+		driver.findElement(personnel.getPosition()).click();
+		driver.findElement(personnel.getPostiondropdown()).click();
+		driver.findElement(personnel.getArea()).click();
+		WebDriverWait wait=new WebDriverWait(driver,Duration.ofSeconds(20));
+		driver.findElement(personnel.getAreadropdown()).click();
+		Thread.sleep(2000);
+	}
+	@When("Iam trying to upload pdf photo")
+	public void Iamtryingtouploadpdfphoto() throws InterruptedException, AWTException {
+		Robot robot = new Robot();
+		Actions builder = new Actions(driver);
+		String path = System.getProperty("user.dir");
+		Thread.sleep(1000);
+		robot.delay(1000);
+		String filename = "C:\\New_ETP\\29Jan\\29Jan\\easytimepro\\src\\main\\resources\\HolidayList.pdf";
+		Thread.sleep(2000);
+		System.out.println(filename);
+		//wait1.until(ExpectedConditions.visibilityOfElementLocated(browse_map));
+		//driver.findElement(browse_map).click();
+		driver.findElement(personnel.getUserprofilepic()).click();
+		StringSelection filepath = new StringSelection(filename);
+		Thread.sleep(1000);
+		Toolkit.getDefaultToolkit().getSystemClipboard().setContents(filepath, null);
+		Thread.sleep(2000);
+		robot.keyPress(KeyEvent.VK_CONTROL);
+		robot.keyPress(KeyEvent.VK_V);
+		Thread.sleep(1000);
+		robot.keyRelease(KeyEvent.VK_V);
+		robot.keyRelease(KeyEvent.VK_CONTROL);
+		robot.delay(2000);
+		robot.keyPress(KeyEvent.VK_ENTER);
+		robot.delay(2000);
+		robot.keyRelease(KeyEvent.VK_ENTER);
+		robot.delay(2000);
+		Thread.sleep(10000);
+		System.out.println("ErrorMessageshoulddisplay");
+	}
+
+	@Then("Error message display")
+	public void Errormessagedisplay () {
+		WebElement ErrorMessage = driver.findElement(personnel.getUserprofileerrormsg());
+		WebDriverWait wait=new WebDriverWait(driver,Duration.ofSeconds(20));
+		Assert.assertTrue(ErrorMessage.isDisplayed());
+
+	}	
+
+	//ETP_TC_225 @Login @Admin
+	@When("Iam creating the employee in employee page") 
+	public void Iamcreatingtheemployeeinemployeepage () {
+		driver.findElement(login.getPersonnelModule()).click();
+		driver.findElement(personnel.getPersonnelEmployee()).click();
+		driver.findElement(personnel.getEmployee()).click();
+		driver.findElement(personnel.getaddEmployee()).click();
+		driver.findElement(personnel.getEmployeeid()).sendKeys(properties.getProperty("EmployeePicture"));
+		driver.findElement(personnel.getEmployeefirstname()).sendKeys(properties.getProperty("FirstName")); 
+		driver.findElement(personnel.getDepartment()).click();
+		driver.findElement(personnel.getDepartmentdown()).click();
+		driver.findElement(personnel.getPosition()).click();
+		driver.findElement(personnel.getPostiondropdown()).click();
+		driver.findElement(personnel.getArea()).click();
+		WebDriverWait wait=new WebDriverWait(driver,Duration.ofSeconds(20));
+		driver.findElement(personnel.getAreadropdown()).click();
+	}
+	@When("admin navigates to the device settings")
+	public void adminnavigatestothedevicesettings () {
+		driver.findElement(personnel.getDevicesettings()).click();
+	}
+	@And("admin sets a new password for the device")
+	public void adminsetsanewpasswordforthedevice () {
+		driver.findElement(personnel.getDevicepassword()).sendKeys(properties.getProperty("Devicepassword"));				
+		driver.findElement(personnel.getConfirmbutton()).click();
+	}
+	@Then("device password should be updated successfully")
+	public void devicepasswordshouldbeupdatedsuccessfully  () {
+		WebElement successMessage = driver.findElement(personnel.getSuccesfullmessage());
+		WebDriverWait wait=new WebDriverWait(driver,Duration.ofSeconds(30));
+		Assert.assertTrue(successMessage.isDisplayed());
+	}
+
+	//ETP_TC_226 @Login @Admin
+	@When("Adding the Employee in Employee login page")
+	public void AddingtheEmployeeinEmployeeloginpage () {
+		driver.findElement(login.getPersonnelModule()).click();
+		driver.findElement(personnel.getPersonnelEmployee()).click();
+		driver.findElement(personnel.getEmployee()).click();
+		driver.findElement(personnel.getaddEmployee()).click();
+		driver.findElement(personnel.getEmployeeid()).sendKeys(properties.getProperty("AdminEmployee"));
+		driver.findElement(personnel.getEmployeefirstname()).sendKeys(properties.getProperty("FirstName")); 
+		driver.findElement(personnel.getDepartment()).click();
+		driver.findElement(personnel.getDepartmentdown()).click();
+		driver.findElement(personnel.getPosition()).click();
+		driver.findElement(personnel.getPostiondropdown()).click();
+		driver.findElement(personnel.getArea()).click();
+		WebDriverWait wait=new WebDriverWait(driver,Duration.ofSeconds(20));
+		driver.findElement(personnel.getAreadropdown()).click();
+
+	}
+	@When("admin navigates to the Attendance settings")
+	public void admin_navigates_to_the_attendance_settings() throws InterruptedException {
+		driver.findElement(personnel.getAttendancesettings()).click();
+
+
+	}
+	@When("user clears the old password for the employee and add new password")
+	public void user_clears_the_old_password_for_the_employee_and_add_new_password() {
+		WebElement oldPasswordField = driver.findElement(personnel.getEmployeeselfpassword());
+		wait.until(ExpectedConditions.visibilityOf(oldPasswordField));
+		oldPasswordField.clear();
+		oldPasswordField.sendKeys(properties.getProperty("Employeenewpassword"));
+		driver.findElement(personnel.getConfirmbutton()).click();
+	}
+
+	@Then("Employee password should be updated successfully")
+	public void employee_password_should_be_updated_successfully() {
+		WebElement successMessage = driver.findElement(personnel.getSuccesfullmessage());
+		WebDriverWait wait=new WebDriverWait(driver,Duration.ofSeconds(30));
+		Assert.assertTrue(successMessage.isDisplayed());
+	} 
+	//@ETP_TC_227
+	@When("Adding the Employee with differentemployee")
+	public void adding_the_employee_with_differentemployee() {
+		driver.findElement(login.getPersonnelModule()).click();
+		driver.findElement(personnel.getPersonnelEmployee()).click();
+		driver.findElement(personnel.getEmployee()).click();
+		driver.findElement(personnel.getaddEmployee()).click();
+		driver.findElement(personnel.getEmployeeid()).sendKeys(properties.getProperty("Employeenew"));
+		driver.findElement(personnel.getEmployeefirstname()).sendKeys(properties.getProperty("FirstName")); 
+		driver.findElement(personnel.getDepartment()).click();
+		driver.findElement(personnel.getDepartmentdown()).click();
+		driver.findElement(personnel.getPosition()).click();
+		driver.findElement(personnel.getPostiondropdown()).click();
+		driver.findElement(personnel.getArea()).click();
+		WebDriverWait wait=new WebDriverWait(driver,Duration.ofSeconds(20));
+		driver.findElement(personnel.getAreadropdown()).click();
+
+	}
+	@Then("logs out the application")
+	public void logs_out_the_application() {
+		driver.findElement(login.getlogout()).click();
+		driver.findElement(common.Confirmbutton()).click();
+	}
+	@Then("logs in as the employee with the new password")
+	public void logs_in_as_the_employee_with_the_new_password() throws Exception {
+		driver.findElement(login.getemployeeTab()).click();
+		windowMinimize(4);
+		driver.findElement(login.getempusername()).sendKeys(properties.getProperty("Employeenew"));
+		driver.findElement(login.getemppassword()).sendKeys(properties.getProperty("EmployeePwd"));
+		driver.findElement(login.getemploginButton()).click();
+	}
+	@Then("Leave page should be display")
+	public void leave_page_should_be_display() {
+		WebElement Leavepage = driver.findElement(personnel.getLeavepage());
+		Assert.assertTrue(Leavepage.isDisplayed());
+
+	}
+
+	//@ETP_TC_228
+	@When("Enter {string} in the page")
+	public void enter_in_the_fields1(String empData) {   
+		driver.findElement(personnel.getPersonnelmanagement()).click();
+		driver.findElement(personnel.getEmployee()).click();
+		driver.findElement(personnel.getaddEmployee()).click();	
+		if(empData.equalsIgnoreCase("OnlyMandatoryDetails")) {
+
+			String EmployeeId1 = RandomStringUtils.randomAlphabetic(5);
+			String FirstName1 = RandomStringUtils.randomAlphabetic(5);
+			//String LastName1 = RandomStringUtils.randomAlphabetic(5);
+
+			driver.findElement(personnel.getEmployeeid()).sendKeys(EmployeeId1);
+			driver.findElement(personnel.getEmployeefirstname()).sendKeys(FirstName1); 
+
+			//Selecting department
+			driver.findElement(personnel.getdepartmentDD()).click();
+			driver.findElement(personnel.getDepartmentdown()).click();
+
+			//Selecting position
+			driver.findElement(personnel.getpositionDD()).click();
+			driver.findElement(personnel.getpositiondown()).click();
+
+			//Selecting Area
+			driver.findElement(personnel.getareaDD()).click();
+			driver.findElement(personnel.getareadown()).click();
+
+			//Selecting holiday location
+			driver.findElement(personnel.getHolidaylocationexisted()).click();
+			driver.findElement(personnel.getHolidaydrop()).click();
+
+		}
+	}
+
+	//@ETP_TC_229
+	@And("User navigate to Role section of approvals")
+	public void navigate_To_Approval_Workflow_Page(){
+		driver.findElement(login.getPersonnelModule()).click();
+		driver.findElement(personnel.getapproval()).click();
+		driver.findElement(personnel.getRolesection()).click();
+
+	}
+	@And("Click on the Add button")
+	public void Click_On_The_Add_Button() {
+		driver.findElement(personnel.getRoleadd()).click();
+
+	}
+	@And("Enter RoleCode and RoleName in the text fields and Click on Confirm button")
+	public void Enter_RoleCode_and_RoleName_in_the_text_fields_and_Click_on_Confirm_button() throws InterruptedException {
+		// Enter the role code and role name in the appropriate fields
+		driver.findElement(personnel.getRolecode()).sendKeys(properties.getProperty("RoleCode"));
+		driver.findElement(personnel.getRolename()).sendKeys(properties.getProperty("RoleName"));
+		// Click on the Confirm button
+		driver.findElement(personnel.getConfirmbutton()).click();
+		WebElement rolePage = driver.findElement(personnel.getRolepage());
+		wait.until(ExpectedConditions.visibilityOf(rolePage));
+	}
+
+	@Then("Created role is displaying in employee managament page")
+	public void Created_role_is_displaying_in_employee_managament_page(){
+		driver.findElement(personnel.getPersonnelEmployee()).click();
+		driver.findElement(personnel.getEmployee()).click();
+		WebDriverWait wait=new WebDriverWait(driver,Duration.ofSeconds(20));
+		driver.findElement(personnel.getaddEmployee()).click();
+		driver.findElement(personnel.getAttendancesettings()).click();
+		wait.until(ExpectedConditions.visibilityOfElementLocated(personnel.getWorkflowdropdown()));
+		WebElement e = driver.findElement(personnel.getWorkflowdropdown());
+		javaScriptClick(driver.findElement(personnel.getWorkflowdropdown()));
+		//			Actions a = new Actions(driver);
+		//			a.doubleClick(e);
+		String Expected ="manager";
+		List<WebElement> cb = driver.findElements(personnel.createdworkflowdropdown());
+		javaScriptClick(cb.get(0));
+		//			String Actual= driver.findElement(personnel.createdworkflowdropdown()).getText();
+		//			Assert.assertEquals(Expected, Actual);
+
+	}
+	//ETP_TC_230
+	@When("Enter new RoleCode and RoleName in the text fields and Click on Confirm button")
+	public void Enter_new_rolecode_and_rolename_in_the_text_fields_and_click_on_confirm_button(){
+		driver.findElement(personnel.getRolecode()).sendKeys(properties.getProperty("Rolecode2"));
+		driver.findElement(personnel.getRolename()).sendKeys(properties.getProperty("RoleNamet"));
+		driver.findElement(personnel.getConfirmbutton()).click();
+		WebElement rolePage = driver.findElement(personnel.getRolepage());
+		wait.until(ExpectedConditions.visibilityOf(rolePage));
+	}
+	@Then("Created new role is displaying in employee managament page")
+	public void Created_new_role_is_displaying_in_employee_managament_page(){
+		driver.findElement(personnel.getPersonnelEmployee()).click();
+		driver.findElement(personnel.getEmployee()).click();
+		driver.findElement(personnel.getaddEmployee()).click();
+		driver.findElement(personnel.getEmployeeid()).sendKeys(properties.getProperty("Employeenew"));
+		driver.findElement(personnel.getEmployeefirstname()).sendKeys(properties.getProperty("FirstName")); 
+		driver.findElement(personnel.getDepartment()).click();
+		driver.findElement(personnel.getDepartmentdown()).click();
+		driver.findElement(personnel.getPosition()).click();
+		driver.findElement(personnel.getPostiondropdown()).click();
+		driver.findElement(personnel.getArea()).click();
+		WebDriverWait wait=new WebDriverWait(driver,Duration.ofSeconds(20));
+		driver.findElement(personnel.getAreadropdown()).click();
+		driver.findElement(personnel.getAttendancesettings()).click();
+		wait.until(ExpectedConditions.visibilityOfElementLocated(personnel.getWorkflowdropdown()));
+		WebElement e = driver.findElement(personnel.getWorkflowdropdown());
+		javaScriptClick(driver.findElement(personnel.getWorkflowdropdown()));
+		String Expected ="TL";
+		String Actual= driver.findElement(personnel.createdworkflowdropdown()).getText();
+		Assert.assertEquals(Expected, Actual);
+	}
+	//@ETP_TC_231
+	@When("Enter {string} in the pages")
+	public void enter_in_the_fieldsa(String empData) {     
+		driver.findElement(personnel.getPersonnelmanagement()).click();
+		driver.findElement(personnel.getEmployee()).click();
+		driver.findElement(personnel.getaddEmployee()).click();	
+		if(empData.equalsIgnoreCase("OnlyMandatoryDetails")) {
+
+			String EmployeeId1 = RandomStringUtils.randomAlphabetic(5);
+			String FirstName1 = RandomStringUtils.randomAlphabetic(5);
+			//String LastName1 = RandomStringUtils.randomAlphabetic(5);
+
+			driver.findElement(personnel.getEmployeeid()).sendKeys(EmployeeId1);
+			driver.findElement(personnel.getEmployeefirstname()).sendKeys(FirstName1); 
+
+			//Selecting department
+			driver.findElement(personnel.getdepartmentDD()).click();
+			driver.findElement(personnel.getDepartmentdown()).click();
+
+			//Selecting position
+			driver.findElement(personnel.getpositionDD()).click();
+			driver.findElement(personnel.getpositiondown()).click();
+
+			//Selecting Area
+			driver.findElement(personnel.getareaDD()).click();
+			driver.findElement(personnel.getareadown()).click();		    			
+		}
+
+	}
+
+	//@ETP_TC_232
+	@When("Enter {string} in the employee page")
+	public void enter_in_the_fieldsb(String empData) {     
+		driver.findElement(personnel.getPersonnelmanagement()).click();
+		driver.findElement(personnel.getEmployee()).click();
+		driver.findElement(personnel.getaddEmployee()).click();	
+		if(empData.equalsIgnoreCase("OnlyMandatoryDetails")) {
+
+			String EmployeeId1 = RandomStringUtils.randomAlphabetic(5);
+			String FirstName1 = RandomStringUtils.randomAlphabetic(5);
+			//String LastName1 = RandomStringUtils.randomAlphabetic(5);
+
+			driver.findElement(personnel.getEmployeeid()).sendKeys(EmployeeId1);
+			driver.findElement(personnel.getEmployeefirstname()).sendKeys(FirstName1); 
+
+			//Selecting department
+			driver.findElement(personnel.getdepartmentDD()).click();
+			driver.findElement(personnel.getDepartmentdown()).click();
+
+			//Selecting position
+			driver.findElement(personnel.getpositionDD()).click();
+			driver.findElement(personnel.getpositiondown()).click();
+
+			//Selecting Area
+			driver.findElement(personnel.getareaDD()).click();
+			driver.findElement(personnel.getareadown()).click();
+
+			driver.findElement(personnel.getConfirmbutton()).click();
+		}
+	}
+	@When("the user is on the Edit Employee page")
+	public void the_user_is_on_the_Edit_Employee_page(){		
+		WebDriverWait wait=new WebDriverWait(driver,Duration.ofSeconds(30));
+		javaScriptClick(driver.findElement(personnel.getEmployeeeditbutton()));
+		WebDriverWait waitc=new WebDriverWait(driver,Duration.ofSeconds(30));
+	}
+	@Then("the Document tab should be displayed")
+	public void the_Document_tab_should_be_displayed(){
+		driver.findElement(personnel.getEmployeedocu()).click();
+		Assert.assertTrue(driver.findElement(personnel.getEmployeedocu()).isDisplayed());
+	}
+
+	//ETP_TC_233
+	@When("Click on personnel employee document")
+	public void click_on_personnel_employee_document() {
+		driver.findElement(personnel.getPersonnelmanagement()).click();
+		driver.findElement(empdoc.getEmpdocc()).click(); 
+	}
+	@When("Add document")
+	public void add_document() {
+		driver.findElement(empdoc.getEmpdocAdd()).click();
+		driver.findElement(personnel.getEmployeedocumentno()).sendKeys(properties.getProperty("DocumentNo"));
+		driver.findElement(personnel.getEmployeedocumenttitle()).sendKeys(properties.getProperty("DocumentTitle"));
+		driver.findElement(personnel.getConfirmbutton()).click();
+	}
+	@When("Click on employee management")
+	public void click_on_employee_management() {
+		driver.findElement(personnel.getPersonnelEmployee()).click();
+	}
+
+	@When("Enter {string} in the employee documentpage")
+	public void enter_in_the_fieldsc(String empData) {  
+		driver.findElement(personnel.getEmployee()).click();
+		WebDriverWait wait=new WebDriverWait(driver,Duration.ofSeconds(20));
+		driver.findElement(personnel.getaddEmployee()).click();	
+		if(empData.equalsIgnoreCase("OnlyMandatoryDetails")) {
+
+			String EmployeeId1 = RandomStringUtils.randomAlphabetic(5);
+			String FirstName1 = RandomStringUtils.randomAlphabetic(5);
+			//String LastName1 = RandomStringUtils.randomAlphabetic(5);
+
+			driver.findElement(personnel.getEmployeeid()).sendKeys(EmployeeId1);
+			driver.findElement(personnel.getEmployeefirstname()).sendKeys(FirstName1); 
+
+			//Selecting department
+			driver.findElement(personnel.getdepartmentDD()).click();
+			driver.findElement(personnel.getDepartmentdown()).click();
+
+			//Selecting position
+			driver.findElement(personnel.getpositionDD()).click();
+			driver.findElement(personnel.getpositiondown()).click();
+
+			//Selecting Area
+			driver.findElement(personnel.getareaDD()).click();
+			driver.findElement(personnel.getareadown()).click();
+			driver.findElement(personnel.getConfirmbutton()).click();
+		}
+
+	}
+	@Then("Created document is displaying in document dropdown")
+	public void created_document_is_displaying_in_document_dropdown() {
+		driver.findElement(personnel.getEmployeeeditbutton()).click();
+		driver.findElement(personnel.getEmployeedocu()).click();
+		driver.findElement(personnel.getEmployeedocumentadd()).click();
+		driver.findElement(personnel.getEmployeedocumentdropdown()).click();
+		String Expected ="aadhar";
+		String Actual= driver.findElement(personnel.getEmployeecreateddocumentname()).getText();
+		Assert.assertEquals(Expected, Actual);
+
+	}
+
+	//@ETP_TC_235
+	@Then("Created document is displaying in document page")
+	public void created_document_is_displaying_in_document_page() throws InterruptedException {
+		List<WebElement> NewlyCreated = driver.findElements(By.xpath("(//table[@class='layui-table'])[6]//tr[1]//td[3]"));
+		for (WebElement ele : NewlyCreated) {
+			String name = ele.getText();
+			Assert.assertEquals(name, ele.getText());
+			System.out.println(name);
+		}
+	}
+
+	//@ETP_TC_236
+	@Then("iam selecting emailalert dropdown as no")
+	public void iam_selecting_emailalert_dropdown_as_yes() throws InterruptedException {
+		Thread.sleep(2000);
+		driver.findElement(personnel.getEmployeedocu()).click();
+		driver.findElement(personnel.getEmployeedocumentadd()).click();
+		driver.findElement(personnel.getEmployeedocumentdropdown()).click();
+		driver.findElement(personnel.getEmployeecreateddocumentemploeepage()).click();
+		Thread.sleep(2000);
+		driver.findElement(personnel.getEmployeeemailalertdropdown()).click();
+		driver.findElement(personnel.getEmployeedocumentconfirmbutton()).click();
+	}
+	//@ETP_TC_237
+	@When("iam selecting emailalert dropdown page")
+	public void iam_selecting_emailalert_dropdown_page() throws InterruptedException {
+		Thread.sleep(2000);
+		driver.findElement(personnel.getEmployeedocu()).click();
+		driver.findElement(personnel.getEmployeedocumentadd()).click();
+		driver.findElement(personnel.getEmployeedocumentdropdown()).click();
+		driver.findElement(personnel.getEmployeecreateddocumentemploeepage()).click();
+
+	}
+	@Then("uploading wrong file")
+	public void uploading_wrong_file() throws InterruptedException, AWTException{
+		wait.until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector("[class=\"layui-form\"]>div:nth-child(6)>div>div>input")));
+		wait.until(ExpectedConditions.presenceOfElementLocated(By.cssSelector("[class=\"layui-form\"]>div:nth-child(6)>div>div>input")));
+		Act.moveToElement(driver.findElement(By.cssSelector("[class=\"layui-form\"]>div:nth-child(6)>div>div>input"))).click().build().perform();
+		String file_loc = "D:\\Dada\\easytimepro\\src\\main\\resources\\UploadETPFiles\\employeeManagement\\employee_Import_Template 1.xlsx";
+		personnel.upload_file(file_loc);
+
+	}
+	@Then("Error message should be display Unsupported File Format")
+	public void error_message_should_be_display() {
+		driver.findElement(personnel.getEmployeedocumentconfirmbutton()).click();
+		Assert.assertTrue(driver.findElement(personnel.getEmployeedocumenterrormeaasge()).isDisplayed());
+	}
+
+	//@ETP_TC_238
+	@When("creating emailalert")
+	public void creating_emailalert() throws InterruptedException {
+		Thread.sleep(2000);
+		driver.findElement(personnel.getEmployeedocu()).click();
+		driver.findElement(personnel.getEmployeedocumentadd()).click();
+		driver.findElement(personnel.getEmployeedocumentdropdown()).click();
+		driver.findElement(personnel.getEmployeecreateddocumentemploeepage()).click();
+	}
+	@Then("uploading correct file")
+	public void uploading_correct_file() throws InterruptedException, AWTException {
+		wait.until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector("[class=\"layui-form\"]>div:nth-child(6)>div>div>input")));
+		wait.until(ExpectedConditions.presenceOfElementLocated(By.cssSelector("[class=\"layui-form\"]>div:nth-child(6)>div>div>input")));
+		Act.moveToElement(driver.findElement(By.cssSelector("[class=\"layui-form\"]>div:nth-child(6)>div>div>input"))).click().build().perform();
+		String file_loc = "D:\\Dada\\easytimepro\\src\\main\\resources\\UploadETPFiles\\employeeManagement\\shaik_aadhar.pdf";
+		personnel.upload_file(file_loc);
+
+	}
+	@Then("user should be download the document")
+	public void user_should_be_download_the_document() throws InterruptedException {
+		driver.findElement(personnel.getEmployeedocumentconfirmbutton()).click();
+		Thread.sleep(2000);
+		WebElement downloadLink = driver.findElement(personnel.getEmployeedownloaduploadfile());
+		downloadLink.click();
+	}
+	//ETP_TC_239
+	@Then("user should edit the document")
+	public void user_should_edit_the_document() {
+		//driver.findElement(personnel.getPersonnel_Employee_Edit_window_Document_Section_Add_window_option_in_Email_Alert_dropdown()).click();
+		driver.findElement(personnel.getEmployeedocumentconfirmbutton()).click();
+		driver.findElement(personnel.getEmployeeedocumenteditbutton()).click();
+		//driver.findElement(personnel.getPersonnel_Employee_Edit_window_Document_Section_Add_window_option_in_Email_Alert_dropdown()).click();
+	}
+	//ETP_TC_240
+	@Then("User is able to delete created document")
+	public void User_is_able_to_delete_created_document () {
+		driver.findElement(empdoc.getEmpcheckbox()).click(); 
+		driver.findElement(personnel.getEmployeeedocumentdeleteoption()).click();
+		driver.findElement(empdoc.getDelconfm()).click(); 
+	}
+	//ETP_TC_241
+	@When("Enter {string} in the Employee")
+	public void enter_in_the_fieldsd(String empData) { 
+		//driver.findElement(personnel.getEmployee()).click();	
+		if(empData.equalsIgnoreCase("OnlyMandatoryDetails")) {
+			String EmployeeId1 = RandomStringUtils.randomAlphabetic(5);
+			String FirstName1 = RandomStringUtils.randomAlphabetic(5);
+			//String LastName1 = RandomStringUtils.randomAlphabetic(5);
+
+			driver.findElement(personnel.getEmployeeid()).sendKeys(EmployeeId1);
+			driver.findElement(personnel.getEmployeefirstname()).sendKeys(FirstName1); 
+
+			//Selecting department
+			driver.findElement(personnel.getdepartmentDD()).click();
+			driver.findElement(personnel.getDepartmentdown()).click();
+
+			//Selecting position
+			driver.findElement(personnel.getpositionDD()).click();
+			driver.findElement(personnel.getpositiondown()).click();
+
+			//Selecting Area
+			driver.findElement(personnel.getareaDD()).click();
+			driver.findElement(personnel.getareadown()).click();
+			driver.findElement(personnel.getPersonnel_Mobile_App_Settings()).click();
+			driver.findElement(personnel.getPersonnel_Mobile_App_Role_Drop_Down()).click();
+			driver.findElement(personnel.getPersonnel_Mobile_App_Employee()).click();
+			driver.findElement(personnel.getConfirmbutton()).click();
+		}
+		else if(empData.equalsIgnoreCase("AllData")) {
+			String EmployeeId2 = RandomStringUtils.randomAlphabetic(5);
+			String FirstName2 = RandomStringUtils.randomAlphabetic(5);
+			String LastName2 = RandomStringUtils.randomAlphabetic(5);
+
+
+			driver.findElement(personnel.getEmployeeid()).sendKeys(EmployeeId2);
+			driver.findElement(personnel.getEmployeefirstname()).sendKeys(FirstName2);
+
+			//Selecting department
+			driver.findElement(personnel.getdepartmentDD()).click();
+			driver.findElement(personnel.getDepartmentdown()).click();
+			driver.findElement(personnel.getemployeelastname()).sendKeys(LastName2);
+
+			//Selecting position
+			driver.findElement(personnel.getpositionDD()).click();
+			driver.findElement(personnel.getpositiondown()).click();
+
+			//Selecting Area
+			driver.findElement(personnel.getareaDD()).click();
+			driver.findElement(personnel.getareadown()).click();
+
+			//Selecting EmployeeType
+			driver.findElement(personnel.getEmploymentType()).click();
+			driver.findElement(personnel.getEmployeeTypedropdown()).click(); 
+
+			//Selecting holiday location
+			driver.findElement(personnel.getHolidaylocationexisted()).click();
+			driver.findElement(personnel.getHolidaydrop()).click();
+
+			//Selecting OutdoorMng
+			driver.findElement(personnel.getOutdoormng()).click();
+			driver.findElement(personnel.getOutdoormngdropdown()).click();
+
+			driver.findElement(personnel.getPersonnel_Mobile_App_Role_Drop_Down()).click();
+			driver.findElement(personnel.getPersonnel_Mobile_App_Administrator()).click();
+			driver.findElement(personnel.getConfirmbutton()).click();
+
+		}  
+	}
+	//@ETP_TC_242
+	@Then("Click on mobile App settings")
+	public void Click_on_mobile_App_settings() throws InterruptedException {
+		Thread.sleep(30000);
+		driver.findElement(personnel.getPersonnel_Mobile_App_Settings()).click();
+	}
+
+	@Then("User is trying to edit client id")
+	public void User_is_trying_to_edit_client_id() {
+		WebElement ClientField = driver.findElement(personnel.getPeronnel_Mobile_Client_id());
+		Assert.assertFalse("Client Id field is enabled, expected disabled", ClientField.isEnabled());
+	}
+	//@ETP_TC_243
+	@Then("Clik on reset client")
+	public void Click_on_reset_client() {
+		driver.findElement(personnel.getPersonnel_Mobile_Client_Reset_button()).click();
+		driver.findElement(personnel.getConfirmbutton()).click();
+	}
+
+	@Then("Error message should be display Client not set")
+	public void Then_Error_message_should_be_display_Client_not_set() {
+		WebElement reseterrormsg = driver.findElement(personnel.getPersonnel_Mobile_reset_error_msg());
+		WebDriverWait wait=new WebDriverWait(driver,Duration.ofSeconds(30));
+		Assert.assertTrue(reseterrormsg.isDisplayed());
+	}
+
+	//@ETP_TC_244
+	@When("Enter multiple {string} in the Employee")
+	public void enter_in_the_fieldse(String empData) throws InterruptedException {
+		//	    	if(empData.equalsIgnoreCase("OnlyMandatoryDetails")) {
+		int count=10;
+		for (int i = 0; i <= count; i++) {
+			Thread.sleep(2000);
+			driver.findElement(personnel.getaddEmployee()).click();	
+			String EmployeeId1 = RandomStringUtils.randomAlphabetic(5);
+			String FirstName1 = RandomStringUtils.randomAlphabetic(5);
+
+
+			driver.findElement(personnel.getEmployeeid()).sendKeys(EmployeeId1);
+			driver.findElement(personnel.getEmployeefirstname()).sendKeys(FirstName1); 
+
+			//Selecting department
+			driver.findElement(personnel.getdepartmentDD()).click();
+			driver.findElement(personnel.getDepartmentdown()).click();
+
+			//Selecting position
+			driver.findElement(personnel.getpositionDD()).click();
+			driver.findElement(personnel.getpositiondown()).click();
+
+			//Selecting Area
+			driver.findElement(personnel.getareaDD()).click();
+			driver.findElement(personnel.getareadown()).click();
+			driver.findElement(personnel.getConfirmbutton()).click();
+		}
+	}
+	@Then("clicking on delete button")
+	public void Clicking_on_delete_button() {
+		driver.findElement(personnel.getPersonnelemployeedeletebutton()).click();
+		driver.findElement(personnel.getPersonnelemployeedeleteconfirmbutton()).click();
+	}
+	@Then("selecting all employees and deleting the employee")
+	public void selecting_all_employees_and_deleting_the_employees() {
+		driver.findElement(personnel.getPersonnelemployeemultiplecheckbox()).click();
+		driver.findElement(personnel.getPersonnelemployeedeletebutton()).click();
+
+	}
+
+
+
+	//@ETP_TC_245
+	@When("Click on employee import button")
+	public void click_on_employee_import_button() {
+		driver.findElement(personnel.getPersonnelemployeeimport()).click();
+
+	}
+	@When("Click on import employee")
+	public void click_on_import_employee() {
+		driver.findElement(personnel.getPersonnelemployeeimportdropdown()).click();
+
+	}
+	@Then("Employee template should be download")
+	public void employee_template_should_be_download() {
+		driver.findElement(personnel.getPersonnelemployeeimportdownload()).click();
+
+
+	}
+
+	//@ETP_TC_246
+	@When("Navigate to personnel module")
+	public void Navigate_to_personnel_module() {
+		driver.findElement(personnel.getPersonnelmanagement()).click();
+
+	}
+	@When("Click on Employee management")
+	public void Click_on_Employee_management() {
+		driver.findElement(personnel.getEmployee()).click();
+
+	}
+	@When("Select the employee import file {string}")
+	public void select_the_employee_import_file(String Case) throws InterruptedException, AWTException{
+
+		if(Case.equalsIgnoreCase("txtFile")){
+			path="\\employeeManagement\\employee_Import_Template_txt.txt";
+		}else if(Case.equalsIgnoreCase("xlsFile")){
+			path="\\employeeManagement\\employee_Import_Template_xls.xls";
+		}else if(Case.equalsIgnoreCase("csvFile")){
+			path="\\employeeManagement\\employee_Import_Template_csv.csv";
+		}else if(Case.equalsIgnoreCase("xlsxFile")){
+			path="\\employeeManagement\\employee_Import_Template_xlsx.xlsx";
+		}
+
+		driver.findElement(personnel.chooseFileButton()).sendKeys(uploadpath+path);
+	}
+
+	//@ETP_TC_247
+	@When("Select the cancel import file")
+	public void select_the_cancel_import_file() {
+		path="\\employeeManagement\\employee_Import_Template_cancel_xls.xlsx";
+		driver.findElement(Org.chooseFileButton()).sendKeys(uploadpath+path);
+	}
+
+	@Then("Click on employee Cancel button")
+	public void click_on_employee_cancel_button(){
+		wait.until(ExpectedConditions.visibilityOf(driver.findElement(common.Cancelbutton())));
+		driver.findElement(common.Cancelbutton()).click();
+	}
+
+	//@ETP_TC_248
+	@When("Select without headers files")
+	public void select_without_headers_files() {
+		path="\\employeeManagement\\employee_Import_Template_Empty_xls.xlsx";
+		driver.findElement(Org.chooseFileButton()).sendKeys(uploadpath+path);	
+	}
+	@Then("Employee import error message should be display")
+	public void Employee_import_error_message_should_be_display() {
+		WebElement errorMessage=driver.findElement(By.xpath("//div[text()='The file needs at least one row of data']"));
+		wait.until(ExpectedConditions.visibilityOf(errorMessage));
+		Assert.assertTrue(errorMessage.isDisplayed());	
+	}
+
+	//@ETP_TC_249
+	@When("Select without employee data")
+	public void Select_without_employee_data() {
+		path="\\employeeManagement\\employee_Import_Template_Empty_Employee_xls.xlsx";
+		driver.findElement(Org.chooseFileButton()).sendKeys(uploadpath+path);	
+	}
+
+	//@ETP_TC_250
+	@When("Select with only mandatory employee data")
+	public void select_with_only_mandatory_employee_data() {
+		path="\\employeeManagement\\employee_Import_Template_Employee_mandatory_xls.xlsx";
+		driver.findElement(Org.chooseFileButton()).sendKeys(uploadpath+path);
+
+	}
+
+	//@ETP_TC_252
+	@When("Select Existining new Employee data")
+	public void select_Existing_new_Employee_data() {
+		path="\\employeeManagement\\employee_Import_Template_New_Employee_xls.xlsx";
+		driver.findElement(Org.chooseFileButton()).sendKeys(uploadpath+path);	
+
+	}
+
+	//ETP_TC_253  //ETP_TC_256
+	@When("Select Overwrite option Existining newdata Existing Employee data")
+	public void select_overwrite_option_Existining_newdata_Existing_Employee_data() {
+		driver.findElement(Org.existingDataDropdown()).click();
+	    driver.findElement(Org.OverWriteOption()).click();
+	    
+	    path="\\employeeManagement\\employee_Import_Template_new_Employee_Existing_data_xls.xlsx";
+	    driver.findElement(Org.chooseFileButton()).sendKeys(uploadpath+path);	    
+	}
+	
+	@Then("Imported empname should display in empname list {string}")
+	public void imported_department_should_display_in_empname_list(String empname) {
+		wait.until(ExpectedConditions.visibilityOf(driver.findElement(By.xpath("//div[text()='"+empname+"']"))));
+		Assert.assertTrue(driver.findElement(By.xpath("//div[text()='"+empname+"']")).isDisplayed());	    
+	}
+	
+	//ETP_TC_254
+	@When("Select Existing option Existining newdata Existing Employee data")
+	public void select_Existing_option_Existining_newdata_Existing_Employee_data() {
+		driver.findElement(Org.existingDataDropdown()).click();
+		driver.findElement(Org.IgnoreOption()).click();
+		    
+        path="\\employeeManagement\\employee_Import_Template_new_Employee_Existing_data_xls.xlsx";
+        driver.findElement(Org.chooseFileButton()).sendKeys(uploadpath+path);	
+    
+	}
+	
+	@Then("Employee Error message should display")
+	public void Error_message_should_display_as(String Message) {
+		WebElement errorMessage=driver.findElement(By.xpath("//*[text()='"+Message+"']"));
+		wait.until(ExpectedConditions.visibilityOf(errorMessage));
+		Assert.assertTrue(errorMessage.isDisplayed());
+	}
+	
+	//ETP_TC_255
+	@Then("Imported another empname should display in empname list {string}")
+	public void Imported_another_empname_should_display_in_empname_list(String empname) {
+	wait.until(ExpectedConditions.visibilityOf(driver.findElement(By.xpath("//div[text()='"+empname+"']"))));
+	Assert.assertTrue(driver.findElement(By.xpath("//div[text()='"+empname+"']")).isDisplayed());	
+	}	
+	//ETP_TC_257
+	@When("Click on employee Document button")
+	public void Click_on_employee_Document_button(){
+		driver.findElement(personnel.getPersonnelimportemployeedocumentdownload()).click();
+	}
+	@Then("Employee document template should be download")
+	public void Employee_document_template_should_be_download(){
+		driver.findElement(personnel.getPersonnelimportdownloaddocumenttemplate()).click();
+	}
+	
+	//ETP_TC_258
+	@When("Select the employee import document file {string}")
+	public void select_the_employee_import_document_file(String Case) throws InterruptedException, AWTException{
+		if(Case.equalsIgnoreCase("txtFile")){
+			path="\\EmployeeImportDocument\\employeecertification_Import_Template_txt.txt";
+		}else if(Case.equalsIgnoreCase("xlsFile")){
+			path="\\EmployeeImportDocument\\employeecertification_Import_Template_xls.xlsx";
+		}else if(Case.equalsIgnoreCase("csvFile")){
+			path="\\EmployeeImportDocument\\employeecertification_Import_Template_csv.xlsx";
+		}else if(Case.equalsIgnoreCase("xlsxFile")){
+			path="\\EmployeeImportDocument\\employeecertification_Import_Template_new_xls.xlsx";
+		}
+
+		driver.findElement(personnel.chooseFileButton()).sendKeys(uploadpath+path);
+	}
+
+	//ETP_TC_260
+			@When("Select employee certificate without headers files")
+			 public void select_employee_certificate_without_headers_files() {
+			    path="\\EmployeeImportDocument\\employeecertification_Import_Template_without_headers_xls.xlsx";
+			    driver.findElement(Org.chooseFileButton()).sendKeys(uploadpath+path);	
+			    }
+		    @Then("Employee import error message should be displaying")
+		      public void Employee_import_error_message_should_be_displaying() {
+		    	WebElement ErrorMessage = driver.findElement(personnel.getUserprofileerrormsg());
+				WebDriverWait wait=new WebDriverWait(driver,Duration.ofSeconds(30));
+				Assert.assertTrue(ErrorMessage.isDisplayed());
+		      }
+		    
+		  //ETP_TC_261
+		    @When("Select employee certificate without document data")
+			 public void Select_employee_certificate_without_document_data () {
+			    path="\\EmployeeImportDocument\\employeecertification_Import_Template _without_data_xls.xlsx";
+			    driver.findElement(Org.chooseFileButton()).sendKeys(uploadpath+path);	
+			    }
+		    @Then("Employee import Certificate error message should be displaying")
+		      public void Employee_import_Certificate_error_message_should_be_displaying() {
+		    	WebElement ErrorMessage = driver.findElement(personnel.getUserprofileerrormsg());
+				WebDriverWait wait=new WebDriverWait(driver,Duration.ofSeconds(30));
+				Assert.assertTrue(ErrorMessage.isDisplayed());
+		      }
+		    
+		    //ETP_TC_262
+		    @When("Select employee certificate withonly mandatory fields headers")
+			 public void Select_employee_certificate_withonly_mandatory_fields_headers() {
+			    path="\\EmployeeImportDocument\\employeecertification_Import_Template _withonly_mandatory_fields_xls.xlsx";
+			    driver.findElement(Org.chooseFileButton()).sendKeys(uploadpath+path);	
+			    }
+		    @Then("import employee with only mandatory data error message should be display")
+		      public void import_employee_with_only_mandatory_data_error_message_should_be_display() {
+		    	WebElement ErrorMessage = driver.findElement(personnel.getUserprofileerrormsg());
+				WebDriverWait wait=new WebDriverWait(driver,Duration.ofSeconds(30));
+				Assert.assertTrue(ErrorMessage.isDisplayed());
+		      }
+		   
+		     //ETP_TC_263
+		    @When("Select employee certificate invalid file format")
+			 public void Select_employee_certificate_invalid_file_format () {
+			    path="\\employeeManagement\\HolidayList.pdf";
+			    driver.findElement(Org.chooseFileButton()).sendKeys(uploadpath+path);	
+			    }
+		    @Then("import employee with invalid file error message should be display")
+		      public void import_employee_with_invalid_file_error_message_should_be_display() {
+		    	WebElement ErrorMessage = driver.findElement(personnel.getPersonnelimportinvalidfile());
+				WebDriverWait wait=new WebDriverWait(driver,Duration.ofSeconds(30));
+				Assert.assertTrue(ErrorMessage.isDisplayed());
+		      }
+		    
+		    //ETP_TC_264
+		    @When("Select employee Ignore option is selected in Existing data")
+			public void Select_employee_Ignore_option_is_selected_in_Existing_data() {
+				driver.findElement(Org.existingDataDropdown()).click();
+				driver.findElement(Org.IgnoreOption()).click();
+				    
+		        path="\\EmployeeImportDocument\\employeecertification_Import_Template_xls.xlsx";
+		        driver.findElement(Org.chooseFileButton()).sendKeys(uploadpath+path);	
+		    }
+		    //ETP_TC_265
+		    @When("Select employee new data when Overwrite option is selected in Existing data")
+			public void Select_employee_new_data_when_Overwrite_option_is_selected_in_Existing_data() {
+				driver.findElement(Org.existingDataDropdown()).click();
+				driver.findElement(Org.OverWriteOption()).click();
+
+				path="\\EmployeeImportDocument\\employeecertification_Import_Template_xls.xlsx";
+				driver.findElement(Org.chooseFileButton()).sendKeys(uploadpath+path);
+			}
+		    
+			
+
+
+
+
+
+
+
+
+
+
+
+	//DADAPEER------------------------------------------------------------------------------------   
+
+	//Surya------------------------------------------------------------------------------------   
+	@Then("User should be navigate to personnel module and click on personnel module")
+	public void user_should_be_navigate_to_personnel_module_and_click_on_personnel_module() throws Throwable {
+		driver.findElement(login.getPersonnelModule()).click();
+
+	}
+
+	@And("click on Employee document")
+	public void click_on_employee_document() {
+		driver.findElement(empdoc.getEmpdocc()).click();
+
+	}
+	@And("click on Add button in emp doc")
+	public void click_on_add_button_in_emp_doc() throws Throwable {
+
+		driver.findElement(empdoc.getEmpdocAdd()).click();
+		//wait.until(ExpectedConditions.elementToBeClickable(empdoc.getEmpdocAdd()));
+
+	}
+	@And("Enter Document No and Document Title in the Document No and Document Title text fields")
+	public void enter_document_no_and_document_title_in_the_document_no_and_document_title_text_fields() {
+		String name = RandomStringUtils.randomAlphabetic(4);
+		String number = RandomStringUtils.randomNumeric(4);
+		driver.findElement(empdoc.getDocno()).sendKeys(number);
+		driver.findElement(empdoc.getDoctitle()).sendKeys(name);
+	}
+	@And("click on Emp confirm button")
+	public void click_on_emp_confirm_button() throws InterruptedException {
+		driver.findElement(empdoc.getEmpconf()).click();   
+	}
+
+	@Then("User should be able to create employee document and successful message should be display")
+	public void user_should_be_able_to_create_employee_document_and_successful_message_should_be_display() {
+		wait.until(ExpectedConditions.visibilityOfAllElementsLocatedBy(empdoc.getSuccessmsg()));
+		Assert.assertTrue(driver.findElement(empdoc.getSuccessmsg()).isDisplayed());
+
+	}
+
+	@Then("User should be able to create multiple employee document and successful message should be display")
+	public void user_should_be_able_to_create_multiple_employee_document_and_successful_message_should_be_display() throws InterruptedException {
+		//driver.findElement(empdoc.getEmpdocAdd()).click();
+		int numberOfUsers = 2;
+		for (int i = 1; i <= numberOfUsers; i++) {
+			// Call a method to create a user with a unique username and password
+			driver.findElement(empdoc.getEmpdocAdd()).click();
+			createUser(driver, "user" + i, "password" + i);
+			Thread.sleep(2000);
+			//wait.until(ExpectedConditions.visibilityOfAllElementsLocatedBy(empdoc.getSuccessmsg()));
+			driver.findElement(empdoc.getEmpconf()).click();
+			wait.until(ExpectedConditions.visibilityOfAllElementsLocatedBy(empdoc.getSuccessmsg()));
+			Assert.assertTrue(driver.findElement(empdoc.getSuccessmsg()).isDisplayed());
+		}
+
+	}
+
+
+	// ETP_TC_359
+	@Then("click on cancel button and user should be able to cancel adding emp doc in emp doc")
+	public void click_on_cancel_button_and_user_should_be_able_to_cancel_adding_emp_doc_in_emp_doc() {
+		wait.until(ExpectedConditions.visibilityOfAllElementsLocatedBy(empdoc.getEmpcancel()));
+		WebElement cancel = driver.findElement(empdoc.getEmpcancel());
+		cancel.click();
+		Assert.assertTrue(cancel.isDisplayed());/// validation purpose
+
+	}
+
+
+
+	// ETP_TC_360
+
+	@Then("click on Edit button in emp doc")
+	public void click_on_edit_button_in_emp_doc() {
+		driver.findElement(empdoc.getEmpedit()).click();     
+	}
+
+	// ETP_TC_361
+
+	@Then("select empdoc check box")
+	public void select_empdoc_check_box() throws InterruptedException {
+		Thread.sleep(3000);
+		driver.findElement(empdoc.getEmpcheckbox()).click(); 
+		Thread.sleep(2000);
+	}
+	@Then("click on empdoc delete button")
+	public void click_on_empdoc_delete_button() throws InterruptedException {
+		Thread.sleep(2000);
+		driver.findElement(empdoc.getEmpDelete()).click();   	
+
+	}
+	@Then("click on empd confirm button")
+	public void click_on_empd_confirm_button() throws InterruptedException {
+		Thread.sleep(2000);
+		driver.findElement(empdoc.getDelconfm()).click();   
+	}
+	@Then("User should be able to Delete employee document and successful message should be display")
+	public void user_should_be_able_to_delete_employee_document_and_successful_message_should_be_display() throws InterruptedException {
+		wait.until(ExpectedConditions.visibilityOfAllElementsLocatedBy(empdoc.getDelsuccess()));
+		//read.sleep(4000);
+		Assert.assertTrue(driver.findElement(empdoc.getDelsuccess()).isDisplayed()); 
+		Thread.sleep(2000);
+	}
+	@Then("click on individual delete button")
+	public void click_on_individual_delete_button() throws InterruptedException {
+		Thread.sleep(3000);
+		driver.findElement(empdoc.getIndviddel()).click();   
+	}
+	@Then("click on indconfirm button")
+	public void click_on_indconfirm_button() throws InterruptedException {
+		Thread.sleep(3000);
+		driver.findElement(empdoc.getIndconfm()).click();   
+	}
+	@Then("Select multiple check boxs")
+	public void select_multiple_check_boxs() throws InterruptedException {
+		driver.findElement(empdoc.getMuldel2()).click(); 
+		driver.findElement(empdoc.getMuldel3()).click();  
+		driver.findElement(empdoc.getMuldel4()).click(); 
+		//driver.findElement(empdoc.getmulDelconfm()).click(); 
+	}
+	// ETP_TC_362
+	@Then("empdoc import template should be present in download directory")
+	public void empdoc_import_template_should_be_present_in_download_directory() throws InterruptedException {	
+		String filepath=System.getProperty("user.dir")+"\\Downloads\\DownloadETPReports\\certification_Import_Template.xlsx";
+		File f = new File(filepath);
+
+		//		Test case is failing while checking file existence, Using thread.sleep to wait		
+		Thread.sleep(3000);
+		Assert.assertTrue(f.exists());
+	}
+	// ETP_TC_363
+
+	@When("Select the empdoc import file {string}")
+	public void select_the_empdoc_import_file(String Case) {
+		if(Case.equalsIgnoreCase("xlsxFile")){
+			path="\\Empdoc\\certification_Import_Template_xlsx.xlsx";
+		}
+
+		driver.findElement(Org.chooseFileButton()).sendKeys(uploadpath+path);
+	}
+
+	@Then("Imported empdoc should display in empdoc list {string}")
+	public void imported_empdoc_should_display_in_empdoc_list(String Case) {
+		if(Case.equalsIgnoreCase("xlsxFile")){
+			comp1="Aadhar Card";
+		}
+		wait.until(ExpectedConditions.visibilityOf(driver.findElement(By.xpath("//div[text()='"+comp2+"']"))));
+		Assert.assertTrue(driver.findElement(By.xpath("//div[text()='"+comp2+"']")).isDisplayed());
+	}
+
+	//ETP_TC_364
+
+	@When("Select the employeedoc import file {string}")
+	public void select_the_employeedoc_import_file(String Case) {
+		if(Case.equalsIgnoreCase("txtFile")){
+			path="\\Empdoc\\Document_2024-02-01-20-01-16_export.txt";
+		}else if(Case.equalsIgnoreCase("xlsFile")){
+			path="\\Empdoc\\Document_2024-02-01-20-00-39_export.xlsx";
+		}else if(Case.equalsIgnoreCase("csvFile")){
+			path="\\Empdoc\\Document_2024-02-01-20-01-34_export.csv";
+		}else if(Case.equalsIgnoreCase("xlsxFile")){
+			path="\\Empdoc\\Document_2024-02-01-20-00-39_export.xlsx";
+		}
+
+		driver.findElement(Org.chooseFileButton()).sendKeys(uploadpath+path);
+	}
+
+	@Then("Imported employeedoc should display in employeedoc list {string}")
+	public void imported_employeedoc_should_display_in_department_list(String Case) {
+		if(Case.equalsIgnoreCase("txtFile")){
+			comp1="8018";
+		}else if(Case.equalsIgnoreCase("xlsFile")){
+			comp1="8018";
+		}else if(Case.equalsIgnoreCase("csvFile")){
+			comp1="8018";
+		}else if(Case.equalsIgnoreCase("xlsxFile")){
+			comp1="8018";
+		}
+		wait.until(ExpectedConditions.visibilityOf(driver.findElement(By.xpath("//div[text()='"+comp2+"']"))));
+		Assert.assertTrue(driver.findElement(By.xpath("//div[text()='"+comp2+"']")).isDisplayed());
+	}
+
+	//ETP_TC_365
+	@When("Select the {string} empdoc file")
+	public void select_the_empdoc_file(String Case) {
+		if(Case.equalsIgnoreCase("Image")){
+			path="\\Empdoc\\MicrosoftTeams-image (42).png";
+		}else if(Case.equalsIgnoreCase("Pdf")){
+			path="\\Empdoc\\Document_20240201210556.pdf";
+		}
+
+		driver.findElement(Org.chooseFileButton()).sendKeys(uploadpath+path);
+	}
+	//ETP_TC_366
+	@When("Select ignore option and import new empdoc file")
+	public void select_ignore_option_and_import_new_empdoc_file() {
+		driver.findElement(Org.existingDataDropdown()).click();
+		driver.findElement(Org.IgnoreOption()).click();
+
+		path="\\Department\\Ignore_NewData.xlsx";
+		driver.findElement(Org.chooseFileButton()).sendKeys(uploadpath+path);
+	}
+
+	@Then("Imported empdoc should display in department list {string}")
+	public void imported_empdoc_should_display_in_department_list(String DeptName) {
+		wait.until(ExpectedConditions.visibilityOf(driver.findElement(By.xpath("//div[text()='"+DeptName+"']"))));
+		Assert.assertTrue(driver.findElement(By.xpath("//div[text()='"+DeptName+"']")).isDisplayed());	    
+	}
+
+	//ETP_TC_367
+	@When("Select Overwrite option and import new empdoc file")
+	public void select_overwrite_option_and_import_new_empdoc_file() {
+		driver.findElement(Org.existingDataDropdown()).click();
+		driver.findElement(Org.OverWriteOption()).click();
+
+		path="\\Department\\Overwrite_NewData.xlsx";
+		driver.findElement(Org.chooseFileButton()).sendKeys(uploadpath+path);
+	}
+	//Surya------------------------------------------------------------------------------------   
+
+
+	//Avinash------------------------------------------------------------------------------------   
+
+	//System
+	//ETP_TC_448
+
+	@And("Click on Group Add button in system module1")
+	public void Click_on_Group_Add_button_in_system_module1() {
+		driver.findElement(sysmod.getSysmo()).click();
+		driver.findElement(sysmod.getSysmoadd()).click();
+	}
+	@Then("Name text field and Below mentioned Module should display in add page1")
+	public void Name_text_field_and_Below_mentioned_Module_should_display_in_add_page1()  {
+		Assert.assertTrue(driver.findElement(sysmod.getAddname()).isDisplayed());
+		Assert.assertTrue(driver.findElement(sysmod.getAddPerson()).isDisplayed()); 
+		Assert.assertTrue(driver.findElement(sysmod.getAddDevi()).isDisplayed());
+		Assert.assertTrue(driver.findElement(sysmod.getAddAttend()).isDisplayed());
+		Assert.assertTrue(driver.findElement(sysmod.getAddAccess()).isDisplayed());
+		Assert.assertTrue(driver.findElement(sysmod.getAddAccess()).isDisplayed());
+	}
+
+	//ETP_TC_449
+
+	@Then ("Click on Company expand button under personnel module")
+	public void Click_on_Company_expand_button_under_personnel_module()
+	{
+		driver.findElement(sysmod.getclickAddcompany()).click();
+	}
+	@Then("Below mentioned option should display under company")
+	public void Below_mentioned_option_should_display_under_company() throws InterruptedException
+	{
+		Thread.sleep(3000);
+		Assert.assertTrue(driver.findElement(sysmod.getviewAdd()).isDisplayed());
+		Assert.assertTrue(driver.findElement(sysmod.getviewEdit()).isDisplayed());
+		Assert.assertTrue(driver.findElement(sysmod.getviewDeleteF()).isDisplayed());
+		Assert.assertTrue(driver.findElement(sysmod.getviewInComp()).isDisplayed());
+		Assert.assertTrue(driver.findElement(sysmod.getviewDeleteS()).isDisplayed());
+	}
+
+
+	//Avinash------------------------------------------------------------------------------------   
+
+
+
+
+	@Then("User should be navigate to personnel module and click on personnel module1")
+	public void user_should_be_navigate_to_personnel_module_and_click_on_personnel_module1() throws Throwable {
+		driver.findElement(login.getPersonnelModule()).click();
+
+		//Employee Document in personnel module ETP_TC_360
+
+	}
+
+
+	@And("clear the data from Document No text field")
+	public void clear_the_data_from_document_no_text_field() {
+		driver.findElement(empdoc.getDocno()).clear();	    	
+	}	    
+
+	@And("Enter Document No in Document No text field")
+	public void enter_document_no_in_document_no_text_field() throws InterruptedException {
+		//wait.until(ExpectedConditions.visibilityOfAllElementsLocatedBy(empdoc.getDocno()));
+		String number = RandomStringUtils.randomNumeric(3);
+		driver.findElement(empdoc.getDocno()).sendKeys(number);
+		//changed data is not displaying in edit page
+	}
+
+	@Then("User should be able to  employee document and successful message should be display")
+	public void user_should_be_able_to_employee_document_and_successful_message_should_be_display() {
+		wait.until(ExpectedConditions.visibilityOfAllElementsLocatedBy(empdoc.getSuccessmsg()));
+		Assert.assertTrue(driver.findElement(empdoc.getSuccessmsg()).isDisplayed());
+
+	}
+	//Employee Document in personnel module ETP_TC_361
+
+	//@Then("select empdoc check box")
+	//public void select_empdoc_check_box() throws InterruptedException {
+	//	    	Thread.sleep(3000);
+	//	    	driver.findElement(empdoc.getEmpcheckbox()).click();     
+	//}
+	//@Then("click on empdoc delete button")
+	//public void click_on_empdoc_delete_button() throws InterruptedException {
+	//	    	Thread.sleep(5000);
+	//	    	driver.findElement(empdoc.getEmpDelete()).click();   	
+	//   
+	//}
+	//@Then("click on empd confirm button")
+	//public void click_on_empd_confirm_button() throws InterruptedException {
+	//	    	Thread.sleep(3000);
+	//	    	driver.findElement(empdoc.getDelconfm()).click();   
+	//}
+	//@Then("User should be able to Delete employee document and successful message should be display")
+	//public void user_should_be_able_to_delete_employee_document_and_successful_message_should_be_display() throws InterruptedException {
+	//	    	wait.until(ExpectedConditions.visibilityOfAllElementsLocatedBy(empdoc.getDelsuccess()));
+	//	        Assert.assertTrue(driver.findElement(empdoc.getDelsuccess()).isDisplayed()); 
+	//	        Thread.sleep(3000);
+	//}
+	//@Then("click on individual delete button")
+	//public void click_on_individual_delete_button() throws InterruptedException {
+	//	    	Thread.sleep(3000);
+	//	    	driver.findElement(empdoc.getIndviddel()).click();   
+	//}
+	//@Then("click on indconfirm button")
+	//public void click_on_indconfirm_button() throws InterruptedException {
+	//	    	Thread.sleep(3000);
+	//	    	driver.findElement(empdoc.getIndconfm()).click();   
+	//}
+	//@Then("Select multiple check boxs")
+	//public void select_multiple_check_boxs() throws InterruptedException {
+	//	    	driver.findElement(empdoc.getMuldel2()).click(); 
+	//	    	Thread.sleep(3000);
+	//	    	driver.findElement(empdoc.getMuldel3()).click();  
+	//	    	Thread.sleep(3000);
+	//	    	driver.findElement(empdoc.getMuldel4()).click(); 
+	//	    	Thread.sleep(3000);
+	//	    	driver.findElement(empdoc.getmulDelconfm()).click(); 
+	//}
+	////@Then("click on mulempd confirm button")
+	////public void click_on_mulempd_confirm_button() throws InterruptedException {
+	////	    	driver.findElement(empdoc.getmulDelconfm()).click(); 
+	////}
+
+
+
+	/////////AVINASH SYSTEM MODULE
+	//ETP_TC_448
+
+
+
+	@And("Click on Group Add button in system module")
+	public void Click_on_Group_Add_button_in_system_module() {
+		driver.findElement(sysmod.getSysmo()).click();
+		driver.findElement(sysmod.getSysmoadd()).click();
+	}
+	@Then("Name text field and Below mentioned Module should display in add page")
+	public void Name_text_field_and_Below_mentioned_Module_should_display_in_add_page()  {
+		Assert.assertTrue(driver.findElement(sysmod.getAddname()).isDisplayed());
+		Assert.assertTrue(driver.findElement(sysmod.getAddPerson()).isDisplayed()); 
+		Assert.assertTrue(driver.findElement(sysmod.getAddDevi()).isDisplayed());
+		Assert.assertTrue(driver.findElement(sysmod.getAddAttend()).isDisplayed());
+		Assert.assertTrue(driver.findElement(sysmod.getAddAccess()).isDisplayed());
+		Assert.assertTrue(driver.findElement(sysmod.getAddAccess()).isDisplayed());
+	}
+
+	//ETP_TC_449
+
+	@Then ("Click on Company expand button under personnel module1")
+	public void Click_on_Company_expand_button_under_personnel_module1()
+	{
+		driver.findElement(sysmod.getclickAddcompany()).click();
+	}
+	@Then("Below mentioned option should display under company1")
+	public void Below_mentioned_option_should_display_under_company1() throws InterruptedException
+	{
+		wait.until(ExpectedConditions.visibilityOf(driver.findElement(sysmod.getviewAdd())));
+		Assert.assertTrue(driver.findElement(sysmod.getviewAdd()).isDisplayed());
+		Assert.assertTrue(driver.findElement(sysmod.getviewEdit()).isDisplayed());
+		Assert.assertTrue(driver.findElement(sysmod.getviewDeleteF()).isDisplayed());
+		Assert.assertTrue(driver.findElement(sysmod.getviewInComp()).isDisplayed());
+		Assert.assertTrue(driver.findElement(sysmod.getviewDeleteS()).isDisplayed());
+	}
+
+	//ETP_TC_450
+	@Then ("Click on Employee expand button under personnel module")
+	public void Click_on_Employee_expand_button_under_personnel_module()
+	{
+		wait.until(ExpectedConditions.visibilityOf(driver.findElement(sysmod.getclickEmpAdd())));
+		driver.findElement(sysmod.getclickEmpAdd()).click();
+
+	}
+	@Then("Below mentioned option should display under employee")
+	public void Below_mentioned_option_should_display_under_employee() 
+	{
+		wait.until(ExpectedConditions.visibilityOf(driver.findElement(sysmod.getviewImportEmp())));
+		Assert.assertTrue(driver.findElement(sysmod.getviewImportEmp()).isDisplayed());
+		Assert.assertTrue(driver.findElement(sysmod.getviewImportDocument()).isDisplayed());
+		Assert.assertTrue(driver.findElement(sysmod.getviewImportPhoto()).isDisplayed());
+		Assert.assertTrue(driver.findElement(sysmod.getviewDepartmentTransfe()).isDisplayed());
+
+	}
+	//ETP_TC_451
+	@And ("Click on Department expand button under personnel module")
+	public void Click_on_Department_expand_button_under_personnel_module()
+	{
+		wait.until(ExpectedConditions.visibilityOf(driver.findElement(sysmod.getclickDepAdd())));
+		driver.findElement(sysmod.getclickDepAdd()).click(); 
+	}
+	@Then("Below mentioned option should display under Department")
+	public void Below_mentioned_option_should_display_under_Department()
+	{
+		wait.until(ExpectedConditions.visibilityOf(driver.findElement(sysmod.getviewImportDept())));
+		Assert.assertTrue(driver.findElement(sysmod.getviewImportDept()).isDisplayed()); 
+		Assert.assertTrue(driver.findElement(sysmod.getviewPerDept()).isDisplayed()); 
+	}
+
+	//ETP_TC_452
+
+	@And ("Click on Position expand button under personnel module")
+	public void Click_on_Position_expand_button_under_personnel_module()
+	{
+		wait.until(ExpectedConditions.visibilityOf(driver.findElement(sysmod.getclickPostAdd())));
+		driver.findElement(sysmod.getclickPostAdd()).click();
+	}
+	@Then ("Below mentioned option should display under Position")
+	public void Below_mentioned_option_should_display_under_Position()
+	{
+		wait.until(ExpectedConditions.visibilityOf(driver.findElement(sysmod.getclickPersoAdd())));
+		Assert.assertTrue(driver.findElement(sysmod.getclickPersoAdd()).isDisplayed());  
+	} 
+
+
+	//ETP_TC_453
+	@And ("Click on Area expand button under personnel module")
+	public void Click_on_Area_expand_button_under_personnel_module()
+	{
+		wait.until(ExpectedConditions.visibilityOf(driver.findElement(sysmod.getclickAreaAdd())));
+
+		driver.findElement(sysmod.getclickAreaAdd()).click();	 
+	}
+	@Then ("Below mentioned option should display under Area")
+	public void Below_mentioned_option_should_display_under_Area()
+	{
+		wait.until(ExpectedConditions.visibilityOf(driver.findElement(sysmod.getAreaPersAdd())));
+		Assert.assertTrue(driver.findElement(sysmod.getAreaPersAdd()).isDisplayed());  
+	}
+
+
+	//ETP_TC_454
+	@And ("Click on Holiday Location expand button under personnel module")
+	public void Click_on_Holiday_Location_expand_button_under_personnel_module() {
+		driver.findElement(sysmod.getclickHolidayAdd()).click();	 
+	}
+	@Then ("Below mentioned option should display under Holiday Location")
+	public void Below_mentioned_option_should_display_under_Holiday_Location()
+	{
+		wait.until(ExpectedConditions.visibilityOf(driver.findElement(sysmod.getHoliPersAdd())));
+		Assert.assertTrue(driver.findElement(sysmod.getHoliPersAdd()).isDisplayed());  
+	}
+
+	//ETP_TC_455
+
+	@And("Click on Resign expand button under personnel module")
+	public void Click_on_Location_expand_button_under_personnel_module(){
+		driver.findElement(sysmod.getclickResignAdd()).click();
+	}
+	@Then ("Below mentioned option should display under Resign")
+	public void Below_mentioned_option_should_display_under_Resign() {
+		wait.until(ExpectedConditions.visibilityOf(driver.findElement(sysmod.getRehireAdd())));
+		Assert.assertTrue(driver.findElement(sysmod.getRehireAdd()).isDisplayed());
+		Assert.assertTrue(driver.findElement(sysmod.getDisableAttendanceAdd()).isDisplayed()); 
+
+	}
+
+
+	//ETP_TC_456
+	@And ("Click on Document expand button under personnel module")
+	public void Click_on_Document_expand_button_under_personnel_module() {
+		driver.findElement(sysmod.getclickDocumentAdd()).click();
+
+	}
+	@Then ("Below mentioned option should display under Document")
+	public void Below_mentioned_option_should_display_under_Document() {
+		wait.until(ExpectedConditions.visibilityOf(driver.findElement(sysmod.getDocView())));
+		Assert.assertTrue(driver.findElement(sysmod.getDocView()).isDisplayed());
+		Assert.assertTrue(driver.findElement(sysmod.getDocImport()).isDisplayed());
+	}
+	//ETP_TC_457
+	@And ("Click on Workflow node expand button under personnel module")
+	public void Click_on_Workflow_node_expand_button_under_personnel_module() {
+		driver.findElement(sysmod.getclickWorkflownodeAdd()).click();
+	}
+	@Then("Below mentioned option should display under Workflow node")
+	public void Below_mentioned_option_should_display_under_Workflow_node() {
+		wait.until(ExpectedConditions.visibilityOf(driver.findElement(sysmod.getDeleteWorkflownode())));
+		Assert.assertTrue(driver.findElement(sysmod.getDeleteWorkflownode()).isDisplayed());
+		Assert.assertTrue(driver.findElement(sysmod.getViewWorkflownode()).isDisplayed());
+	}
+
+
+
+
+
+
+
+
+}
+
+

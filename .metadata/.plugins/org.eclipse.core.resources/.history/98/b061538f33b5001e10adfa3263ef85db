@@ -1,0 +1,90 @@
+package pageObjects;
+
+import org.openqa.selenium.By;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.support.PageFactory;
+
+public class personnelObject {
+	private WebDriver driver;
+	public personnelObject(WebDriver driver) {
+		this.driver = driver;
+		PageFactory.initElements(driver, this);
+	}
+	
+	private final By personnelmanagement= By.xpath("//a[@app='personnel']");
+	public By getPersonnelmanagement() {
+		return personnelmanagement;
+	}
+	
+	private final By personnelEmployee = By.xpath("//li[contains(@class, 'layui-nav-item') and contains(@class, 'side-menu-group') and contains(@class, 'layui-nav-itemed') and contains(@title, 'Employee Management')]");
+	public By getPersonnelEmployee() {
+		return personnelEmployee;
+	}
+	
+	private final By Employee = By.xpath("//*[@id=\"side_menu_nav\"]/li[2]/dl/dd[1]/a/span");
+	
+	public By getEmployee() {
+		return Employee;
+	}
+	private final By addEmployee = By.cssSelector("#employee_fluid li:nth-child(1)>a");
+	public By getaddEmployee() {
+		return addEmployee;
+	}
+	
+	private final By personnelemployeedropdown = By.cssSelector("[id^=\"position\"][class=\"layui-form-select tree-select\"]");
+	public By getPersonnelemployeedropdown() {
+		return personnelemployeedropdown;
+	}
+	
+	private final By personnelemployeecreatedposition = By.cssSelector("[id^=\"position\"][class=\"ztree scrollbar\"]>li:nth-child(2)>a>span+span");
+	public By getPersonnelemployeecreatedposition() {
+		return personnelemployeecreatedposition;
+	}
+	
+
+	private final By Holidaylocation = By.cssSelector("a[link='/personnel/location/'][title='Holiday Location']");
+	public By getHolidaylocation() {
+		return Holidaylocation;
+	}
+	
+	private final By Personnelholidayaddbutton = By.cssSelector("a[id*='location_'][title='Add']");
+	public By getPersonnelholidayaddbutton() {
+		return Personnelholidayaddbutton;
+	}
+	
+	private final By personnelholidayname = By.cssSelector("#id_location_name");
+	public By getPersonnelholidayname() {
+		return personnelholidayname;
+	}
+	
+	private final By personnelholidayconfirmbutton = By.cssSelector(".layui-layer-btn0");
+	public By getPersonnelholidayconfirmbutton() {
+		return personnelholidayconfirmbutton;
+	}
+ 
+	private final By personnelholidaydropdown = By.cssSelector("[id^=\"location\"][class=\"layui-form-select tree-select\"]");
+	 public By getPersonnelholidaydropdown() {
+			return personnelholidaydropdown;
+		}
+	 
+	 private final By Personnelholidaydrop = By.cssSelector("[id^=\"location\"][class=\"ztree scrollbar\"]>li:nth-child(2)>a>span+span");
+	 public By getPersonnelholidaydrop() {
+			return Personnelholidaydrop;				
+		}
+	 
+	 private final By PersonnelArea = By.cssSelector("a[link='/personnel/area/'][title='Area']");
+	 public By getPersonnelArea() {
+			return PersonnelArea;
+		}
+	 
+
+}
+
+
+
+
+
+
+
+	
+

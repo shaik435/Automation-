@@ -1,0 +1,231 @@
+package stepDefinations;
+import io.cucumber.java.Before;
+import io.cucumber.java.After;
+import io.cucumber.java.en.Given;
+
+import io.cucumber.java.en.Then;
+import io.cucumber.java.en.When;
+import io.cucumber.junit.Cucumber;
+import io.opentelemetry.exporter.logging.SystemOutLogRecordExporter;
+import utilities.BrowserActions;
+import utilities.BrowserDriver;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
+import java.time.Duration;
+import java.util.ArrayList;
+import java.util.List;
+
+import org.junit.Assert;
+import org.junit.runner.RunWith;
+import org.openqa.selenium.Alert;
+import org.openqa.selenium.By;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.ui.ExpectedCondition;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
+import pageObjects.*;
+import utilities.Base;
+
+@SuppressWarnings("all")
+@RunWith(Cucumber.class)
+public class EmpRequestSteps extends BrowserDriver {
+	private WebDriver driver;
+	   private EmpLogin login;
+	   private EmpRequestPage request;
+	   private WebDriverWait webwait;
+	   private Base base;
+	   
+	   @Before("@ETP_Emp_Request")
+	   public void start()
+	   {
+		   driver=intializedriver();
+		   driver.manage().window().maximize();	
+		   
+		   login = new EmpLogin(driver);
+		   request = new EmpRequestPage(driver);
+		   base = new Base(driver);
+		   
+	   }
+	   
+	   
+	  @After("@ETP_Emp_Request")
+	  public void stop() throws InterruptedException
+	  {
+		  Thread.sleep(3000);
+		  driver.close();
+	  }
+	    
+	  
+	  
+	  //Steps
+	  
+	  @Given("^Enter easyTimePro URl in browser$")
+	    public void enter_easyTimePro_URl_in_browser() throws InterruptedException {
+	    	driver.get("http://10.10.21.207/");
+	    	
+	    	WebDriverWait webwait = new WebDriverWait(driver, Duration.ofSeconds(10));
+	    	WebElement loginPage = driver.findElement(login.getLoginPage());
+	    	webwait.until(ExpectedConditions.visibilityOf(loginPage));
+	    	
+	    }
+	  @Then("^Login Page should display$")
+	    public void login_Page_should_display() {
+	    	driver.findElement(login.getLoginPage()).isDisplayed();
+	    }
+	  
+	  @When("Click on Employee login tab")
+	    public void click_on_Employee_login_tab() {
+	    	driver.findElement(login.getemployeeTab()).click();
+	    }
+	  
+	  @Then("Above mentioned options should display in employee login page")
+	    public void above_mentioned_options_should_display_in_employee_login_page() {
+	    	driver.findElement(login.getempusername()).isDisplayed();
+	    	driver.findElement(login.getemppassword()).isDisplayed();
+	    	driver.findElement(login.getemploginButton()).isDisplayed();
+	    	driver.findElement(login.getforgotPasswordLink()).isDisplayed();
+	    }
+	    
+	  @When("Enter employee username and default password")
+	    public void enter_employee_username_and_default_password() {
+	    	driver.findElement(login.getempusername()).sendKeys("Testemployee");
+	    	driver.findElement(login.getemppassword()).sendKeys("123456");
+	    }
+	  @When("Click on emp_login button")
+	    public void click_on_emp_login_button() throws InterruptedException {
+	    	driver.findElement(login.getemploginButton()).click();
+	    	Thread.sleep(2000);
+	    }
+
+	  @When("Employee should be able to login")
+	    public void employee_should_be_able_to_login() {
+	    	driver.findElement(login.getempHomePage()).isDisplayed();
+	    } 
+  
+	  @When("Click on manual log page")
+	    public void clickOnManualLogPage() {
+	        driver.findElement(request.getEmployeeRequestpage()).click();
+	  }
+	  
+	  @Then("Manual log page displayed")
+	    public void verifyManualLogPageDisplayed() {
+		  if (driver.findElement(request.getEmployeemanuallog()).isDisplayed()) {
+		    System.out.println("Manual log page is displayed.");
+		  
+	       }else {
+		   System.out.println("Manual log page is not displayed.");
+      } 
+	    }
+		  
+		  @Then("User able to print above mentioned headers")
+		    public void User_able_to_print_above_mentioned_headers() {
+			if(driver.findElement(request.getEmployeecolumnfirstname()).isDisplayed()){
+			  System.out.println("First Name");
+			  
+		  }else {
+			  System.out.println("columnnameshouldprint");
+			  
+		  }
+		  
+			if(driver.findElement(request.getEmployeecolumnlastname()).isDisplayed()){
+				System.out.println("Last Name");
+				
+			 }else {
+				  System.out.println("columnnameshouldprint");
+				  
+			  }
+			
+			
+			if(driver.findElement(request.getEmployeecolumncategory()).isDisplayed()){
+				System.out.println("category");
+				
+			}else {
+				  System.out.println("not visable");
+				  
+			  }
+			if(driver.findElement(request.getEmployeecolumnstarttime()).isDisplayed()) {
+				System.out.println("starttime");
+			}else {
+				System.out.println("not visable");
+			}
+			  
+	        if(driver.findElement(request.getemployeecolumnendtime()).isDisplayed()) {
+	        	
+	        	System.out.println("Endtime");
+	        }else {
+	        	System.out.println("Not visable");
+	        }
+            if(driver.findElement(request.getemployeecolumnLeavePayment()).isDisplayed()) {
+	        	
+	        	System.out.println("LeavePayment");
+	        }else {
+	        	System.out.println("Not visable");
+	        }
+            if(driver.findElement(request.getemployeecolumndays()).isDisplayed()) {
+	        	
+	        	System.out.println("Days");
+	        }else {
+	        	System.out.println("Not visable");
+	        } 
+            
+            if(driver.findElement(request.getemployeecolumnApprovalRemark()).isDisplayed()) {
+	        	
+	        	System.out.println("ApprovalRemark");
+	        }else {
+	        	System.out.println("Not visable");
+	        } 
+             if(driver.findElement(request.getemployeecolumnApprovalRemark()).isDisplayed()) {
+	        	
+	        	System.out.println("ApprovalRemark");
+	        }else {
+	        	System.out.println("Not visable");
+	        } 
+            
+             if(driver.findElement(request.getemployeecolumnApplyReason()).isDisplayed()) {
+ 	        	
+ 	        	System.out.println("Apply reason");
+ 	        }else {
+ 	        	System.out.println("Not visable");
+ 	        } 
+            
+             if(driver.findElement(request.getemployeecolumnApprovalstate()).isDisplayed()) {
+  	        	
+  	        	System.out.println("Approvalstate");
+  	        }else {
+  	        	System.out.println("Not visable");
+  	        }
+		  }
+             
+             @Then("User able to print above mentioned options in manuallog page")
+ 		    public void User_able_to_print_above_mentioned_options_in_manuallog_pag() {
+            List<WebElement> nameElements = driver.findElements(By.xpath("//*[@id=\"tab_staffLeaveRequest\"]/div[1]/div/div/label"));
+            for (WebElement name : nameElements) {
+                System.out.println(name.getText());            
+                }            
+             }            
+            private static List<String> extractNamesFromElements(List<WebElement> elements) {
+                List<String> names = new ArrayList<>();
+                for (WebElement element : elements) {
+                    names.add(element.getText().trim());
+                }
+                return names;
+                
+            }
+                
+           @Then("user able to click add manual log pop")
+     	   public void User_able_to_click_add_manual_log_pop() {
+           driver.findElement(request.getEmployeeaddmanuallogpop()).click();
+           Assert.assertTrue(driver.findElement(request.getEmployeeaddpagecalendar()).isDisplayed());
+        
+     
+         }
+        	
+              
+	  }
+		  
+		  
+
+	
+

@@ -1,0 +1,1774 @@
+ @eayTimePro_9.0.8
+ Feature: easyTimePro_9.0.8
+ 
+#Author: Ashwini H S 
+#(Assigned task: Login ->  ETP_TC_01 To ETP_TC_39,Organization -> ETP_TC_77 To ETP_TC_212)
+
+  Background: Navigate to easyTimePro login page
+	Given Enter easyTimePro URl in browser
+  Then Login Page should display
+  Then Below mentioned components should display in login page
+  #Username textfield,Password textfield,login button,ZkTecoLogo,easyTimeProLogo,adminTab,employeeTab
+
+@ETP_TC_01 @Admin_Login_01 @Login  @Admin   
+Scenario: Verify user is able to login to application as an admin by entering Default username and password
+Given Enter username and password into username and password text field respectively
+When Click on login button
+#Validations
+Then Easytimelogo should display in top left corner
+Then Personnel, Device, Attendance, Access, System modules should display in top bar
+Then Guide and Userprofile icon should display in top right corner
+
+@ETP_TC_02 @Admin_Login_02 @Login  @Admin
+Scenario: Verify user is not able to login to application as an admin by entering invalid username and password
+Given Enter invalid username and password into username and password text field respectively
+When Click on login button
+#Validations
+Then Error message should display as "Login failed, username or password is wrong."
+
+@ETP_TC_03 @Admin_Login_03 @Login  @Admin
+Scenario: Verify user is not able to login to application as an admin without entering username and password
+When Click on login button
+#Validations
+Then Error message should display as Please fill in this field
+
+@ETP_TC_04_to_14 @Admin_Login_04_to_14 @Login  @Admin
+Scenario Outline: Verify clicking on the below mentioned icons in Operation guide page is redirecting to respective page
+#Add Area, Add Department, Add Position, Add Employee, Add Device, Time Table, Assign Shift, Schedule Shift, Add Leave, Calculate Attendance,Reports
+Given Enter username and password into username and password text field respectively
+When Click on login button
+When Click on Guide link
+When Click on "<icon>" icon
+#Validation
+Then It should redirect to the respective "<page>" page
+Examples:
+|icon|page|
+|Add Area|area|
+|Add Department|department|
+|Add Position|position|
+|Add Employee|employee|
+|Add Device|device|
+|Time Table|time Table|
+|Assign Shift|shift|
+|Schedule Shift|employee Schedule|
+|Add Leave|leave|
+|Calculate Attendance|Calculate|
+|Reports|Reports|
+
+@ETP_TC_15_to_19 @Admin_Login_05_to_19 @Login  @Admin
+Scenario Outline: Clicking on below mentioned modules in homepage is redirecting to respective page
+#Personnel,Device,Attendance,Access,System
+Given Enter username and password into username and password text field respectively
+When Click on login button
+When Click on "<moduleName>" module
+#Validation
+Then It should redirect to the "<page>" module page
+Examples:
+|moduleName|page|
+|Personnel|department|
+|Device|device|
+|Attendance|globalrule|
+|Access|device_acc|
+|System|group|
+
+@ETP_TC_20 @Admin_Login_20 @Login  @Admin
+Scenario: Verify below listed options are displayed  when user click on user profile icon
+#About,Help,Language,Password,Logout
+Given Enter username and password into username and password text field respectively
+When Click on login button
+When Click on user profile
+#Validation
+Then Above mentioned options should display in userprofile list
+
+@ETP_TC_21 @Admin_Login_21 @Login  @Admin
+Scenario: Verify help document is displayed in new tab when user click on help option
+Given Enter username and password into username and password text field respectively
+When Click on login button
+When Click on user profile
+When Click on Help option
+#Validation
+Then Help document should display in new tab
+
+@ETP_TC_22 @Admin_Login_22 @Login  @Admin
+Scenario: Verify user is able to reset password
+Given Enter username and password into username and password text field respectively
+When Click on login button
+When Click on user profile
+When Click on Password option
+When Enter Old Password, New Password and Confirm Password
+When Click on Confirm button
+#Validation
+Then Pop-up should display as "Auto logout after 3 seconds"
+Then Login Page should display after 3 seconds
+
+@ETP_TC_23_to_24 @Admin_Login_23_to_24 @Login  @Admin
+Scenario Outline: Verify user is able to login with updated password and not able to login with old password
+Given Enter username and password into username and "<PasswordType>" text field respectively
+When Click on login button
+#Validations
+Then User should be able to login with new password and should not be able to login with old password "<PasswordType>" 
+Examples:
+|PasswordType|
+|old|
+|new|
+
+@ETP_TC_25 @Admin_Login_25 @Login  @Admin
+Scenario: Verify user is able to set old password as new password
+Given Enter username and new password into username and password text field respectively
+When Click on login button
+When Click on user profile
+When Click on Password option
+When Change old password as new password
+When Click on Confirm button
+#Validation
+Then Pop-up should display as "Auto logout after 3 seconds"
+Then Login Page should display after 3 seconds
+
+@ETP_TC_26 @Admin_Login_26 @Login  @Admin
+Scenario: Verify user is able to logout
+Given Enter username and password into username and password text field respectively
+When Click on login button
+When Click on user profile
+When Click on Logout option
+When Click on Confirm button
+#Validation
+Then Below mentioned components should display in login page
+#Username textfield,Password textfield,login button,ZkTecoLogo,easyTimeProLogo,adminTab,employeeTab
+
+
+@ETP_TC_27 @Emp_Login_01 @Login  @Employee
+Scenario: Verify user is able to login to application as an employee by entering default username and password
+When Click on Employee login tab
+When Enter employee username and default password
+When Click on emp_login button
+#Validation
+Then Easytimelogo should display in top left corner in home page
+Then Attendance module should display in top bar
+Then Userprofile icon should display in top right corner
+
+@ETP_TC_28 @Emp_Login_02 @Login  @Employee
+Scenario: Verify user is able to login to application as an employee by entering username and password set by the admin
+When Login as an admin
+When Change the employee password in employee page
+When Logout as an admin
+When Click on Employee login tab
+When Enter employee username and password set by the admin
+When Click on emp_login button
+#Validation
+Then Easytimelogo should display in top left corner in home page
+Then Attendance module should display in top bar
+Then Userprofile icon should display in top right corner
+
+@ETP_TC_29 @Emp_Login_03 @Login  @Employee
+Scenario: Verify user is not able to login to application as an employee by entering invalid username and password 
+When Click on Employee login tab
+When Enter Invalid username and password in employee tab
+When Click on emp_login button
+#Validation
+Then Error message should display as Login failed, username or password is wrong.in employee tab
+
+@ETP_TC_30 @Emp_Login_04 @Login  @Employee
+Scenario: Verify user is not able to login to application as an employee without entering username and password 
+When Click on Employee login tab
+When Click on emp_login button
+#Validation
+Then Error message should display as Please fill in this field
+
+@ETP_TC_31&32 @Emp_Login_05&06 @Login  @Employee
+Scenario Outline: Verify user is able to login to application as an employee by entering employee email Id as username
+When Click on Employee login tab
+When Enter employee "<username>" and password set by the admin
+When Click on emp_login button
+#Validation
+Then Easytimelogo should display in top left corner in home page
+Then Attendance module should display in top bar
+Then Userprofile icon should display in top right corner
+Examples:
+|username|
+|EmpEmail|
+|EmpPhoneNumber|
+
+@ETP_TC_33 @Emp_Login_07 @Login  @Employee
+Scenario: Verify below listed options are displayed  when user click on user profile icon
+#Help,Language,Password,Logout
+When Click on Employee login tab
+When Enter employee username and password set by the admin
+When Click on emp_login button
+When Click on empProfile Icon
+#Validation
+Then Above mentioned options should display in empProfile Icon
+
+@ETP_TC_34 @Emp_Login_08 @Login  @Employee
+Scenario: Verify help document is displayed in new tab when user click on help option
+When Click on Employee login tab
+When Enter employee username and password set by the admin
+When Click on emp_login button
+When Click on empProfile Icon
+When Click on Help option
+#Validation
+Then Employee Help document should display in new tab
+
+@ETP_TC_35 @Emp_Login_09 @Login  @Employee
+Scenario: Verify user is able reset employee password 
+When Click on Employee login tab
+When Enter employee username and password set by the admin
+When Click on emp_login button
+When Click on empProfile Icon
+When Click on Password option
+When Enter Old Password, new Password and confirm Password of employee
+When Click on Confirm button
+#Validation
+Then Pop-up should display as "Auto logout after 3 seconds"
+Then Login Page should display after 3 seconds
+
+@ETP_TC_36&37 @Emp_Login_10&11 @Login  @Employee
+Scenario Outline: Verify user is able to login with updated password and not able to login with old password
+When Click on Employee login tab
+When Enter employee username and "<password>"
+When Click on emp_login button
+#Validations
+Then User should be able to login with new password and should not be able to login with old "<password>" 
+Examples:
+|password|
+|PWSetByTheAdmin|
+|PWSetByTheEmp|
+
+@ETP_TC_38 @Emp_Login_12 @Login  @Employee
+Scenario: Verify user is able to set old password as new password
+When Click on Employee login tab
+When Enter employee username and password set by the employee
+When Click on emp_login button
+When Click on empProfile Icon
+When Click on Password option
+When Set old password as new password
+When Click on Confirm button
+#Validation
+Then Pop-up should display as "Auto logout after 3 seconds"
+Then Login Page should display after 3 seconds
+
+@ETP_TC_39 @Emp_Login_13 @Login  @Employee
+Scenario: Verify user is able reset employee password 
+When Click on Employee login tab
+When Enter employee username and password set by the admin
+When Click on emp_login button
+When Click on empProfile Icon
+When Click on Logout button
+#Validation
+Then Below mentioned components should display in login page
+#Username textfield,Password textfield,login button,ZkTecoLogo,easyTimeProLogo,adminTab,employeeTab
+
+#Department
+@ETP_TC_77 @Department_01 @Department @Organization
+Scenario Outline: Verify user is able to add department
+Given Login to easyTimePro application
+Given User should be present in department module
+When Click on Add button
+And Enter Department details according to below mentioned "<Case>"
+#When Click on Confirm button in Add department page
+When Click on Confirm button
+#Validation
+Then Success message should display
+Then Added department should display in department list
+Examples:
+|Case|
+|Case1_OnlyMandatoryData|
+|Case2_BothMandatoryAndOptionalData|
+
+
+@ETP_TC_78 @Department_02 @Department @Organization
+Scenario Outline: Verify error message is displayed or not when user try to add department without mandatory field
+Given Login to easyTimePro application
+Given User should be present in department module
+When Click on Add button
+And Enter only optional Department details "<Case>"
+When Click on Confirm button
+#Validation
+Then Error message should display as "Please fill in all required fields."
+Examples:
+|Case|
+|Case1_Without_mandatory_data|
+|Case2_Without_mandatory_and_optional_data|
+
+#Department
+@ETP_TC_79 @Department_03 @Department @Organization
+Scenario: Verify user is able to Cancel adding department
+Given Login to easyTimePro application
+Given User should be present in department module
+When Click on Add button
+And Enter Department details according to below mentioned "<Case>"
+When Click on Cancel button
+#Validation
+Then Department should not be added and should not display in department list
+
+#Department
+@ETP_TC_80 @Department_04 @Department @Organization
+Scenario Outline: Verify Department ID is disabled in edit popup
+Given Login to easyTimePro application
+Given User should be present in department module
+When Click on Edit button of department "<Case>"
+#Validation
+Then Department ID should be disabled in Edit button
+Examples:
+|Case|
+|Case1_UsingEditButton|
+|Case2_UsingEditlink|
+
+@ETP_TC_81 @Department_05 @Department @Organization
+Scenario Outline: Verify user is able to edit department
+Given Login to easyTimePro application
+Given User should be present in department module
+When Click on Edit button of department "<Case>"
+When Change the department name
+When Click on Confirm button
+#Validation
+Then Success message should display
+Then Edited department name should display in department list
+Examples:
+|Case|
+|Case1_UsingEditButton|
+|Case2_UsingEditlink|
+
+@ETP_TC_82 @Department_06 @Department @Organization
+Scenario Outline: Verify user is able to cancel editing department 
+Given Login to easyTimePro application
+Given User should be present in department module
+When Click on Edit button of department "<Case>"
+When Change the department name
+When Click on Cancel button
+#Validation
+Then Edited department name should not display in department list
+Examples:
+|Case|
+|Case1_UsingEditButton|
+|Case2_UsingEditlink|
+
+@ETP_TC_83 @Department_07 @Department @Organization
+Scenario Outline: Verify department list is displaying in Parent dropdown list
+Given Login to easyTimePro application
+Given User should be present in department module
+Given Count the departments present in department page
+When Click on "<Case>" button
+When Click on parent dropdown
+#Validation
+Then Department count should be equal parent dropdown options count <"Case">
+Examples:
+|Case|
+|Case1_EditButton|
+|Case2_AddButton|
+
+@ETP_TC_84 @Department_08 @Department @Organization
+Scenario Outline: Verify user is able to cancel deleting department 
+Given Login to easyTimePro application
+Given User should be present in department module
+Given Count the departments present in department page 
+When Click on "<Case>" delete button in department page
+When Click on Cancel button
+#Validation
+Then Department should not be deleted from department page
+Examples:
+|Case|
+|Usingdeletebuttonofparticulardepartment|
+|Usingcommondeletebutton|
+
+@ETP_TC_85 @Department_09 @Department @Organization
+Scenario Outline: Verify user is able to delete department
+Given Login to easyTimePro application
+Given User should be present in department module
+Given Count the departments present in department page 
+When Click on "<Case>" delete button in department page
+When Click on Confirm button
+#Validation
+Then Success message should display
+Then Department should be deleted from department page
+Examples:
+|Case|
+|Usingdeletebuttonofparticulardepartment|
+|Usingcommondeletebutton|
+
+@ETP_TC_86 @Department_10 @Department @Organization
+Scenario Outline: Verify user is able to delete default department
+Given Login to easyTimePro application
+Given User should be present in department module
+Given Count the departments present in department page 
+When Click on "<Case>" default delete button in department page
+When Click on Confirm button
+#Validation
+Then Error message should display as "Default department can not be removed."
+Then Department should not be deleted from department page
+Examples:
+|Case|
+|UsingParticularDeleteButtonofDefaultDepartment|
+|UsingCommonDeleteButtonofDefaultDepartment|
+
+@ETP_TC_87 @Department_11 @Department @Organization @Import
+Scenario: Verify user is able to download template by clicking on Download template
+Given Login to easyTimePro application
+Given User should be present in department module
+When Click on Import button
+When Click on Download Template
+#Validation
+Then Department import template should be present in download directory
+
+@ETP_TC_88 @Department_12 @Department @Organization @Import
+Scenario Outline: Verify user is able to import Departments
+Given Login to easyTimePro application
+Given User should be present in department module
+When Click on Import button
+When Select the department import file "<Case>"
+When Click on Confirm button
+#Validation
+#Added with and without mandatory data in all files
+Then Success message should display
+Then Imported departments should display in department list "Case"
+Examples:
+|Case|
+|txtFile|
+|xlsFile|
+|csvFile|
+|xlsxFile|
+
+@ETP_TC_89 @Department_13 @Department @Organization @Import
+Scenario: Verify user is able to cancel Importing Department
+Given Login to easyTimePro application
+Given User should be present in department module
+When Click on Import button
+When Select department import file
+When Click on Cancel button
+#Validation
+#Added with and without mandatory data in all files
+Then Departments should not be imported and should not display in department list
+
+@ETP_TC_90 @Department_14 @Department @Organization @Import
+Scenario Outline: Verify error message is displayed or not when user try to import department without headers and data
+Given Login to easyTimePro application
+Given User should be present in department module
+When Click on Import button
+When Select the "<Case>" department file 
+When Click on Confirm button
+#Validation
+Then Error message should display as "Headers are required"
+Examples:
+|Case|
+|Empty|
+
+
+@ETP_TC_91 @Department_15 @Department @Organization @Import
+Scenario Outline: Verify error message is displayed or not when user try to import department without department data
+Given Login to easyTimePro application
+Given User should be present in department module
+When Click on Import button
+When Select the "<Case>" department file 
+When Click on Confirm button
+#Validation
+Then Error message should display as "The file needs at least one row of data"
+Examples:
+|Case|
+|OnlyHeaders|
+
+
+@ETP_TC_92 @Department_16 @Department @Organization @Import
+Scenario Outline: Verify error message is displayed or not when user try to import department with only mandatory fields headers and data
+Given Login to easyTimePro application
+Given User should be present in department module
+When Click on Import button
+When Select the "<Case>" department file 
+When Click on Confirm button
+#Validation
+Then Error message should display as "The Parent field is required"
+Examples:
+|Case|
+|OnlyMandatoryHeadersAndData|
+
+@ETP_TC_93 @Department_17 @Department @Organization @Import
+Scenario Outline: Verify error message is displayed or not when user try to import department without Department ID column
+Given Login to easyTimePro application
+Given User should be present in department module
+When Click on Import button
+When Select the "<Case>" department file 
+When Click on Confirm button
+#Validation
+Then Error message should display as "The Department ID field is required"
+Examples:
+|Case|
+|WithoutDepartmentIDColumn|
+
+@ETP_TC_94 @Department_18 @Department @Organization @Import
+Scenario Outline: Verify error message is displayed or not when user try to import department without Department Name column
+Given Login to easyTimePro application
+Given User should be present in department module
+When Click on Import button
+When Select the "<Case>" department file 
+When Click on Confirm button
+#Validation
+Then Error message should display as "The Department Name field is required"
+Examples:
+|Case|
+|WithoutDepartmentNameColumn|
+
+@ETP_TC_95 @Department_19 @Department @Organization @Import
+Scenario Outline: Verify error message is displayed or not when user try to import department without department ID details
+Given Login to easyTimePro application
+Given User should be present in department module
+When Click on Import button
+When Select the "<Case>" department file 
+When Click on Confirm button
+#Validation
+Then Error message should display as "Error data on row 1, the department ID is empty"
+Examples:
+|Case|
+|WithoutDepartmentIDDetails|
+
+@ETP_TC_96 @Department_20 @Department @Organization @Import
+Scenario Outline: Verify error message is displayed or not when user try to import department without department Name details
+Given Login to easyTimePro application
+Given User should be present in department module
+When Click on Import button
+When Select the "<Case>" department file 
+When Click on Confirm button
+#Validation
+Then Error message should display as "Error data on row 1, the department Name is empty"
+Examples:
+|Case|
+|WithoutDepartmentNameDetails|
+
+@ETP_TC_97 @Department_21 @Department @Organization @Import
+Scenario Outline: Verify error message is displayed or not when user try to import department using invalid file format
+Given Login to easyTimePro application
+Given User should be present in department module
+When Click on Import button
+When Select the "<Case>" department file 
+When Click on Confirm button
+#Validation
+Then Error message should display as "Invalid file format"
+Examples:
+|Case|
+|Image|
+|Pdf|
+
+@ETP_TC_98 @Department_22 @Department @Organization @Import
+Scenario: Verify user is able to import new data when Ignore option is selected in Existing data dropdown
+Given Login to easyTimePro application
+Given User should be present in department module
+When Click on Import button
+When Select ignore option and import new file
+When Click on Confirm button
+#Validations
+Then Success message should display
+Then Imported department should display in department list "Dep_801"
+
+@ETP_TC_99 @Department_23 @Department @Organization @Import
+Scenario: Verify user is able to import new data when Overwrite option is selected in existing data dropdown
+Given Login to easyTimePro application
+Given User should be present in department module
+When Click on Import button
+When Select Overwrite option and import new file
+When Click on Confirm button
+#Validations
+Then Success message should display
+Then Imported department should display in department list "Dep_802"
+
+
+@ETP_TC_100 @Department_24 @Department @Organization @Import
+Scenario: Verify user is not able to import existing data when Ignore option is selected in existing data dropdown
+Given Login to easyTimePro application
+Given User should be present in department module
+When Click on Import button
+When Select Ignore option and import existing data
+When Click on Confirm button
+#Validations
+Then Error message should display as "Department with the same id already exists"
+
+@ETP_TC_101 @Department_25 @Department @Organization @Import
+Scenario: Verify user is able to import existing data when Overwrite option is selected in existing data dropdown
+Given Login to easyTimePro application
+Given User should be present in department module
+When Click on Import button
+When Select Overwrite option and import existing data
+When Click on Confirm button
+#Validations
+Then Success message should display
+Then Imported department should display in department list "Dep_801"
+Then Imported department should display in department list "Dep_802"
+
+@ETP_TC_102 @Department_26 @Department @Organization @Import
+Scenario: Verify user is able to import existing and new data when Overwrite option is selected in existing data dropdown
+Given Login to easyTimePro application
+Given User should be present in department module
+When Click on Import button
+When Select Overwrite option and import new+existing data
+When Click on Confirm button
+#Validations
+Then Success message should display
+Then Imported department should display in department list "Dep_801"
+Then Imported department should display in department list "Dep_803"
+
+@ETP_TC_103 @Department_27 @Department @Organization @Import
+Scenario Outline: Verify user is able to add employees to particular deparment
+Given Login to easyTimePro application
+Given User should be present in department module
+When Select any one department checkbox
+When Click on Personnel Transfer
+When Select "<NoOfEmp>" employee in Personnel Transfer popup
+When Click on Confirm button
+#Validation
+Then Success message should display
+Then Employee count of the department should be equal to "<NoOfEmp>" selected
+Examples:
+|NoOfEmp|
+|Single|
+|Multiple|
+
+@ETP_TC_104 @Department_28 @Department @Organization @Import
+Scenario Outline: Verify user is able to change employee department from default to user added and vice versa
+Given Login to easyTimePro application
+Given User should be present in department module
+When Select department "<depType>" checkbox
+When Click on Personnel Transfer
+When Select "<NoOfEmp>" employee in Personnel Transfer popup
+When Click on Confirm button
+#Validation
+Then Success message should display
+Then Employee count of the department should be equal to "<NoOfEmp>" selected
+Examples:
+|depType|NoOfEmp|
+|AddingEmployeeToDefaultDep|Single|
+|TransferingFromDefaultToUserAdded|Single|
+|TransferingFromUserAddedToDefault|Single|
+
+@ETP_TC_105 @Department_29 @Department @Organization @Import
+Scenario: Verify department name of employee is displaying in employee page
+Given Login to easyTimePro application
+Given User should be present in department module
+When Select any one department
+When Click on Personnel Transfer
+When Select a employee in Personnel Transfer popup
+When Click on Confirm button
+When Navigate to emp page
+#Validation
+Then Department name of selected employee should display in employee page
+
+@ETP_TC_106 @Department_30 @Department @Organization @Import
+Scenario: Verify employee count in department page after deleting employee in employee page
+Given Login to easyTimePro application
+Given User should be present in department module
+When Select any one department
+When Click on Personnel Transfer
+When Select a employee in Personnel Transfer popup
+When Click on Confirm button
+Given Verify the employee count of department before deleting employee
+When Navigate to emp page
+When Delete a employee in employee page
+Given Navigate to department module
+#Validation
+Then Verify the employee count of department after deleting employee
+
+@ETP_TC_107 @Department_31 @Department @Organization @Import
+Scenario: Verify resigned count when resigned employee record is in Pending status
+Given Login to easyTimePro application
+Given User should be present in department module
+When Select any one department
+When Click on Personnel Transfer
+When Select a employee in Personnel Transfer popup
+When Click on Confirm button
+Given Verify the employee count of department before employee resignation
+When Navigate to resign page
+When Add an employee as resigned in resign page
+Given Navigate to department module 
+#Validation
+Given Verify the employee count of department after employee resignation
+
+@ETP_TC_108 @Department_32 @Department @Organization @Import
+Scenario: Verify resigned count when resigned employee record is in Confirmed status
+Given Login to easyTimePro application
+Given User should be present in department module
+When Select any one department
+When Click on Personnel Transfer
+When Select a employee in Personnel Transfer popup
+When Click on Confirm button
+Given Verify the employee count of department before employee resignation
+When Navigate to resign page
+When Add an employee as resigned in resign page with Yesterday 
+Given Navigate to department module
+#Validation
+Given Verify the employee count of department after employee resignation
+
+@ETP_TC_109 @Department_33 @Department @Organization @Import
+Scenario Outline: Verify error message is displayed or not when user try to do delete,personnel transfer operations without selecting department checkbox
+Given Login to easyTimePro application
+Given Navigate to department module
+When Click on "<button>" button
+#Validation
+Then Error message should display as "Please select object(s)"
+Examples:
+|button|
+|PersonnelTransfter|
+|Delete|
+
+@ETP_TC_110 @Department_34 @Department @Organization @Import
+Scenario Outline: Verify error message is displayed or not when user try to do personnel transfer operation when multiple departments are selected
+Given Login to easyTimePro application
+Given Navigate to department module
+Given Click on SelectAll checkbox in department module
+When Click on "<button>" button
+#Validation
+Then Error message should display as "Please select only one object for operation"
+Examples:
+|button|
+|PersonnelTransfter|
+
+  #Position
+@ETP_TC_111 @Position_01 @Position @Organization
+Scenario Outline: Verify user is able to add Position
+Given Login to easyTimePro application
+Given User should be present in Position module
+When Click on Add button
+And Enter Position details according to below mentioned "<Case>"
+When Click on Confirm button
+#Validation
+Then Success message should display
+Then Added Position should display in Position list
+Examples:
+|Case|
+|Case1_OnlyMandatoryData|
+|Case2_BothMandatoryAndOptionalData|
+
+
+@ETP_TC_112 @Position_02 @Position @Organization
+Scenario Outline: Verify error message is displayed or not when user try to add Position without mandatory field
+Given Login to easyTimePro application
+Given User should be present in Position module
+When Click on Add button
+And Enter only optional Position details "<Case>"
+When Click on Confirm button
+#Validation
+Then Error message should display as "Please fill in all required fields."
+Examples:
+|Case|
+|Case1_Without_mandatory_data|
+|Case2_Without_mandatory_and_optional_data|
+
+#Position
+@ETP_TC_113 @Position_03 @Position @Organization
+Scenario: Verify user is able to Cancel adding Position
+Given Login to easyTimePro application
+Given User should be present in Position module
+When Click on Add button
+And Enter Position details according to below mentioned "<Case>"
+When Click on Cancel button
+#Validation
+Then Position should not be added and should not display in Position list
+
+#Position
+@ETP_TC_114 @Position_04 @Position @Organization
+Scenario Outline: Verify Position ID is disabled in edit popup
+Given Login to easyTimePro application
+Given User should be present in Position module
+When Click on Edit button of Position "<Case>"
+#Validation
+Then Position ID should be disabled in Edit button
+Examples:
+|Case|
+|Case1_UsingEditButton|
+|Case2_UsingEditlink|
+
+@ETP_TC_115 @Position_05 @Position @Organization
+Scenario Outline: Verify user is able to edit Position
+Given Login to easyTimePro application
+Given User should be present in Position module
+When Click on Edit button of Position "<Case>"
+When Change the Position name
+When Click on Confirm button
+#Validation
+Then Success message should display
+Then Edited Position name should display in Position list
+Examples:
+|Case|
+|Case1_UsingEditButton|
+|Case2_UsingEditlink|
+
+@ETP_TC_116 @Position_06 @Position @Organization
+Scenario Outline: Verify user is able to cancel editing Position 
+Given Login to easyTimePro application
+Given User should be present in Position module
+When Click on Edit button of Position "<Case>"
+When Change the Position name
+When Click on Cancel button
+#Validation
+Then Edited Position name should not display in Position list
+Examples:
+|Case|
+|Case1_UsingEditButton|
+|Case2_UsingEditlink|
+
+@ETP_TC_117 @Position_07 @Position @Organization
+Scenario Outline: Verify Position list is displaying in Parent dropdown list
+Given Login to easyTimePro application
+Given User should be present in Position module
+Given Count the Positions present in Position page
+When Click on "<Case>" button in position page
+When Click on parent dropdown in position page
+#Validation
+Then Position count should be equal parent dropdown options count <"Case">
+Examples:
+|Case|
+|Case1_EditButton|
+|Case2_AddButton|
+
+@ETP_TC_118 @Position_08 @Position @Organization
+Scenario Outline: Verify user is able to cancel deleting Position 
+Given Login to easyTimePro application
+Given User should be present in Position module
+Given Count the Positions present in Position page 
+When Click on "<Case>" delete button in Position page
+When Click on Cancel button
+#Validation
+Then Position should not be deleted from Position page
+Examples:
+|Case|
+|UsingdeletebuttonofparticularPosition|
+|Usingcommondeletebutton|
+
+@ETP_TC_119 @Position_09 @Position @Organization
+Scenario Outline: Verify user is able to delete Position
+Given Login to easyTimePro application
+Given User should be present in Position module
+Given Count the Positions present in Position page 
+When Click on "<Case>" delete button in Position page
+When Click on Confirm button
+#Validation
+Then Success message should display
+Then Position should be deleted from Position page
+Examples:
+|Case|
+|UsingdeletebuttonofparticularPosition|
+|Usingcommondeletebutton|
+
+@ETP_TC_120 @Position_10 @Position @Organization
+Scenario Outline: Verify user is able to delete default Position
+Given Login to easyTimePro application
+Given User should be present in Position module
+Given Count the Positions present in Position page 
+When Click on "<Case>" default delete button in Position page
+When Click on Confirm button
+#Validation
+Then Error message should display as "Default position can not be removed."
+Then Position should not be deleted from Position page
+Examples:
+|Case|
+|UsingParticularDeleteButtonofDefaultPosition|
+|UsingCommonDeleteButtonofDefaultPosition|
+
+@ETP_TC_121 @Position_11 @Position @Organization @Import
+Scenario: Verify user is able to download template by clicking on Download template
+Given Login to easyTimePro application
+Given User should be present in Position module
+When Click on Import button
+When Click on Download Template
+#Validation
+Then Position import template should be present in download directory
+
+@ETP_TC_122 @Position_12 @Position @Organization @Import
+Scenario Outline: Verify user is able to import Positions
+Given Login to easyTimePro application
+Given User should be present in Position module
+When Click on Import button
+When Select the Position import file "<Case>"
+When Click on Confirm button
+#Validation
+#Added with and without mandatory data in all files
+Then Success message should display
+Then Imported Positions should display in Position list "Case"
+Examples:
+|Case|
+|txtFile|
+|xlsFile|
+|csvFile|
+|xlsxFile|
+
+
+#DADAPEER------------------------------------------------------------------------------------------
+@ETP_TC_213 @EmployeeManagement  @Admin   
+Scenario: Verify Departments in Dropdown List
+Given Enter username and password into username and password text field respectively
+And Click on login button
+And Add multiple departments in department page
+And Navigate to Employee management page
+
+
+@ETP_TC_214 @EmployeeManagement  @Admin   
+Scenario: Verify Positions added in Position page are reflecting in Position* dropdown list
+Given Enter username and password into username and password text field respectively
+And Click on login button
+And Add position in position page
+Then Navigate to Employee management drop down page
+
+@ETP_TC_215 @EmployeeManagement @Admin
+Scenario: Verify Holiday Location page are reflecting in Holiday Location dropdown list
+Given Enter username and password into username and password text field respectively
+And Click on login button
+And Add holiday in holiday page
+Then Naviagte Employee management holiday drop down page
+
+@ETP_TC_216 @EmployeeManagement @Admin
+Scenario: Verify Areas added in Area page are reflecting in Area dropdown list
+Given Enter username and password into username and password text field respectively
+And Click on login button
+And Add Area in Area page
+Then Naviagte Employee management Area drop down page
+
+@ETP_TC_217 @EmployeeManagement @Admin
+Scenario Outline: User adds an employee with specific details
+Given Enter username and password into username and password text field respectively
+And Click on login button
+When Navigate to employee page
+When Click on the add button
+And Enter "<Employee_Data>" in the fields
+And Click on the confirm button
+#Validations 
+Then a success message should be displayed
+Then the created employee should be visible in the employee list
+Examples:
+|Employee_Data|
+|OnlyMandatoryDetails|
+|AllData|
+
+
+@ETP_TC_218 @EmployeeManagement @Admin
+Scenario: Verify error message is displayed or not when user try to add employee without mandatory field.
+Given Enter username and password into username and password text field respectively
+And  Click on login button
+When Naviagte Employee management page 
+And  Click on the confirm button
+Then Error message should display 
+
+@ETP_TC_220 @EmployeeManagement @Admin
+Scenario: Verify user is able to create a employee as Permanent employee
+Given Enter username and password into username and password text field respectively
+And  Click on login button
+When Iam in employee page 
+When Iam clicking on add button
+When Enter Employee_permanent in the fields
+When submits the employee creation form
+Then the employee with the provided details should be created successfully
+
+@ETP_TC_221 @EmployeeManagement @Admin
+Scenario: Verify user is able to create a employee as Temporary employee
+Given Enter username and password into username and password text field respectively
+And  Click on login button
+When Iam in employee page 
+When Iam clicking on add button
+When Enter Employee_temporary in the fields
+When submits the employee creation form
+Then the employee with the provided details should be created successfully
+
+@ETP_TC_222 @EmployeeManagement @Admin
+Scenario: Verify whether user able to Enable Outdoor Mng in Employee page 
+Given Enter username and password into username and password text field respectively
+And  Click on login button
+When the user is on the Employee page
+When the user attempts to enable Outdoor Management
+Then Succesfull message should be display 
+
+@ETP_TC_223 @EmployeeManagement @Admin
+Scenario: Verify user is able to Upload user photo in the application
+Given Enter username and password into username and password text field respectively
+And  Click on login button
+When Enter Employee details 
+When the user attempts to upload a user photo
+Then Succesfull message display 
+
+@ETP_TC_224 @EmployeeManagement @Admin
+Scenario: Verify Error message is displayed or not when user tries to upload photo with unsupported format
+Given Enter username and password into username and password text field respectively
+And  Click on login button
+When Iam creating the employee 
+When Iam trying to upload pdf photo
+#Then Error message display 
+
+@ETP_TC_225 @EmployeeManagement @Admin
+Scenario: Verify Admin is able to set Device Password
+Given Enter username and password into username and password text field respectively
+And  Click on login button
+When Iam creating the employee in employee page 
+When admin navigates to the device settings
+And  admin sets a new password for the device
+Then device password should be updated successfully
+
+@ETP_TC_226 @EmployeeManagement @Admin
+Scenario: Verify user is able to Set employee password
+Given Enter username and password into username and password text field respectively
+And  Click on login button
+When Adding the Employee in Employee login page 
+When admin navigates to the Attendance settings
+And  user clears the old password for the employee and add new password
+Then Employee password should be updated successfully
+
+@ETP_TC_227 @EmployeeManagement @Admin
+Scenario: Verify user is able to Set employee password
+Given Enter username and password into username and password text field respectively
+And  Click on login button
+When Adding the Employee with differentemployee 
+When admin navigates to the Attendance settings
+And  user clears the old password for the employee and add new password
+Then Employee password should be updated successfully
+Then logs out the application
+Then logs in as the employee with the new password
+Then Leave page should be display 
+
+@ETP_TC_228 @EmployeeManagement @Admin
+Scenario Outline: Verify user is able to enable/Disable  Holiday location
+Given Enter username and password into username and password text field respectively
+And  Click on login button
+And Enter "<Employee_Data>" in the page 
+And Click on the confirm button
+#Validations 
+Then a success message should be displayed
+Examples:
+|Employee_Data|
+|OnlyMandatoryDetails|
+
+@ETP_TC_229 @EmployeeManagement @Admin
+Scenario: Verify created workflow role in Flow page are reflecting in Workflow Role dropdown
+Given Enter username and password into username and password text field respectively
+And  Click on login button
+When User navigate to Role section of approvals
+When Click on the Add button
+When Enter RoleCode and RoleName in the text fields and Click on Confirm button
+Then Created role is displaying in employee managament page
+ 
+@ETP_TC_230 @EmployeeManagement @Admin 
+Scenario: Verify 'Employee Role Name' is updating in Employee page after changing role
+Given Enter username and password into username and password text field respectively
+And  Click on login button
+When User navigate to Role section of approvals
+When Click on the Add button
+When Enter new RoleCode and RoleName in the text fields and Click on Confirm button
+Then Created new role is displaying in employee managament page
+
+@ETP_TC_231 @EmployeeManagement @Admin
+Scenario Outline: Document tab is not displaying in Add employee page while adding employee
+Given Enter username and password into username and password text field respectively
+And  Click on login button
+When Enter "<Employee_Data>" in the pages 
+Then the 'Document' tab is not displayed
+Examples:
+|Employee_Data|
+|OnlyMandatoryDetails|
+
+@ETP_TC_232 @EmployeeManagement @Admin
+Scenario Outline: Document tab is displayed only in Edit employee page while editing employee
+Given Enter username and password into username and password text field respectively
+And  Click on login button
+When Enter "<Employee_Data>" in the employee page 
+When the user is on the Edit Employee page
+Then the Document tab should be displayed
+Examples:
+|Employee_Data|
+|OnlyMandatoryDetails|
+
+@ETP_TC_233 @EmployeeManagement @Admin
+Scenario Outline: Verify created documents in Employee document page are reflecting in Document* dropdown
+Given Enter username and password into username and password text field respectively
+And  Click on login button
+When Click on personnel employee document
+When Add document 
+When Click on employee management 
+When Enter "<Employee_Data>" in the employee documentpage  
+When the user is on the Edit Employee page
+Then Created document is displaying in document dropdown 
+Examples:
+|Employee_Data|
+|OnlyMandatoryDetails|
+
+@ETP_TC_234 @EmployeeManagement @Admin
+Scenario: Verify whether user able to create document by giving mandatory fields and succesfull message is displaying 
+Given Enter username and password into username and password text field respectively
+When Click on login button
+Then User should be navigate to personnel module and click on personnel module
+And click on Employee document
+And click on Add button in emp doc
+And Enter Document No and Document Title in the Document No and Document Title text fields
+And click on Emp confirm button
+Then User should be able to create employee document and successful message should be display
+ 
+@ETP_TC_235 @EmployeeManagement @Admin
+Scenario: Verify user is able to add document by giving mandatory details and created documnets are displaying in document page
+Given Enter username and password into username and password text field respectively
+When Click on login button
+Then User should be navigate to personnel module and click on personnel module
+And click on Employee document
+And click on Add button in emp doc
+And Enter Document No and Document Title in the Document No and Document Title text fields
+And click on Emp confirm button
+Then User should be able to create employee document and successful message should be display
+Then Created document is displaying in document page 
+
+@ETP_TC_236 @EmployeeManagement @Admin
+Scenario Outline: Verify user is able to send Alert thorugh Email by selecting Yes in "Email Alert" dropdownon default date
+Given Enter username and password into username and password text field respectively
+And  Click on login button
+Then User should be navigate to personnel module and click on personnel module
+And click on Employee document
+And click on Add button in emp doc
+And Enter Document No and Document Title in the Document No and Document Title text fields
+And click on Emp confirm button
+When Click on employee management 
+When Enter "<Employee_Data>" in the employee documentpage  
+When the user is on the Edit Employee page
+Then iam selecting emailalert dropdown as no  
+Examples:
+|Employee_Data|
+|OnlyMandatoryDetails|
+
+@ETP_TC_237 @EmployeeManagement @Admin
+Scenario Outline: Make sure user is not allowed to select wrong file
+Given Enter username and password into username and password text field respectively
+And  Click on login button
+Then User should be navigate to personnel module and click on personnel module
+And click on Employee document
+And click on Add button in emp doc
+And Enter Document No and Document Title in the Document No and Document Title text fields
+And click on Emp confirm button
+When Click on employee management 
+When Enter "<Employee_Data>" in the employee documentpage  
+When the user is on the Edit Employee page
+When iam selecting emailalert dropdown page  
+Then uploading wrong file
+#Validations 
+Then Error message should be display Unsupported File Format 
+Examples:
+|Employee_Data|
+|OnlyMandatoryDetails|
+
+@ETP_TC_238 @EmployeeManagement @Admin
+Scenario Outline:Verify user is able to download the document
+Given Enter username and password into username and password text field respectively
+And  Click on login button
+Then User should be navigate to personnel module and click on personnel module
+And click on Employee document
+And click on Add button in emp doc
+And Enter Document No and Document Title in the Document No and Document Title text fields
+And click on Emp confirm button
+When Click on employee management 
+When Enter "<Employee_Data>" in the employee documentpage  
+When the user is on the Edit Employee page
+When creating emailalert   
+Then uploading correct file 
+Then user should be download the document 
+Examples:
+|Employee_Data|
+|OnlyMandatoryDetails|
+
+@ETP_TC_239 @EmployeeManagement @Admin
+Scenario Outline: Verify whether user is able to Edit the document
+Given Enter username and password into username and password text field respectively
+And  Click on login button
+Then User should be navigate to personnel module and click on personnel module
+And click on Employee document
+And click on Add button in emp doc
+And Enter Document No and Document Title in the Document No and Document Title text fields
+And click on Emp confirm button
+When Click on employee management
+When Enter "<Employee_Data>" in the employee documentpage  
+When the user is on the Edit Employee page
+When creating emailalert   
+Then uploading correct file 
+Then user should edit the document 
+Examples:
+|Employee_Data|
+|OnlyMandatoryDetails|
+
+
+@ETP_TC_240 @EmployeeManagement @Admin
+Scenario: Verify user is able to add document by giving mandatory details and created documnets are displaying in document page
+Given Enter username and password into username and password text field respectively
+When Click on login button
+Then User should be navigate to personnel module and click on personnel module
+And click on Employee document
+And click on Add button in emp doc
+And Enter Document No and Document Title in the Document No and Document Title text fields
+And click on Emp confirm button
+Then User should be able to create employee document and successful message should be display
+Then User is able to delete created document 
+
+@ETP_TC_241 @EmployeeManagement @Admin
+Scenario Outline: Verify user is able to set app role.
+Given Enter username and password into username and password text field respectively
+And Click on login button
+When Navigate to employee page
+When Click on the add button
+When Enter "<Employee_Data>" in the Employee
+And Click on the confirm button
+#Validations 
+Then a success message should be displayed
+Examples:
+|Employee_Data|
+|OnlyMandatoryDetails|
+|AllData|
+
+@ETP_TC_242 @EmployeeManagement @Admin
+Scenario Outline: Make sure user is not allowed to edit Client Id
+Given Enter username and password into username and password text field respectively
+When Click on login button
+When Navigate to employee page
+When Click on the add button
+When Enter "<Employee_Data>" in the Employee
+And Click on the confirm button
+#Validations 
+Then a success message should be displayed 
+When the user is on the Edit Employee page
+Then Click on mobile App settings
+Then User is trying to edit client id 
+Examples:
+|Employee_Data|
+|OnlyMandatoryDetails|
+
+@ETP_TC_243 @EmployeeManagement @Admin
+Scenario Outline: Make sure user is not allowed to edit Client Id
+Given Enter username and password into username and password text field respectively
+When Click on login button
+When Navigate to employee page
+When Click on the add button
+When Enter "<Employee_Data>" in the Employee
+And Click on the confirm button
+#Validations 
+Then a success message should be displayed 
+When the user is on the Edit Employee page
+Then Click on mobile App settings
+Then Clik on reset client
+Then Error message should be display Client not set
+Examples:
+|Employee_Data|
+|OnlyMandatoryDetails|
+
+@ETP_TC_244 @EmployeeManagement @Admin
+Scenario Outline: Verify user is able to delete the employee.
+Given Enter username and password into username and password text field respectively
+When Click on login button
+When Navigate to employee page
+When Enter multiple "<Employee_Data>" in the Employee
+And Click on the confirm button
+#Validations 
+Then clicking on delete button
+Then selecting all employees and deleting the employee
+Examples:
+|Employee_Data|
+|OnlyMandatoryDetails|
+
+@ETP_TC_245 @EmployeeManagement @Admin
+Scenario: Verify user is able to download template in Import Employee popup
+Given Enter username and password into username and password text field respectively
+When Click on login button
+When Navigate to employee page
+When Click on employee import button
+When Click on import employee
+#Validations 
+Then Employee template should be download
+
+@ETP_TC_246 @EmployeeManagement @Admin
+Scenario Outline: Verify user is able to import the employee
+Given Login to easyTimePro application
+When Navigate to personnel module
+When Click on Employee management
+When Click on employee import button
+When Click on import employee
+When Select the employee import file "<Case>"
+When Click on Confirm button
+#Validation
+Then Success message should display
+Examples:
+|Case|
+|txtFile|
+|xlsFile|
+|csvFile|
+|xlsxFile|
+
+@ETP_TC_247 @EmployeeManagement @Admin
+Scenario: Verify user is able to cancel Importing employee
+Given Login to easyTimePro application
+When Navigate to personnel module
+When Click on Employee management
+When Click on employee import button
+When Click on import employee
+When Select the cancel import file 
+Then Click on employee Cancel button
+
+@ETP_TC_248 @EmployeeManagement @Admin
+Scenario Outline: Verify error message is displayed or not when user try to import employee  without headers 
+Given Login to easyTimePro application
+When Navigate to personnel module
+When Click on Employee management
+When Click on employee import button
+When Click on import employee
+When Select without headers files
+When Click on Confirm button
+#Validation
+Then Employee import error message should be display 
+
+@ETP_TC_249 @EmployeeManagement @Admin
+Scenario Outline: Verify error message is displayed or not when user try to import employee  without employee data
+Given Login to easyTimePro application
+When Navigate to personnel module
+When Click on Employee management
+When Click on employee import button
+When Click on import employee
+When Select without employee data
+When Click on Confirm button
+#Validation
+Then Employee import error message should be display 
+
+@ETP_TC_250 @EmployeeManagement @Admin
+Scenario Outline: Verify error message is displayed or not when user try to import employee  with only mandatory fields headers and data
+Given Login to easyTimePro application
+When Navigate to personnel module
+When Click on Employee management
+When Click on employee import button
+When Click on import employee
+When Select with only mandatory employee data
+When Click on Confirm button
+#Validation
+Then Succesfull message should be display 
+
+@ETP_TC_251 @EmployeeManagement @Admin
+Scenario Outline: Verify error message is displayed or not when user try to import employee using invalid file format
+Given Login to easyTimePro application
+When Navigate to personnel module
+When Click on Employee management
+When Click on employee import button
+When Click on import employee
+When Select department import file
+When Click on Confirm button
+#Validation
+Then Employee import error message should be display 
+
+@ETP_TC_252 @EmployeeManagement @Admin
+Scenario: Verify user is able to import new data when Ignore option is selected in Existing data dropdown
+Given Login to easyTimePro application
+When Navigate to personnel module
+When Click on Employee management
+When Click on employee import button
+When Click on import employee
+When Select Existining new Employee data 
+When Click on Confirm button
+#Validation
+Then Succesfull message should be display 
+
+@ETP_TC_253 @EmployeeManagement @Admin
+Scenario: Verify user is able to import new data when Overwrite option is selected in existing data dropdown
+Given Login to easyTimePro application
+When Navigate to personnel module
+When Click on Employee management
+When Click on employee import button
+When Click on import employee
+When Select Overwrite option Existining newdata Existing Employee data 
+When Click on Confirm button
+#Validation
+Then Succesfull message should be display 
+Then Imported empname should display in empname list "zero"
+
+@ETP_TC_254 @EmployeeManagement @Admin
+Scenario: Verify user is able to import existing data when Ignore option is selected in existing data dropdown
+Given Login to easyTimePro application
+When Navigate to personnel module
+When Click on Employee management
+When Click on employee import button
+When Click on import employee
+When Select Existing option Existining newdata Existing Employee data  
+When Click on Confirm button
+#Validation
+Then Employee Error message should display
+
+@ETP_TC_255 @EmployeeManagement @Admin
+Scenario: Verify user is able to import existing data when Overwrite option is selected in existing data dropdown
+Given Login to easyTimePro application
+When Navigate to personnel module
+When Click on Employee management
+When Click on employee import button
+When Click on import employee
+When Select Overwrite option Existining newdata Existing Employee data 
+When Click on Confirm button
+#Validation
+Then Succesfull message should be display 
+Then Imported empname should display in empname list "zero"
+Then Imported another empname should display in empname list "hero"
+
+@ETP_TC_256 @EmployeeManagement @Admin
+Scenario: Verify user is able to import new data when Overwrite option is selected in existing data dropdown
+Given Login to easyTimePro application
+When Navigate to personnel module
+When Click on Employee management
+When Click on employee import button
+When Click on import employee
+When Select Overwrite option Existining newdata Existing Employee data 
+When Click on Confirm button
+#Validation
+Then Succesfull message should be display 
+Then Imported empname should display in empname list "zero"
+
+@ETP_TC_257 @EmployeeManagement @Admin
+Scenario: Verify user is able to download template in Import Employee document popup
+Given Login to easyTimePro application
+When Navigate to personnel module
+When Click on Employee management
+When Click on employee import button
+When Click on employee Document button
+When Click on import employee
+#Validations 
+Then Employee document template should be download
+
+@ETP_TC_258 @EmployeeManagement @Admin
+Scenario Outline: Verify user is able to import the employee document
+Given Login to easyTimePro application
+When Navigate to personnel module
+When Click on Employee management
+When Click on employee import button
+When Click on employee Document button
+When Select the employee import document file "<Case>"
+When Click on Confirm button
+#Validation
+Then Success message should display
+Examples:
+|Case|
+|txtFile|
+|xlsFile|
+|csvFile|
+|xlsxFile|
+
+@ETP_TC_259 @EmployeeManagement @Admin
+Scenario: Verify user is able to cancel Importing employee document.
+Given Login to easyTimePro application
+When Navigate to personnel module
+When Click on Employee management
+When Click on employee import button
+When Click on employee Document button
+When Select the cancel import file 
+Then Click on employee Cancel button
+
+@ETP_TC_260 @EmployeeManagement @Admin
+Scenario: Verify error message is displayed or not when user try to import employee  document without headers and data 
+Given Login to easyTimePro application
+When Navigate to personnel module
+When Click on Employee management
+When Click on employee import button
+When Click on import employee
+When Select employee certificate without headers files
+When Click on Confirm button
+#Validation
+Then Employee import error message should be displaying 
+
+
+@ETP_TC_261 @EmployeeManagement @Admin
+Scenario: Verify error message is displayed or not when user try to import employee document  without document data
+Given Login to easyTimePro application
+When Navigate to personnel module
+When Click on Employee management
+When Click on employee import button
+When Click on import employee
+When Select employee certificate without document data 
+When Click on Confirm button
+#Validation
+Then Employee import Certificate error message should be displaying 
+
+@ETP_TC_262 @EmployeeManagement @Admin
+Scenario: Verify error message is displayed or not when user try to import employee document  with only mandatory fields headers and data
+Given Login to easyTimePro application
+When Navigate to personnel module
+When Click on Employee management
+When Click on employee import button
+When Click on import employee
+When Select employee certificate withonly mandatory fields headers 
+When Click on Confirm button
+#Validation
+Then import employee with only mandatory data error message should be display 
+
+@ETP_TC_263 @EmployeeManagement @Admin
+Scenario: Verify error message is displayed or not when user try to import employee document using invalid file format
+Given Login to easyTimePro application
+When Navigate to personnel module
+When Click on Employee management
+When Click on employee import button
+When Click on import employee
+When Select employee certificate invalid file format 
+When Click on Confirm button
+#Validation
+Then import employee with invalid file error message should be display 
+
+@ETP_TC_264 @EmployeeManagement @Admin
+Scenario: Verify user is able to import new data when Ignore option is selected in Existing data dropdown
+Given Login to easyTimePro application
+When Navigate to personnel module
+When Click on Employee management
+When Click on employee import button
+When Click on import employee
+When Select employee Ignore option is selected in Existing data
+When Click on Confirm button
+#Validation
+Then Success message should display
+ 
+@ETP_TC_265 @EmployeeManagement @Admin
+Scenario: Verify user is able to import new data when Overwrite option is selected in existing data dropdown
+Given Login to easyTimePro application
+When Navigate to personnel module
+When Click on Employee management
+When Click on employee import button
+When Click on import employee
+When Select employee new data when Overwrite option is selected in Existing data
+When Click on Confirm button
+#Validation
+Then Success message should display
+
+
+#DADAPEER------------------------------------------------------------------------------------------
+
+#Surya------------------------------------------------------------------------------------------
+#Employee Document in Personnel module
+@ETP_TC_357 @EmployeeDocument @Admin
+Scenario: Verify user is able to add Employee Document
+Given Enter username and password into username and password text field respectively
+When Click on login button
+Then User should be navigate to personnel module and click on personnel module
+And click on Employee document
+And click on Add button in emp doc
+And Enter Document No and Document Title in the Document No and Document Title text fields
+And click on Emp confirm button
+Then User should be able to create employee document and successful message should be display
+ 
+@ETP_TC_358  @EmployeeDocument @Admin
+Scenario: Verify user is able to add multiple Employee Document
+Given Enter username and password into username and password text field respectively
+When Click on login button
+Then User should be navigate to personnel module and click on personnel module
+And click on Employee document
+Then User should be able to create multiple employee document and successful message should be display
+ 
+@ETP_TC_359  @EmployeeDocument @Admin
+Scenario: Verify user is able to cancel adding Employee Document
+Given Enter username and password into username and password text field respectively
+When Click on login button
+Then User should be navigate to personnel module and click on personnel module
+And click on Employee document
+And click on Add button in emp doc
+Then click on cancel button and user should be able to cancel adding emp doc in emp doc
+ 
+@ETP_TC_360  @EmployeeDocument @Admin
+Scenario: Verify user is able to edit the Document
+Given Enter username and password into username and password text field respectively
+When Click on login button
+Then User should be navigate to personnel module and click on personnel module
+And click on Employee document
+And click on Edit button in emp doc
+Then clear the data from Document No text field
+And Enter Document No in Document No text field
+And click on Emp confirm button
+Then User should be able to  employee document and successful message should be display
+
+@ETP_TC_361 @EmployeeDocument @Admin
+Scenario: Verify user is able to delete the Document
+Given Enter username and password into username and password text field respectively
+When Click on login button
+Then User should be navigate to personnel module and click on personnel module
+And click on Employee document
+And select empdoc check box
+Then click on empdoc delete button
+And click on empd confirm button
+Then User should be able to Delete employee document and successful message should be display
+Then click on individual delete button
+And click on indconfirm button
+Then User should be able to Delete employee document and successful message should be display
+Then Select multiple check boxs
+And click on empdoc delete button
+And click on empd confirm button
+Then User should be able to Delete employee document and successful message should be display
+
+@ETP_TC_362 @EmployeeDocument @Admin
+Scenario: Verify user is able to download template by clicking on Download template
+Given Login to easyTimePro application
+Then User should be navigate to personnel module and click on personnel module
+Given click on Employee document
+When Click on Import button
+When Click on Download Template
+#Validation
+Then empdoc import template should be present in download directory
+
+@ETP_TC_363 @EmployeeDocument @Admin
+Scenario Outline: Verify user is able to import Employee Document
+Given Login to easyTimePro application
+Then User should be navigate to personnel module and click on personnel module
+Given click on Employee document
+When Click on Import button
+When Select the empdoc import file "<Case>"
+When Click on Confirm button
+#Validation
+#Added with and without mandatory data in all files
+Then Success message should display
+Then Imported empdoc should display in empdoc list "Case"
+Examples:
+|Case|
+|xlsxFile|
+
+@ETP_TC_364 @EmployeeDocument @Admin
+Scenario Outline: Verify user can able to import txt,xls,csv and xlsx  farmat Documents 
+Given Login to easyTimePro application
+Then User should be navigate to personnel module and click on personnel module
+Given click on Employee document
+When Click on Import button
+When Select the employeedoc import file "<Case>"
+When Click on Confirm button
+#Validation
+#Added with and without mandatory data in all files
+Then Success message should display
+Then Imported employeedoc should display in employeedoc list "Case"
+Examples:
+|Case|
+|txtFile|
+|xlsFile|
+|csvFile|
+|xlsxFile|
+
+@ETP_TC_365 @EmployeeDocument @Admin
+Scenario Outline: Verify error message is displaying when user import other than  txt,xls,csv and xlsx format
+Given Login to easyTimePro application
+Then User should be navigate to personnel module and click on personnel module
+Given click on Employee document
+When Click on Import button
+When Select the "<Case>" empdoc file 
+When Click on Confirm button
+#Validation
+Then Error message should display as "Invalid file format"
+Examples:
+|Case|
+|Image|
+|Pdf|
+
+@ETP_TC_366 @EmployeeDocument @Admin
+Scenario: Verify user is able to import new data when Ignore option is selected in Existing data dropdown
+Given Login to easyTimePro application
+Then User should be navigate to personnel module and click on personnel module
+Given click on Employee document
+When Click on Import button
+When Select ignore option and import new empdoc file
+When Click on Confirm button
+#Validations
+Then Success message should display
+Then Imported empdoc should display in empdoc list "8018"
+
+@ETP_TC_367 @EmployeeDocument @Admin
+Scenario: Verify user is able to import new data when Overwrite option is selected in existing data dropdown
+Given Login to easyTimePro application
+Then User should be navigate to personnel module and click on personnel module
+Given click on Employee document
+When Click on Import button
+When Select Overwrite option and import new empdoc file
+When Click on Confirm button
+#Validations
+Then Success message should display
+Then Imported empdoc should display in empdoc list "2060"
+
+
+
+#Surya------------------------------------------------------------------------------------------
+
+#Avinash------------------------------------------------------------------------------------------
+#Module: System(@ETP_TC_448 - @ETP_TC_544)
+#Author: Avinash Kumar Padhy 
+
+@ETP_TC_448 @System   
+Scenario: Verify user is able to navigate to Add Group page by clicking on Add buttton
+Given Enter username and password into username and password text field respectively
+And Click on login button
+And Click on Group Add button in system module 
+Then Name text field and Below mentioned Module should display in add page
+#Personnel,Device,Attendance,Access,System.
+
+
+@ETP_TC_449 @System
+Scenario: Verify whether below mention option are displaying under company sub-module when user click on company expand button
+#(Add,Edit ,Delete,View,Delete)
+Given Enter username and password into username and password text field respectively
+And Click on login button
+And Click on Group Add button in system module 
+Then Click on Company expand button under personnel module
+Then Below mentioned option should display under company 
+ #Add,Edit ,Delete,View,Delete
+
+@ETP_TC_450
+Scenario: Verify whether below mention option are displaying under Employee  sub-module when user click on Empoyee expand button
+#("Import Employee ,Import Document,Import Photo ,Department Transfe")
+Given Enter username and password into username and password text field respectively
+And Click on login button
+And Click on Group Add button in system module
+Then Click on Employee expand button under personnel module
+Then Below mentioned option should display under employee 
+#Import Employee ,Import Document,Import Photo ,Department Transfe
+@ETP_TC_451
+Scenario: Verify whether below mention option are displaying under Department sub-module when user click on Department expand button
+#("Import,Personnel Transfer")
+Given Enter username and password into username and password text field respectively
+When Click on login button
+And Click on Group Add button in system module
+And Click on Department expand button under personnel module
+Then Below mentioned option should display under Department
+#"Import,Personnel Transfer"
+
+@ETP_TC_452
+Scenario: Verify whether below mention option are displaying under Position  sub-module when user click on Position  expand button
+#("Personnel Transfer")
+Given Enter username and password into username and password text field respectively
+When Click on login button
+And Click on Group Add button in system module
+And Click on Position expand button under personnel module
+Then Below mentioned option should display under Position
+#"Personnel Transfer"
+
+@ETP_TC_453
+Scenario: Verify whether below mention option are displaying under Area sub-module when user click on Area expand button
+#("Personnel Transfer")
+Given Enter username and password into username and password text field respectively
+When Click on login button
+And Click on Group Add button in system module
+And Click on Area expand button under personnel module
+Then Below mentioned option should display under Area
+#"Personnel Transfer"
+
+@ETP_TC_454
+Scenario: Verify whether below mention option are displaying under Holiday Location  sub-module when user click on Holiday Location expand button
+#("Personnel Transfer")
+Given Enter username and password into username and password text field respectively
+When Click on login button
+And Click on Group Add button in system module
+And Click on Holiday Location expand button under personnel module
+Then Below mentioned option should display under Holiday Location
+#"Personnel Transfer"
+
+@ETP_TC_455
+Scenario: Verify whether below mention option are displaying under Resign  sub-module when user click on Resign expand button
+#("Rehire,Disable Attendance") 
+Given Enter username and password into username and password text field respectively
+When Click on login button
+And Click on Group Add button in system module
+And Click on Resign expand button under personnel module
+Then Below mentioned option should display under Resign
+#Rehire,Disable Attendance
+
+@ETP_TC_456
+Scenario: Verify whether below mention option are displaying under Document sub-module when user click on Document  expand button
+#("View,Import")
+Given Enter username and password into username and password text field respectively
+When Click on login button
+And Click on Group Add button in system module
+And Click on Document expand button under personnel module
+Then Below mentioned option should display under Document
+#(View,Import_
+
+
+@ETP_TC_457
+Scenario: Verify whether below mention option are displaying under Workflow node sub-module when user click on workflow node expand button
+#("Delete,View")
+Given Enter username and password into username and password text field respectively
+When Click on login button
+And Click on Group Add button in system module
+And Click on Workflow node expand button under personnel module
+Then Below mentioned option should display under Workflow node
+#(Delete,View)
+
+#Avinash------------------------------------------------------------------------------------------

@@ -1,0 +1,44 @@
+package StepDefinitations;
+
+import java.time.Duration;
+
+import org.openqa.selenium.chrome.ChromeDriver;
+
+import io.cucumber.java.en.*;
+
+
+public class LoginDemoSteps {
+	
+    @Given("browser is open")
+    public void browser_is_open() {
+    	 String projectpath = System.getProperty("user.dir");
+			System.out.println("project path is:"+"projectpath");
+			System.getProperty("webdriver.chrome.driver",projectpath+"\\src\\test\\resources\\Drivers.exe");	
+			driver = new ChromeDriver();
+			driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(10));
+			driver.manage().window().maximize();
+			
+        
+    }
+
+    @And("user is on login page")
+    public void user_is_on_login_page() {
+        
+    }
+
+    @When("user enters username and password")
+    public void user_enters_username_and_password() {
+     
+    }
+    @And("user clicks on login button")
+    public void user_clicks_on_login_button() {
+    	
+    }
+    @Then("home page is displaying")
+    public void home_page_is_displaying() {
+    	
+    }
+    
+
+
+}

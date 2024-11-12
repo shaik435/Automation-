@@ -1,0 +1,55 @@
+package stepDefinations;
+
+import io.cucumber.java.Before;
+import io.cucumber.java.After;
+import io.cucumber.java.en.Given;
+
+import io.cucumber.java.en.Then;
+import io.cucumber.java.en.When;
+import io.cucumber.junit.Cucumber;
+import io.opentelemetry.exporter.logging.SystemOutLogRecordExporter;
+import utilities.BrowserActions;
+import utilities.BrowserDriver;
+
+import java.time.Duration;
+
+import org.junit.Assert;
+import org.junit.runner.RunWith;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.ui.ExpectedCondition;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
+import pageObjects.*;
+
+@SuppressWarnings("all")
+@RunWith(Cucumber.class)
+
+public class Employeeloginsteps extends BrowserDriver {
+
+   private WebDriver driver;
+   private Employeelogin login;
+   private WebDriverWait webwait;
+  
+   
+   @Before("@ETP_Login")
+   public void start()
+   {
+	   driver=intializedriver();
+	   driver.manage().window().maximize();	
+	   
+	   login = new Employeelogin(driver);
+	   
+	   
+   }
+   
+   
+  @After("@ETP_Login")
+  public void stop() throws InterruptedException
+  {
+	  Thread.sleep(3000);
+	  driver.close();
+  }
+    
+ 
+}

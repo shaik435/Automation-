@@ -1,0 +1,33 @@
+package day2;
+
+public class VariablesDemo {
+
+	public static void main(String[] args) {
+//		float iteam_price =4.5F,iteam_pricea= 5.5f;
+//		
+//		System.out.println(iteam_price);
+//		System.out.println(iteam_pricea);
+		
+		    int isRaining = 1;  // 1 represents true
+	        int isSunny = 0;    // 0 represents false
+
+	        System.out.println("Is it raining? " + (isRaining == 1));
+	        System.out.println("Is it sunny? " + (isSunny == 1));
+
+	        // Example of using integer in conditional statements
+	        if (isRaining == 1) {
+	            System.out.println("Don't forget your umbrella!");
+	        } else {
+	            System.out.println("Leave your umbrella at home.");
+	        }
+		
+				
+	        
+
+	    
+	
+	
+
+	}
+
+}

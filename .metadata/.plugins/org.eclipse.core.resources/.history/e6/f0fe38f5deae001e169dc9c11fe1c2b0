@@ -1,0 +1,24 @@
+ @eayTimePro_9.0.8
+ Feature: easyTimePro_9.0.8
+
+ @ETP_Admin_Login_01
+ Scenario: Landing page validation
+ Given  I am in easyTimeProWebsite 
+ 
+ @ETP_Admin_Login_02
+ Given  I am in easyTimeProWebsite
+ #When  the user is on the Department page
+ #When the user adds the following departments:
+      #| DepartmentName |
+      #| HR             |
+      #| Finance        |
+      #| IT             |
+ #Then the user navigates to the Department dropdown list
+ #And the dropdown list should include the added departments:
+      #| DepartmentName |
+      #| HR             |
+      #| Finance        |
+      #| IT             |
+ 
+ 
+

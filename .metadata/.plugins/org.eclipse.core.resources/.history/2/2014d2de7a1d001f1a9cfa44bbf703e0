@@ -1,0 +1,15 @@
+package day2;
+
+public class Switchcase2 {
+
+	public static void main(String[] args) {
+		String "Sunday" = 1;
+		
+		switch(Sunday)
+		{
+		case Sunday : System.out.println(1);
+		          break;
+	}
+
+	}
+}

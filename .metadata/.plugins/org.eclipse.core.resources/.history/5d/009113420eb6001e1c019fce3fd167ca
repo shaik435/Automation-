@@ -1,0 +1,358 @@
+package stepDefinition;
+
+import static org.junit.Assert.assertEquals;
+
+import java.awt.AWTException;
+import java.awt.Robot;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.time.Duration;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.NoSuchElementException;
+import java.util.Properties;
+import java.util.concurrent.TimeUnit;
+
+import org.apache.commons.lang3.RandomStringUtils;
+import org.junit.Assert;
+import org.openqa.selenium.By;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.interactions.Actions;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.FluentWait;
+import org.openqa.selenium.support.ui.WebDriverWait;
+
+import com.aventstack.extentreports.cucumber.adapter.ExtentCucumberAdapter;
+
+import io.cucumber.datatable.DataTable;
+import io.cucumber.java.After;
+import io.cucumber.java.Before;
+import io.cucumber.java.Scenario;
+import io.cucumber.java.en.And;
+import io.cucumber.java.en.Given;
+import io.cucumber.java.en.Then;
+import io.cucumber.java.en.When;
+import pageObjects.loginObject;
+import pageObjects.personnelObject;
+import utils.Base;
+
+@SuppressWarnings("unused")
+public class easyTimePro extends Base {
+	public WebDriver driver;
+	private Properties properties;
+	public WebDriverWait wait;
+	
+	//Page Objects
+	private loginObject login;
+	private String Department_Name_Text;
+	private personnelObject personnel;
+	
+	
+	
+
+	@Before("@eayTimePro_9.0.8")
+	public void setup() throws IOException, InterruptedException, AWTException {
+		FileInputStream fis1 = new FileInputStream(
+				System.getProperty("user.dir") + "/src/main/resources/data.properties");
+		properties = new Properties();
+		properties.load(fis1);
+		 //driver.manage().timeouts().implicitlyWait(java.time.Duration.ofSeconds(5));
+		//driver = initializeDriver("chrome", "x64", "windows");
+		driver = initializeDriver("Edge", "x64", "windows");
+		driver.manage().window().maximize();
+		ExtentCucumberAdapter.addTestStepLog("Driver Initialized");
+		
+		
+		//Wait 
+		wait = new WebDriverWait(driver, Duration.ofSeconds(10L));
+		
+		
+		//PageObjects
+		login = new loginObject(driver);
+		personnel = new personnelObject(driver);
+	}
+	
+	
+	@After("@eayTimePro_9.0.8")
+	public void teardown(Scenario scenario) throws IOException {
+		if (scenario.isFailed()) {
+			scenario.attach(getByteScreenshot(driver), "image/png", "screenshot name");
+		}
+		driver.quit();
+	}
+	
+	
+	// Background
+
+		@Given("^Enter easyTimePro URl in browser$")
+	    public void enter_easyTimePro_URl_in_browser() throws InterruptedException {
+	    	driver.get(properties.getProperty("URL"));
+	    	
+	    	WebElement loginPage = driver.findElement(login.getLoginPage());
+	    	wait.until(ExpectedConditions.visibilityOf(loginPage));
+	    }
+
+	    @Then("^Login Page should display$")
+	    public void login_Page_should_display() {
+	    	String ExpectedURL=properties.getProperty("ExpectedURL");
+	    	String ActualURL=driver.getCurrentUrl();
+	    	Assert.assertEquals(ExpectedURL, ActualURL);
+	    }
+	    
+	    @Then("Below mentioned components should display in login page")
+	    public void below_mentioned_components_should_display_in_login_page() {
+	    	Assert.assertTrue(driver.findElement(login.getusername()).isDisplayed());
+	    	Assert.assertTrue(driver.findElement(login.getpassword()).isDisplayed());
+	    	Assert.assertTrue(driver.findElement(login.getloginButton()).isDisplayed());
+	    	Assert.assertTrue(driver.findElement(login.getZkTecoLogo()).isDisplayed());
+	    	Assert.assertTrue(driver.findElement(login.geteasyTimeProLogo()).isDisplayed());
+	    	Assert.assertTrue(driver.findElement(login.getadminTab()).isDisplayed());
+	    	Assert.assertTrue(driver.findElement(login.getemployeeTab()).isDisplayed());
+	    }
+	    
+	    //ETP_TC_01
+	    @When("Enter username and password into username and password text field respectively")
+	    public void enter_username_and_password_into_username_and_password_text_field_respectively() {
+	    	 driver.findElement(login.getusername()).sendKeys(properties.getProperty("AdminUsername"));
+	         driver.findElement(login.getpassword()).sendKeys(properties.getProperty("AdminPassword"));
+	    }
+
+	    @When("Click on login button")
+	    public void click_on_login_button() throws Exception {
+	    	driver.findElement(login.getloginButton()).click();    	
+			windowMinimize(4);
+	    }
+
+	    @Then("Easytimelogo should display in top left corner")
+	    public void easytimelogo_should_display_in_top_left_corner() {
+	    	Assert.assertTrue(driver.findElement(login.getetpLogoWithDashboardLink()).isDisplayed());
+	    }
+
+	    @Then("Personnel, Device, Attendance, Access, System modules should display in top bar")
+	    public void personnel_device_attendance_access_system_modules_should_display_in_top_bar() {
+	    	Assert.assertTrue(driver.findElement(login.getPersonnelModule()).isDisplayed());
+	    	Assert.assertTrue(driver.findElement(login.getDeviceModule()).isDisplayed());
+	    	Assert.assertTrue(driver.findElement(login.getAttendanceModule()).isDisplayed());
+	    	Assert.assertTrue(driver.findElement(login.getAccessModule()).isDisplayed());
+	    	Assert.assertTrue(driver.findElement(login.getSystemModule()).isDisplayed());
+	    }
+
+	    @Then("Guide and Userprofile icon should display in top right corner")
+	    public void guide_and_userprofile_icon_should_display_in_top_right_corner() {
+	    	Assert.assertTrue(driver.findElement(login.getGuidelink()).isDisplayed());
+	    	Assert.assertTrue(driver.findElement(login.getUserprofile()).isDisplayed());
+	    } 
+	    
+
+	   //ETP_TC_213
+	    	@And("Add multiple departments in department page")
+		    public void add_multiple_departments_in_department_page() throws InterruptedException {
+		    	driver.findElement(login.getPersonnel()).click();
+//		    	Thread.sleep(2000);
+		    	driver.findElement(By.xpath("(//span[.='Department'])[1]")).click();
+		    	
+//		    	Thread.sleep(2000);
+		    		
+		    		
+		    		
+		    		for(int i=0;i<2;i++)
+		    		{      ArrayList<String> col = new ArrayList<String>();
+		    		     col.add("Teting");
+		    		     col.add("Developing");
+		 
+		    	    driver.findElement(By.xpath("//a[.='Add']")).click();
+		    		driver.findElement(By.xpath("//input[@name='dept_name']")).sendKeys(col.get(i));
+		    		driver.findElement(By.xpath("//a[.='Confirm']")).click();
+		    		Thread.sleep(1000);
+		    	
+		    		}
+		    		
+//		    		Thread.sleep(2000);
+		    		
+		    		List<WebElement> count = driver.findElements(By.cssSelector("div[class='layui-table-body layui-table-main'] > table > tbody > tr > td[data-field='dept_name'] > div"));
+		    		 int n = count.size();
+		    		for(int j=0;j<count.size();j++)
+		    		{
+		    			if(j==n-1)
+		    			{
+		    				Department_Name_Text=count.get(j).getText();
+		    				
+		    			}
+		    		}
+	         
+		    }
+		    
+		    @When("Navigate to Employee management page")
+		    public void navigate_to_employee_management_page() throws InterruptedException {
+		    	driver.findElement(By.xpath("(//span[.='Employee'])[1]")).click();
+		    	Actions ac = new Actions(driver); 
+		    	ac.moveToElement(driver.findElement(By.cssSelector("#employee_47656e6572616c416374696f6e4e6577"))).click().build().perform();
+		    	driver.findElement(By.cssSelector ("div[id*='department'][class='layui-form-select tree-select']")).click();
+		    	List<WebElement> List = driver.findElements(By.cssSelector(".tree-ul > ul > li > a > span + span"));
+		    	
+		    	for(int i=0;i<List.size();i++)
+		    	{
+		    		if(List.get(i).getText().equalsIgnoreCase(Department_Name_Text))
+		    		{
+		    			System.out.println(Department_Name_Text);
+		    			Assert.assertTrue(List.get(i).isDisplayed());
+		    		}
+		    	
+		    	}
+		    }
+	    	
+		  //ETP_TC_214
+			@And ("Add position in position page")
+		    public void Add_position_in_position_page() throws InterruptedException { 
+		    driver.findElement(login.getPersonnel()).click();
+		    driver.findElement(login.getPersonnelposition()).click();
+		    driver.findElement(login.getAddbutton()).click();
+		    WebElement add= driver.findElement(login.getAddposition());
+		    add.click();
+		    add.sendKeys("tester");
+		    driver.findElement(login.getConfirmbutton()).click();		    
+			}
+		 
+		    @Then ("Navigate to Employee management drop down page") 		    
+		    public void Navigate_to_in_Employee_Management_drop_page() throws InterruptedException { 
+            driver.findElement(personnel.getPersonnelEmployee()).click();
+            driver.findElement(personnel.getEmployee()).click();
+            driver.findElement(personnel.getaddEmployee()).click();
+            driver.findElement(personnel.getPersonnelemployeedropdown()).click();
+            String Expected="tester";
+            String Actual=driver.findElement(personnel.getPersonnelemployeecreatedposition()).getText();
+            Assert.assertEquals(Expected, Actual);
+}
+
+		    
+		    //ETP_TC_215
+            @And("Add holiday in holiday page")
+            public void Add_holiday_in_holiday_page() throws InterruptedException {
+            driver.findElement(login.getPersonnel()).click();
+            WebDriverWait wait=new WebDriverWait(driver,Duration.ofSeconds(10));
+            //driver.findElement(personnel.getPersonnelorganisation()).click();        
+            driver.findElement(personnel.getHolidaylocation()).click();
+            driver.findElement(personnel.getPersonnelholidayaddbutton()).click();
+            WebElement clickElement = driver.findElement(personnel.getPersonnelholidayname());
+            clickElement.click();
+            clickElement.sendKeys(properties.getProperty("HolidayLocation"));
+            WebElement clickconfirmbutton = driver.findElement(personnel.getPersonnelholidayconfirmbutton());
+            clickconfirmbutton.click();                      
+            }
+
+            @Then("Naviagte Employee management holiday drop down page")
+            public void Naviagte_Employee_management_holiday_drop_down_page() {
+            driver.findElement(personnel.getPersonnelEmployee()).click();
+            driver.findElement(personnel.getEmployee()).click();
+            driver.findElement(personnel.getaddEmployee()).click();
+            driver.findElement(personnel.getPersonnelholidaydropdown()).click();
+            String Expected="bangalore";
+            String Actual=driver.findElement(personnel.getPersonnelholidaydrop()).getText();
+            Assert.assertEquals(Expected, Actual);
+}
+            //@ETP_TC_216
+            @And("Add Area in Area page")
+            public void Add_Area_in_Area_page() {
+            driver.findElement(login.getPersonnel()).click();
+            //driver.findElement(personnel.getPersonnelorganisation()).click();
+            driver.findElement(personnel.getPersonnelArea()).click();
+            driver.findElement(personnel.getPersonnelAreaAddbutton()).click();
+            WebElement clickElement = driver.findElement(personnel.getPersonnelareaname());
+            clickElement.click();
+            clickElement.sendKeys(properties.getProperty("AreaName"));
+            WebElement clickconfirmbutton = driver.findElement(personnel.getPersonnelholidayconfirmbutton());
+            clickconfirmbutton.click(); 
+            
+            }
+            @Then("Naviagte Employee management Area drop down page")
+            public void Naviagte_Employee_management_Area_drop_down_page() {
+            driver.findElement(personnel.getPersonnelEmployee()).click();
+            driver.findElement(personnel.getEmployee()).click();
+            driver.findElement(personnel.getaddEmployee()).click();
+            driver.findElement(personnel.getPersonnelareadropdown()).click();
+            String Expected ="hyderbad";
+            String Actual= driver.findElement(personnel.getPersonneldropdown()).getText();
+            Assert.assertEquals(Expected, Actual);
+            	
+            }
+            //ETP_TC_217
+            @When("the user is on the employee page")
+            public void navigateToEmployeePage() {
+            	driver.findElement(personnel.getPersonnelmanagement()).click();
+                driver.findElement(personnel.getEmployee()).click();
+                
+            }
+
+            @When("the user clicks on the add button")
+            public void clickOnAddButton() {
+            driver.findElement(personnel.getaddEmployee()).click();	
+           
+            }
+
+            @And("the user enters the following employee details")           
+            	public void enterEmployeeDetails(DataTable employeeData) {
+                    List<Map<String, String>> data = employeeData.asMaps(String.class, String.class);
+                    for (Map<String, String> row : data) {
+                        String empId = row.get("10001");
+                        String firstName = row.get("shaik");
+                        String department = row.get("testing");
+                        String position = row.get("tester");
+                        String area = row.get("bangalore");
+                        String employmentType = row.get("permanent");
+                        String holidayLocation = row.get("bangalore");
+                        String lastName = row.get("dadapeer");
+                        String dateOfJoining = row.get("2024-01-18");
+                        enterEmployeeDetails(empId, firstName, department, position, area,
+                         employmentType, holidayLocation, lastName, dateOfJoining);
+                    }
+                }
+             private void enterEmployeeDetails(String empId, String firstName, String department,
+            		String position, String area, String employmentType,
+            		String holidayLocation, String lastName, String dateOfJoining) {
+            	// Placeholder implementation for entering employee details
+            	// You should replace this with actual code to interact with your application
+            	driver.findElement(personnel.getEmployeeid()).sendKeys(properties.getProperty("Employeeid"));
+            	driver.findElement(personnel.getEmployeefirstname()).sendKeys(properties.getProperty("FirstName"));
+            	WebElement departmentDropdown = driver.findElement((personnel.getDepartmentdropdown());
+            	driver.findElement(personnel.getDepartmentdrop()).sendKeys(properties.getProperty("Department"));
+            	//driver.findElement(personnel.getPersonnelemployeedropdown()).click();
+            	driver.findElement(personnel.getPersonnelemployeecreatedposition()).sendKeys(properties.getProperty("Position"));
+            	driver.findElement(By.id("area")).sendKeys(area);
+            	driver.findElement(By.id("employmentType")).sendKeys(employmentType);
+            	driver.findElement(By.id("holidayLocation")).sendKeys(holidayLocation);
+            	driver.findElement(By.id("lastName")).sendKeys(lastName);
+            	driver.findElement(By.id("dateOfJoining")).sendKeys(dateOfJoining);
+            }
+                    
+            
+            @And("the user clicks on the confirm button")
+            public void clickOnConfirmButton() {
+              driver.findElement("").click();
+            }
+
+            @Then("a success message should be displayed")
+            public void validateSuccessMessage() {
+                // Implementation for validating the success message
+                WebElement successMessage = driver.findElement(By.id("successMessage"));
+                Assert.assertTrue(successMessage.isDisplayed());
+            }
+
+            @And("the created employee should be visible in the employee list")
+            public void validateEmployeeVisibility(DataTable employeeData) {
+                // Implementation for validating the created employee in the employee list
+                // This method should handle DataTable and verify the created employee details
+            }
+}
+
+
+            
+            
+
+
+
+
+
+    

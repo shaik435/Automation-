@@ -1,0 +1,15 @@
+URL: http://127.0.0.1/
+ExpectedURL: http://127.0.0.1/login/?next=/
+Department
+#ETP_TC_01
+AdminUsername: admin
+AdminPassword: admin
+Position= tester 
+HolidayLocation = bangalore 
+AreaName = hyderbad
+Employeeid = 10001
+FirstName:sekhar
+Department: testing 
+Employeetype:permanent
+LastName:reddy
+DateOfJoining:2024-01-18

@@ -1,0 +1,1917 @@
+package pageObjects;
+
+import org.junit.Assert;
+import org.openqa.selenium.By;
+import org.openqa.selenium.JavascriptExecutor;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.interactions.Actions;
+import org.openqa.selenium.support.PageFactory;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
+import utils.Utils;
+
+import java.util.List;
+
+@SuppressWarnings("unused")
+public class CloudAccessPageObjects {
+	final WebDriver driver;
+
+	public CloudAccessPageObjects(WebDriver driver) {
+		this.driver = driver;
+		PageFactory.initElements(driver, this);
+	}
+	private final By alert =By.cssSelector("div[role='alert']");
+
+	public By getAlert() {
+		return alert;
+	}
+
+	//Login Page
+	private final By logo= By.cssSelector("#root > div > main > div > div > img:nth-child(1)");
+	private final By signInLogo= By.cssSelector("#root > div > main > div > div > div > div:nth-child(2) > h5");
+	private final By userName= By.cssSelector("#root > div > main > div > div > form > div >div:nth-child(2)>div>div>input#email");
+	private final By password= By.cssSelector("#root > div > main > div > div > form > div >div:nth-child(2)>div>div>input#password");
+	private final By eyeIcon= By.cssSelector("#root > div > main > div > div > form > div >div:nth-child(2)>div>div>div>button");
+	private final By forgotPasswordLink= By.cssSelector("#root > div > main > div > div > form > div >div:nth-child(2)>a>span.MuiButton-label");
+	private final By login= By.cssSelector("#root > div > main > div > div > form > div > div > button");
+	private final By orSignInith= By.cssSelector("#root > div > main > div > div>div>div:nth-child(2)>div>p:nth-child(2)");
+	private final By minervaIcon = By.cssSelector("#root > div > main > div > div>div>div:nth-child(2)>div>button");
+	private final By dontHaveAnAccount= By.cssSelector("#root > div > main > div > div>div>div:nth-child(2)>div>p:nth-child(1)");
+	private final By signUp= By.cssSelector("#root > div > main > div > div>div>div:nth-child(2)>div>a");
+	private final By footer= By.cssSelector("#root > div > div > div > div > span");
+	private final By loginFailAlert =By.cssSelector("div[role='alert']");
+	
+	
+	public By getLogo() {
+		return logo;
+	}
+	public By getSignInLogo() {
+		return signInLogo;
+	}
+	public By getUserName() {
+		return userName;
+	}
+	public By getPassword() {
+		return password;
+	}
+	
+	public By getEyeIcon() {
+		return eyeIcon;
+	}
+	public By getForgotPasswordLink() {
+		return forgotPasswordLink;
+	}
+	public By getLogin() {
+		return login;
+	}
+	public By getOrSignInith() {
+		return orSignInith;
+	}
+	public By getMinervaIcon() {
+		return minervaIcon;
+	}
+	public By getDontHaveAnAccount() {
+		return dontHaveAnAccount;
+	}
+	public By getSignUp() {
+		return signUp;
+	}
+	public By getFooter() {
+		return footer;
+	}
+	
+	// Login Page
+	
+	//Verify Company Page
+	
+	private final By companyHeader = signInLogo;
+	private final By companyCode = By.cssSelector("#company_code");
+	
+	private final By continueButton = By.xpath("//button[contains(@type, 'submit')]");
+	private final By BackFromCompany = By.cssSelector("#root > div > main > div > div > div:nth-child(4) > div > a");
+	
+	public By getCompanyHeader() {
+		return companyHeader;
+	}
+	public By getCompanyCode() {
+		return companyCode;
+	}
+	public By getContinueButton() {
+		return continueButton;
+	}
+	public By getBackFromCompany() {
+		return BackFromCompany;
+	}
+	
+	//Verify Company Page
+	
+	private final By companycodedropdown=By.xpath("//input[@id=\"company_code\"]");
+	private final By continuebtn=By.xpath("//input[@id=\"company_code\"]");
+	
+	
+	public By getcompanycodedropdown()
+	{
+		return companycodedropdown;
+	}
+	
+	public By getcontinuebtn()
+	{
+		return continuebtn;
+	}
+	
+	//SignUp Page
+	
+	private final By SignUpPagelogo= logo;
+	private final By Signuplink = By.xpath("//a[.=\"Sign up\"]");
+	private final By signUpLogo= signInLogo;
+	private final By firstName=By.cssSelector("#root > div > main > div > div > form > div >div:nth-child(2)>div>div>input#mui-1");
+	private final By lastName=By.cssSelector("#root > div > main > div > div > form > div >div:nth-child(2)>div>div>input#mui-2");
+	private final By email=By.cssSelector("#root > div > main > div > div > form > div >div:nth-child(2)>div>div>input#mui-3");
+	private final By contactNumber = By.xpath("//*[@id=\"mui-4\"]");
+	private final By passwordSignup=By.cssSelector("#root > div > main > div > div > form > div >div:nth-child(2)>div>div>input#mui-4");
+	private final By passwordEyeIcon=By.cssSelector("div main div div:nth-child(5) div div div > button");
+	private final By confirmPassword=By.cssSelector("#root > div > main > div > div > form > div >div:nth-child(2)>div>div>input#mui-5");
+	private final By confirmPasswordEyeIcon=By.cssSelector("div main div div:nth-child(6) div div div > button");
+	private final By signUpButton=By.cssSelector("#root > div > main > div > div > form > div > div > button[type='submit']");
+	private final By backButton=By.cssSelector("#root > div > main > div > div > form > div > div > button[type='button']");
+	private final By SignUpSuccessfullAlert = loginFailAlert ;
+	private final By SignUpSuccessfulMailIcon = By.cssSelector("#root > div > main > div > div > div > div > p > img");
+	private final By SignUpSuccessfulMessage = By.cssSelector("#root > div > main > div > div > div > div > h5");
+	private final By signUpSuccessfulBackLink = By.cssSelector("#root > div > main > div > div > div > div > a");
+	//toast background colour #07bc0c duration 750ms
+	
+	
+	public By getSignuplink() {
+
+		return Signuplink;
+	}
+	public By getSignUpPagelogo() {
+		return SignUpPagelogo;
+	}
+	public By getSignUpLogo() {
+		return signUpLogo;
+	}
+	public By getFirstName() {
+		return firstName;
+	}
+	public By getLastName() {
+		return lastName;
+	}
+	public By getEmail() {
+		return email;
+	}
+	public By getContactNumber() {
+		return contactNumber;
+	}
+	public By getPasswordSignup() {
+		return passwordSignup;
+	}
+	public By getPasswordEyeIcon() {
+		return passwordEyeIcon;
+	}
+	public By getConfirmPassword() {
+		return confirmPassword;
+	}
+	public By getConfirmPasswordEyeIcon() {
+		return confirmPasswordEyeIcon;
+	}
+	public By getSignUpButton() {
+		return signUpButton;
+	}
+	public By getBackButton() {
+		return backButton;
+	}
+	public By getSignUpSuccessfullAlert() {
+		return SignUpSuccessfullAlert;
+	}
+	public By getSignUpSuccessfulMailIcon() {
+		return SignUpSuccessfulMailIcon;
+	}
+	public By getSignUpSuccessfulMessage() {
+		return SignUpSuccessfulMessage;
+	}
+	public By getSignUpSuccessfulBackLink() {
+		return signUpSuccessfulBackLink;
+	}
+	
+	//SignUp page
+	
+
+	//Forgot Password page
+	private final By lockLogo = By.cssSelector("div main div div:nth-child(2) div:nth-child(1) div p:nth-child(1) > img:nth-child(1)");
+	private final By forgotPasswordLogo = By.cssSelector("div main div div:nth-child(2) div:nth-child(1) div > p:nth-child(2)");
+	private final By forgotPasswordInstruction = By.cssSelector("div main div div:nth-child(2) div:nth-child(2) div > h5");
+	private final By resetPasswordMailId = userName;
+	private final By sendLink = signUpButton;
+	private final By backToLogin =BackFromCompany ;
+	private final By forgotPasswordAlert = SignUpSuccessfullAlert;
+	private final By emailSent = forgotPasswordLogo;
+	private final By emailSentSmall = forgotPasswordInstruction;
+
+	
+	public By getLockLogo() {
+		return lockLogo;
+	}
+	public By getForgotPasswordLogo() {
+		return forgotPasswordLogo;
+	}
+	public By getForgotPasswordInstruction() {
+		return forgotPasswordInstruction;
+	}
+	public By getResetPasswordMailId() {
+		return resetPasswordMailId;
+	}
+	public By getSendLink() {
+		return sendLink;
+	}
+	public By getBackToLogin() {
+		return backToLogin;
+	}
+	public By getForgotPasswordAlert() {
+		return forgotPasswordAlert;
+	}
+	public By getEmailSent() {
+		return emailSent;
+	}
+
+	public By getEmailSentSmall() {
+		return emailSentSmall;
+	}
+	
+	//Forgot Password Page
+
+	//Minerva Login page
+	private final By minervaLogo = By.cssSelector(".row>div>div>div>img:nth-child(1)");
+	private final By minervatext = By.cssSelector(".row>div>div>div>img:nth-child(2)");
+	private final By minervaUsername = By.cssSelector("#userName");
+	private final By minervaPassword = By.cssSelector("#password");
+	private final By eyeIconInMinerva = By.cssSelector("#togglePassword");
+	private final By minervaForgotPassword = By.cssSelector("#signin > div > a");
+	private final By loginWithMinerva = By.cssSelector("#signin > button");
+	private final By loginMinervawithGoogle = By.cssSelector(".row>div:nth-child(2)>div>div>div>div>form>div:nth-child(7)>div:nth-child(1)>a>img");
+	private final By loginMinervawithFacebook = By.cssSelector(".row>div:nth-child(2)>div>div>div>div>form>div:nth-child(7)>div:nth-child(2)>a>img");
+	private final By wrongCredentialErrorInMinerva = By.cssSelector("body > div > div > div > div > div > div > div > div > div > span");
+
+	public By getWrongCredentialErrorInMinerva() {
+		return wrongCredentialErrorInMinerva;
+	}
+
+	public By getMinervaLogo() {
+		return minervaLogo;
+	}
+
+	public By getMinervatext() {
+		return minervatext;
+	}
+
+	public By getMinervaUsername() {
+		return minervaUsername;
+	}
+
+	public By getMinervaPassword() {
+		return minervaPassword;
+	}
+
+	public By getEyeIconInMinerva() {
+		return eyeIconInMinerva;
+	}
+
+	public By getMinervaForgotPassword() {
+		return minervaForgotPassword;
+	}
+
+	public By getLoginWithMinerva() {
+		return loginWithMinerva;
+	}
+
+	public By getLoginMinervawithGoogle() {
+		return loginMinervawithGoogle;
+	}
+
+	public By getLoginMinervawithFacebook() {
+		return loginMinervawithFacebook;
+	}
+
+	// Minerva Login Page
+
+	//Forgot Password of Minerva
+
+	private final By minervaForgotPasswordLockLogo = By.cssSelector(".row> div:nth-child(2)>div>div>div>div>div>div>img");
+	private final By minervaForgotPasswordLogo = By.cssSelector(".row> div:nth-child(2)>div>div>div>div>h3");
+	private final By minervaForgotPasswordInstruction = By.cssSelector(".row> div:nth-child(2)>div>div>div>div>form>label");
+	private final By minervaResetPasswordMailId = By.cssSelector(".row> div:nth-child(2)>div>div>div>div>form>div>input");
+	private final By minervaForgotPasswordSendLink = By.cssSelector(".row> div:nth-child(2)>div>div>div>div>form>button");
+	private final By minervaForgotPasswordBackToLogin =By.cssSelector(".row> div:nth-child(2)>div>div>div>div>form>div>a") ;
+	private final By minervaForgotPasswordAlert = By.cssSelector("#error-message");
+	private final By minervaForgotPasswordEmailSent = By.cssSelector("#success-message");
+
+	public By getMinervaForgotPasswordLockLogo() {
+		return minervaForgotPasswordLockLogo;
+	}
+
+	public By getMinervaForgotPasswordLogo() {
+		return minervaForgotPasswordLogo;
+	}
+
+	public By getMinervaForgotPasswordInstruction() {
+		return minervaForgotPasswordInstruction;
+	}
+
+	public By getMinervaResetPasswordMailId() {
+		return minervaResetPasswordMailId;
+	}
+
+	public By getMinervaForgotPasswordSendLink() {
+		return minervaForgotPasswordSendLink;
+	}
+
+	public By getMinervaForgotPasswordBackToLogin() {
+		return minervaForgotPasswordBackToLogin;
+	}
+
+	public By getMinervaForgotPasswordAlert() {
+		return minervaForgotPasswordAlert;
+	}
+
+	public By getMinervaForgotPasswordEmailSent() {
+		return minervaForgotPasswordEmailSent;
+	}
+
+	//Forgot Password of Minerva
+
+	//Dashboard
+	
+	private final By EmployeeName = By.cssSelector("#root > div > header > div > div > button > span > div > div");
+	private final By logoInDashBoard  = By.cssSelector("div div:nth-child(2) a > img");
+	private final By sideMenu  = By.cssSelector("div div:nth-child(1) div:nth-child(2) div div:nth-child(1) nav > div");
+	private final By sideMenuDashboard  = By.cssSelector("div[role='menu']>div:nth-child(1)>div>div:nth-child(2)>span:nth-child(1)");
+	private final By sideMenuOrganization  = By.cssSelector("div[role='menu']>div:nth-child(2)>div>div:nth-child(2)>span:nth-child(1)");
+	private final By sideMenuSiteManagement  = By.cssSelector("div[role='menu']>div:nth-child(3)>div>div:nth-child(2)>span:nth-child(1)");
+	private final By sideMenuDeviceManagement  = By.cssSelector("div[role='menu']>div:nth-child(4)>div>div:nth-child(2)>span:nth-child(1)");
+	private final By sideMenuAccessControll = By.cssSelector("div[role='menu']>div:nth-child(5)>div>div:nth-child(2)>span:nth-child(1)");
+	private final By sideMenuReport  = By.cssSelector("div[role='menu']>div:nth-child(6)>div>div:nth-child(2)>span:nth-child(1)");
+	private final By dashboardCards = By.cssSelector("div div div div div div:nth-child(2) div div div > div.MuiCardContent-root");
+	private final By dashboardCardHeaders = By.cssSelector("div div div div div div:nth-child(2) div div div div div > h2");
+	private final By dashboardCardCounts = By.cssSelector("div div div div div div:nth-child(2) div div:nth-child(1) div div div > span");
+	private final By dashboardCardIcons = By.cssSelector("div div div div div div:nth-child(2) div div:nth-child(1) div div div > img");
+	private final By searchSite = By.cssSelector("#company_code");
+	private final By map = By.xpath("/html[1]/body[1]/div[1]/div[1]/div[1]/div[2]/div[1]/div[1]/div[1]/div[2]/div[3]/div[1]/div[1]/div[2]/div[2]");
+	private final By eventSectionHeader  = By.cssSelector("#chart>div:nth-child(1)>div>h2");
+	private final By eventSectionBody = By.cssSelector("#chart>div:nth-child(2)");
+	private final By notificationSectionHeader = By.cssSelector(".app-content--inner>div>div>div:nth-child(5)>div>div:nth-child(1)");
+	private final By notificationSectionCheckBoxNames  = By.cssSelector(".app-content--inner>div>div>div:nth-child(5)>div>div:nth-child(2)>div>div");
+	private final By notificationSectionCheckBoxes  = By.cssSelector(".app-content--inner>div>div>div:nth-child(5)>div>div:nth-child(2)>div>div >span>span>input");
+	private final By notificationSectionBody = By.cssSelector(".app-content--inner>div>div>div:nth-child(5)>div>div:nth-child(3)");
+	private final By timeRange = By.cssSelector("#demo-simple-select-outlined");
+	private final By timeRangeText = By.cssSelector("div div div div div div:nth-child(4) div:nth-child(1) div:nth-child(2) div div fieldset legend > span:nth-child(1)");
+
+	public By getEmployeeName() {
+		return EmployeeName;
+	}
+	public By getLogoInDashBoard() {
+		return logoInDashBoard;
+	}
+	public By getSideMenu() {
+		return sideMenu;
+	}
+	public By getSideMenuDashboard() {
+		return sideMenuDashboard;
+	}
+	public By getSideMenuOrganization() {
+		return this.sideMenuOrganization;
+	}
+	public By getSideMenuSiteManagement() {
+		return sideMenuSiteManagement;
+	}
+	public By getSideMenuDeviceManagement() {
+		return sideMenuDeviceManagement;
+	}
+	public By getSideMenuAccessControll() {
+		return sideMenuAccessControll;
+	}
+	public By getSideMenuReport() {
+		return sideMenuReport;
+	}
+	public By getDashboardCards() {
+		return dashboardCards;
+	}
+	public By getDashboardCardHeaders() {
+		return dashboardCardHeaders;
+	}
+	public By getDashboardCardCounts() {
+		return dashboardCardCounts;
+	}
+	public By getDashboardCardIcons() {
+		return dashboardCardIcons;
+	}
+	public By getSearchSite() {
+		return searchSite;
+	}
+	public By getMap() {
+		return map;
+	}
+	public By getEventSectionHeader() {
+		return eventSectionHeader;
+	}
+	public By getEventSectionBody() {
+		return eventSectionBody;
+	}
+	public By getNotificationSectionHeader() {
+		return notificationSectionHeader;
+	}
+	public By getNotificationSectionCheckBoxNames() {
+		return notificationSectionCheckBoxNames;
+	}
+	public By getNotificationSectionCheckBoxes() {
+		return notificationSectionCheckBoxes;
+	}
+	public By getNotificationSectionBody() {
+		return notificationSectionBody;
+	}
+	public By getLoginFailAlert() {
+		return loginFailAlert;
+	}
+	public By getTimeRange() {
+		return timeRange;
+	}
+	public By getTimeRangeText() {
+		return timeRangeText;
+	}
+
+
+
+
+
+	//Dashboard
+
+	//Organization
+	private final By organizationsection = By.xpath("(//div[@class=\"sidenav---sidenav-subnav---1EN61\"])[1]");
+	private final By personsubmodule = By.cssSelector("span.MuiBox-root.jss70.navTextSubTitle");
+	private final By departmentsubmodule = By.xpath("//span[.=\"Department\"]");
+	private final By designationmodule = By.xpath("//span[.=\"Designation\"]");
+	private final By userRoleSubmodule = By.xpath("//span[.=\"User Role\"]");
+	private final By noRecordsFoundpage = By.xpath("//tbody/tr/td[.=\"No Records Found\"]");
+	private final By personPageTitle = By.cssSelector("#root > div.app-wrapper > div > div:nth-child(2) > div > div > div > div:nth-child(1) > div > div > span");
+	private final By toastwindow = By.xpath("//div[@class=\"Toastify\"]");
+	private final By toastMessage = By.cssSelector(".dark-toast>div");
+
+	public By gettoastwindow()
+	{
+		return toastwindow;
+	}
+	public By gettoastMessage()
+	{
+		return toastMessage;
+	}
+	public By getPersonSubmodule() {
+		
+		return personsubmodule;
+	}
+	
+	public By getOrganizationSection() {
+		
+		return this.organizationsection;
+	}
+
+
+	public By getPersonPageTitle() {
+		return personPageTitle;
+	}
+
+	//Organization
+
+
+
+	//Site Management
+	private final By addressType = By.cssSelector("div[role='menu']>div:nth-child(3)>div:nth-child(2)>div:nth-child(2)>div>div>span");
+	private final By addressTypeTitle=By.xpath("//div[@class=\\\"MuiBox-root jss198 breadcrumb_link\\\"]");
+	//siteTypevalidation
+	private final By SiteTypeTitle=By.xpath("//div[contains(@class,'breadcrumb_link')]");
+	//SiteValidation
+	private final By Site=By.xpath("//span[contains(@class,'is-active')]");
+
+
+
+	//Address Type
+		private final By pageHeading= By.xpath("//div[@class=\"MuiBox-root jss198 breadcrumb_link\"]");
+		private final By refreshButton = By.xpath("(//button[@class=\"MuiButtonBase-root MuiIconButton-root MuiIconButton-colorSecondary\"])[1]");
+		private final By filterButton = By.cssSelector("#root > div.app-wrapper > div > div:nth-child(2) > div > div > div > div:nth-child(2) > div > div > div > button > span > svg > path");
+		private final By rowSelectionDropDown = By.cssSelector(".MuiSelect-selectMenu > div");
+		private final By rowSelectionDropdownOptions = By.cssSelector("#menu- > div > ul > li");
+		private final By paginationElements = By.cssSelector("div div div div div div:nth-child(3) table tr td div div:nth-child(5) > span");
+		private final By table = By.cssSelector("table.MuiTable-root:nth-child(1)");
+		private final By tableHeaders = By.cssSelector("table.MuiTable-root:nth-child(1)>thead>tr>th>span>div");
+		private final By tableRows = By.cssSelector("table.MuiTable-root:nth-child(1)>tbody>tr>td:nth-child(2)");
+		private final By columnValues = By.cssSelector("table.MuiTable-root:nth-child(1)>tbody>tr>td");
+		private final By NameColumnSorting = By.cssSelector("table.MuiTable-root:nth-child(1)>thead > tr > th:nth-child(2)>span>div+*");
+		private final By DescriptionColumnSorting = By.cssSelector("table.MuiTable-root:nth-child(1) > thead > tr > th:nth-child(3)>span>div+*");
+		private final By noRecordFound = By.cssSelector("table.MuiTable-root:nth-child(1) > tbody > tr > td");
+
+	public By getNoRecordFound() {
+		return noRecordFound;
+	}
+
+	public By getPageHeading() {
+		return pageHeading;
+	}
+
+	public By getRowSelectionDropdownOptions() {
+		return rowSelectionDropdownOptions;
+	}
+
+	public By getTable() {
+		return table;
+	}
+
+	public By getFilterButton() {
+		return filterButton;
+	}
+	public By getRowSelectionDropDown() {
+		return rowSelectionDropDown;
+	}
+
+
+	public List<WebElement> get(String elementName){
+		List<WebElement> elementList= null;
+		switch(elementName){
+
+			case "rows":
+				elementList= driver.findElements(tableRows);
+				break;
+
+			case "tableHeaders":
+				elementList= driver.findElements(tableHeaders);
+				break;
+
+			case "columnValues":
+				elementList= driver.findElements(columnValues);
+				break;
+
+			case "paginationElements":
+				elementList= driver.findElements(paginationElements);
+				break;
+		}
+
+		return elementList;
+
+	}
+
+	public List<WebElement> getColumnValuesByColumnNumber(int columnNumber){
+		return driver.findElements(By.cssSelector("table.MuiTable-root:nth-child(1)>tbody>tr>td:nth-child("+columnNumber+")"));
+	}
+
+	public By getNameColumnSorting() {
+		return NameColumnSorting;
+	}
+
+	public By getDescriptionColumnSorting() {
+		return DescriptionColumnSorting;
+	}
+
+	public int numberOfRows()
+	{
+		List<WebElement> elementList = get("rows");
+		return elementList.size();
+	}
+
+	public String getColumnValuesAsPerColumnName(String columnName){
+		List<WebElement> elementList = get("tableHeaders");
+		String searchWord;
+		int columnNumber =0;
+		for(int i=0;i<elementList.size();i++){
+			if(elementList.get(i).getText().equals(columnName)){
+				columnNumber=i;
+				System.out.println(columnNumber+"----->"+columnName);
+			}
+		}
+		List<WebElement> columnValues = driver.findElements(By.cssSelector("#root > div > div > div:nth-child(2) > div > div > div > div> div > div > div > div > table>tbody>tr>td:nth-child("+(columnNumber+2)+")"));
+		for (WebElement el:columnValues){
+			System.out.println(el.getText());
+		}
+		int ran = (int) (Math.random()*numberOfRows());
+		System.out.println(ran);
+		searchWord=columnValues.get(ran).getText();
+		return searchWord;
+	}
+
+
+
+
+	public String getColumnName(int columnNumber)
+	{
+		List<WebElement> elementList = get("tableHeaders");
+		return elementList.get(columnNumber).getText();
+	}
+
+	public void printTable(){
+		List<WebElement> headerList = get("tableHeaders");
+		List<WebElement> elementList = get("columnValues");
+		for(WebElement header : headerList){
+			System.out.print(header.getText()+"\t");
+		}
+		for(int i=0;i<elementList.size();i++){
+			int headerListSize = get("tableHeaders").size();
+			System.out.println(elementList.get(i).getText()+"\t");
+			if(i==headerListSize){
+				System.out.println("\n");
+			}
+		}
+	}
+
+	public WebElement getPaginationElements(String elementName){
+		List<WebElement> paginationElements = get("paginationElements");
+		WebElement desiredElement = null;
+		switch (elementName){
+			case "firstPage":
+				desiredElement= paginationElements.get(0);
+				break;
+			case "previousPage":
+				desiredElement= paginationElements.get(1);
+				break;
+			case "pageDescription":
+				desiredElement= paginationElements.get(2);
+				break;
+			case "nextPage":
+				desiredElement= paginationElements.get(3);
+				break;
+			case "lastPage":
+				desiredElement= paginationElements.get(4);
+				break;
+
+		}
+		return desiredElement;
+	}
+
+	//filter window
+	private final By filterWindow = By.cssSelector("div.MuiDialog-paperWidthSm");
+	private final By filterHeading=By.cssSelector("div.MuiDialog-paperWidthSm>div:nth-child(1)>h2>div>div>h4");
+	private final By filterCloseButton=By.cssSelector("div.MuiDialog-paperWidthSm>div:nth-child(1)>h2>div>div+*");
+	private final By filterNameField=By.cssSelector("div.MuiDialog-paperWidthSm>div:nth-child(2)>form>div>div:nth-child(1)>div>div");
+	private final By filterCodeField=By.cssSelector("div.MuiDialog-paperWidthSm>div:nth-child(2)>form>div>div:nth-child(2)>div>div");
+	private final By filterApplyButton=By.cssSelector("div.MuiDialog-paperWidthSm>div:nth-child(3)>button:nth-child(1)");
+	private final By filterResetButton=By.cssSelector("div.MuiDialog-paperWidthSm>div:nth-child(3)>button:nth-child(2)");
+
+	public By getFilterWindow() {
+		return filterWindow;
+	}
+
+	public By getFilterHeading() {
+		return filterHeading;
+	}
+
+	public By getFilterCloseButton() {
+		return filterCloseButton;
+	}
+
+	public By getFilterNameField() {
+		return filterNameField;
+	}
+
+	public By getFilterCodeField() {
+		return filterCodeField;
+	}
+
+	public By getFilterApplyButton() {
+		return filterApplyButton;
+	}
+
+	public By getFilterResetButton() {
+		return filterResetButton;
+	}
+
+	//filter window
+	//Address Type
+
+	//Site Type
+
+	private final By siteType = By.cssSelector("div[role='menu']>div:nth-child(3)>div:nth-child(2)>div:nth-child(3)>div>div>span");
+	private final By addButton=By.xpath("//*[contains(@title, 'Add')]");
+	private final By addNewWindowSubmit=By.cssSelector("body > div > div > div > div > button:nth-child(1) > span.MuiButton-label");
+	private final By addNewWindowCancel=By.cssSelector("body > div > div > div > div > button:nth-child(2) > span.MuiButton-label");
+	private final By addWindowName=By.cssSelector("body > div > div > div > div>form>div>div:nth-child(1)>div>div>div>input");
+	private final By addWindowCode = By.cssSelector("body > div > div > div > div>form>div>div:nth-child(2)>div>div>div>input");
+	private final By deleteButtonInTable = By.cssSelector("div:nth-child(1)>button>span>svg>g#Delete");
+	private final By deleteButtonNearRefresh = By.xpath("(//button[@type=\"button\"])[9]");
+	private final By mandatoryAlert = loginFailAlert;
+	private final By emptyTable = columnValues;
+	private final By selectAll= By.cssSelector("table.MuiTable-root:nth-child(1)>thead>tr>th>span>span>input[type='checkbox']");
+	private final By filterClose = By.cssSelector("[role='none presentation']>div>div>h2>div>svg.MuiSvgIcon-root");
+	private final By confirmInSiteType = By.cssSelector("[role='none presentation']>div>div>button:nth-child(1)>span:nth-child(1)");
+	private final By cancelInSiteType = By.cssSelector("[role='none presentation']>div>div>button:nth-child(2)>span:nth-child(1)");
+
+	public By getConfirmInSiteType() {
+		return confirmInSiteType;
+	}
+
+	public By getCancelInSiteType() {
+		return cancelInSiteType;
+	}
+
+	public By getFilterClose() {
+		return filterClose;
+	}
+
+	public By getSiteType() {
+		return siteType;
+	}
+
+	//Site Type
+	private final By site = By.cssSelector("div[role='menu']>div:nth-child(3)>div:nth-child(2)>div:nth-child(4)>div>div>span");
+
+	public By getsite() {
+		return site;
+	}
+	public void validSiteType(String pageName) throws InterruptedException {
+		Assert.assertTrue(driver.findElement(SiteTypeTitle()).isDisplayed());
+		System.out.println(pageName);
+		String obj=(driver.findElement(SiteTypeTitle()).getText());
+		System.out.println(obj);
+		Assert.assertEquals(driver.findElement(SiteTypeTitle()).getText(), pageName);
+		Assert.assertTrue(driver.findElement(getRefreshButton()).isDisplayed());
+		Assert.assertTrue(driver.findElement(getFilterButton()).isDisplayed());
+		Assert.assertTrue(driver.findElement(getTable()).isDisplayed());
+		Thread.sleep(2000);
+		Assert.assertTrue(driver.findElement(getRowSelectionDropDown()).isDisplayed());
+		Thread.sleep(2000);
+		Assert.assertTrue(getPaginationElements("firstPage").isDisplayed());
+		Assert.assertTrue(getPaginationElements("previousPage").isDisplayed());
+		Assert.assertTrue(getPaginationElements("pageDescription").isDisplayed());
+		Assert.assertTrue(getPaginationElements("nextPage").isDisplayed());
+		Assert.assertTrue(getPaginationElements("lastPage").isDisplayed());
+		//Assert.assert
+		
+	}
+
+	private By SiteTypeTitle() {
+		// TODO Auto-generated method stub
+		return  SiteTypeTitle;
+	}
+	public void validateSitePage(String pageName) throws InterruptedException {
+		Assert.assertTrue(driver.findElement( Site()).isDisplayed());
+		System.out.println( pageName);
+		String obj=(driver.findElement(Site()).getText());
+		System.out.println(obj);
+		//Assert.assertEquals(driver.findElement(Site()).getText(), pageName);
+		Assert.assertTrue(driver.findElement(getRefreshButton()).isDisplayed());
+		Assert.assertTrue(driver.findElement(getFilterButton()).isDisplayed());
+		Assert.assertTrue(driver.findElement(getTable()).isDisplayed());
+		Thread.sleep(2000);
+		Assert.assertTrue(driver.findElement(getRowSelectionDropDown()).isDisplayed());
+		Thread.sleep(2000);
+		Assert.assertTrue(getPaginationElements("firstPage").isDisplayed());
+		Assert.assertTrue(getPaginationElements("previousPage").isDisplayed());
+		Assert.assertTrue(getPaginationElements("pageDescription").isDisplayed());
+		Assert.assertTrue(getPaginationElements("nextPage").isDisplayed());
+		Assert.assertTrue(getPaginationElements("lastPage").isDisplayed());
+		//Assert.assert
+		
+	}
+	private By Site() {
+		// TODO Auto-generated method stub
+		return Site;
+	}
+	public void validatePage(String pageName) throws InterruptedException {
+		Assert.assertTrue(driver.findElement(getPageHeading()).isDisplayed());
+		System.out.println(pageName);
+		String obj=(driver.findElement(getPageHeading()).getText());
+		System.out.println(obj);
+		Assert.assertEquals(driver.findElement(getPageHeading()).getText(), pageName);
+		Assert.assertTrue(driver.findElement(getRefreshButton()).isDisplayed());
+		Assert.assertTrue(driver.findElement(getFilterButton()).isDisplayed());
+		Assert.assertTrue(driver.findElement(getTable()).isDisplayed());
+		Thread.sleep(2000);
+		Assert.assertTrue(driver.findElement(getRowSelectionDropDown()).isDisplayed());
+		Thread.sleep(2000);
+		Assert.assertTrue(getPaginationElements("firstPage").isDisplayed());
+		Assert.assertTrue(getPaginationElements("previousPage").isDisplayed());
+		Assert.assertTrue(getPaginationElements("pageDescription").isDisplayed());
+		Assert.assertTrue(getPaginationElements("nextPage").isDisplayed());
+		Assert.assertTrue(getPaginationElements("lastPage").isDisplayed());
+		//Assert.assert
+		
+	}
+
+	public By getAddButton() {
+
+		return addButton;
+
+	}
+
+	public By getAddButtonConfirm() {
+		return addNewWindowSubmit;
+	}
+
+	public By getAddButtonCancel() {
+		return addNewWindowCancel;
+	}
+
+	public By getMandatoryAlert() {
+		return mandatoryAlert;
+	}
+
+	public By getAddWindowName() {
+		return addWindowName;
+	}
+
+	public By getAddWindowCode() {
+		return addWindowCode;
+	}
+
+	public void validateToast(WebDriverWait wait, String message){
+		wait.until(ExpectedConditions.visibilityOfElementLocated(getMandatoryAlert()));
+		Assert.assertTrue(driver.findElement(getMandatoryAlert()).isDisplayed());
+		Assert.assertEquals(message,driver.findElement(getMandatoryAlert()).getText());
+		wait.until(ExpectedConditions.invisibilityOfAllElements(driver.findElements(getMandatoryAlert())));
+	}
+
+	public void validateToast(WebDriverWait wait){
+		wait.until(ExpectedConditions.visibilityOfElementLocated(getMandatoryAlert()));
+		Assert.assertTrue(driver.findElement(getMandatoryAlert()).isDisplayed());
+		wait.until(ExpectedConditions.invisibilityOfAllElements(driver.findElements(getMandatoryAlert())));
+	}
+
+	public By getEmptyTable() {
+		return emptyTable;
+	}
+
+	public void addNewRecord(String name, String code){
+		driver.findElement(getAddWindowName()).sendKeys(name);
+		driver.findElement(getAddWindowCode()).sendKeys(code);
+	}
+
+	public By getDeleteButtonInTable() {
+		return deleteButtonInTable;
+	}
+
+	public By getDeleteButtonNearRefresh() {
+		return deleteButtonNearRefresh;
+	}
+
+	public void tableOpeartions(Actions actions, String matcher, String operation, int columnNum) {
+		List<WebElement> siteTypeNames = getColumnValuesByColumnNumber(columnNum);
+		for(int i=0; i<siteTypeNames.size();i++){
+			if(siteTypeNames.get(i).getText().contains(matcher)){
+				System.out.println(siteTypeNames.get(i).getText()+" FOUND AT "+i);
+				int location = i+1;
+				switch(operation){
+					case "select":
+						actions.moveToElement(driver.findElement(By.cssSelector("table.MuiTable-root:nth-child(1)>tbody>tr:nth-child("+location+")>td:nth-child(1)>span>span>input"))).click().build().perform();
+						break;
+					case "update":
+						try {
+							Thread.sleep(3000);
+						} catch (InterruptedException e) {
+							e.printStackTrace();
+						}
+						actions.moveToElement(driver.findElement(By.cssSelector("table.MuiTable-root:nth-child(1)>tbody>tr:nth-child("+location+")>td:nth-child(5)>div>button:nth-child(1)"))).click().build().perform();
+						break;
+					case "delete":
+						System.out.println("Perform deletion at "+location);
+						actions.moveToElement(driver.findElement(By.cssSelector("table.MuiTable-root:nth-child(1)>tbody>tr:nth-child("+location+")>td:nth-child(5)>div>button:nth-child(2)"))).click().build().perform();
+						break;
+				}
+				break;
+
+			}
+		}
+	}
+
+
+	public WebElement selectAll() {
+		System.out.println("Selecting ALL");
+		return driver.findElement(selectAll);
+	}
+
+	public void clearField() {
+		driver.findElement(getAddWindowName()).clear();
+		driver.findElement(getAddWindowCode()).clear();
+	}
+
+
+	//Site
+	private final By addSiteName = By.xpath("//input[@class=\"MuiInputBase-input MuiOutlinedInput-input MuiInputBase-inputMarginDense MuiOutlinedInput-inputMarginDense\"]");
+	private final By siteTypeInput = By.cssSelector("#mui-component-select-siteTypeId");
+	private final By siteTypeOptions = By.cssSelector("#menu-siteTypeId > div > ul > li > span:nth-child(1)");
+	private final By filterSiteNameField = By.xpath("//input[@class=\"MuiInputBase-input MuiOutlinedInput-input MuiInputBase-inputMarginDense MuiOutlinedInput-inputMarginDense\"]");
+	private final By filterSiteApply = By.cssSelector("body > div > div> div > div > button:nth-child(1) > span:nth-child(1)");
+	private final By filterSiteCancel = By.cssSelector("body > div > div> div > div > button:nth-child(2) > span:nth-child(1)");
+
+	private final By addSiteConfirm = By.xpath("//button[contains(.,'Submit')]");
+	private final By addSiteCancel = By.xpath("//button[contains(.,'Cancel')]");
+
+	private final By siteConfirm = By.cssSelector("[role='tabpanel']>div>p>div>div:nth-child(1)>div:nth-child(5)>div>button:nth-child(1)>span:nth-child(1)");
+	private final By siteCancel = By.cssSelector("[role='tabpanel']>div>p>div>div:nth-child(1)>div:nth-child(5)>div>button:nth-child(2)>span:nth-child(1)");
+
+	public By getAddSiteConfirm() {
+		return addSiteConfirm;
+	}
+
+	public By getSiteConfirm() {
+		return siteConfirm;
+	}
+
+	public By getSiteCancel() {
+		return siteCancel;
+	}
+
+	public By getAddSiteCancel() {
+		return addSiteCancel;
+	}
+
+	public By getAddSiteName() {
+		return addSiteName;
+	}
+
+	public By getSiteTypeInput() {
+		return siteTypeInput;
+	}
+
+	public By getSiteTypeOptions() {
+		return siteTypeOptions;
+	}
+
+	public void addNewSiteRecord(Utils utils, String name, String siteType) throws InterruptedException {
+		Thread.sleep(3000);
+		utils.click(driver.findElement(addSiteName));
+		driver.findElement(addSiteName).sendKeys(name);
+		utils.click(driver.findElement(siteTypeInput));
+		Thread.sleep(2000);
+		for(WebElement siteTypeOption :driver.findElements(siteTypeOptions)){
+			if (siteTypeOption.getText().equals(siteType)){
+				utils.click(siteTypeOption);
+			}
+		}
+//		Thread.sleep(2000);
+//		utils.click(driver.findElement(By.cssSelector("div> div > div[role='tablist'] > button:nth-child(2)>span:nth-child(1)")));
+//		Thread.sleep(3000);
+//		utils.click(driver.findElement(By.cssSelector("form>div>div:nth-child(1)>div>div>div>input")));
+//		driver.findElement(By.cssSelector("form>div>div:nth-child(1)>div>div>div>input")).sendKeys("Mahadevpura");
+//		driver.findElement(By.cssSelector("form>div>div:nth-child(3)>div>div>div>input")).sendKeys("Karnataka");
+//		Thread.sleep(2000);
+//		driver.findElement(By.cssSelector("form>div>div:nth-child(4)>div>div>div>input")).sendKeys("Bangalore");
+//		Thread.sleep(2000);
+//		utils.click(driver.findElement(By.cssSelector("form>div>div:nth-child(10)>div>div>div>input")));
+//		Thread.sleep(2000);
+//		List<WebElement> listBoxOptions2 = driver.findElements(By.cssSelector("[role='listbox']>li>span:nth-child(1)"));
+//		for (WebElement option:listBoxOptions2)
+//		{
+//			if (option.getText().equals("Office")){
+//				Thread.sleep(2000);
+//				option.click();
+//			}
+//		}
+//		Thread.sleep(2000);
+//		utils.click(driver.findElement(By.cssSelector("form>div>div:nth-child(2)>div>div>div>input")));
+//		Thread.sleep(2000);
+//		List<WebElement> listBoxOptions = driver.findElements(By.cssSelector("[role='listbox']>li>span:nth-child(1)"));
+//		for (WebElement option:listBoxOptions)
+//		{
+//			if (option.getText().equals("India")){
+//				Thread.sleep(2000);
+//				((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView(true);", option);
+//				Thread.sleep(2000);
+//				option.click();
+//				break;
+//			}
+//		}
+//
+//
+//		try {
+//			Thread.sleep(2000);
+//		} catch (InterruptedException e) {
+//			e.printStackTrace();
+//		}
+	}
+
+	public void clearSiteField() {
+		driver.findElement(addSiteName).clear();
+
+	}
+
+	public By getFilterSiteNameField() {
+		return filterSiteNameField;
+	}
+
+	public By getFilterSiteWindow() {
+		return By.cssSelector("div.MuiDialogContent-root");
+	}
+
+	public By getFilterSiteApply() {
+		return filterSiteApply;
+	}
+
+	public By getFilterSiteCancel() {
+		return filterSiteCancel;
+	}
+
+	public By getFilterSiteHeading() {
+		return By.cssSelector("body > div > div > div > div > h2 > div > div > h4");
+	}
+
+	public By getFilterSiteCloseButton() {
+		return By.cssSelector("svg.MuiSvgIcon-root");
+	}
+
+	//Site
+
+	//Site Management
+
+	//Device Management
+	private final By deviceSubMenu = By.cssSelector("span.MuiBox-root.jss81.navTextSubTitle");
+	private final By doorSubMenu = By.cssSelector("span.MuiBox-root.jss82.navTextSubTitle");
+	private final By readerSubMenu = By.cssSelector("span.MuiBox-root.jss83.navTextSubTitle");
+	private final By auxiliaryInputSubMenu = By.cssSelector("span.MuiBox-root.jss84.navTextSubTitle");
+	private final By auxiliaryOutputSubMenu = By.cssSelector("span.MuiBox-root.jss85.navTextSubTitle");
+
+	//Device
+	private final By deleteButtonNearRefreshInDevice=By.cssSelector("button>svg>g#Delete");
+	private final By deleteButtonNearEditInDevice=By.cssSelector("button>span>svg>g#Delete");
+	private final By buttonsAboveTheTable = By.cssSelector(".MuiGrid-root>div:nth-child(2)>div>div>button>svg>g");
+	private final By buttonSubMenuOptions = By.cssSelector("ul[role='menu']>li");
+	private final By deviceTable = table;
+	private final By deviceTableHeaders = By.cssSelector("table.MuiTable-root:nth-child(1)>thead>tr>th");
+	private final By deviceTableRows = By.cssSelector("table.MuiTable-root:nth-child(1)>tbody>tr>td:nth-child(2)");
+	private final By deviceCellValues = By.cssSelector("table.MuiTable-root:nth-child(1)>tbody>tr>td");
+	private final By deviceNameColumnSorting = By.cssSelector("table.MuiTable-root:nth-child(1)>thead > tr > th:nth-child(2)>span>span>div+*");
+	private final By deviceSnColumnSorting = By.cssSelector("table.MuiTable-root:nth-child(1)>thead > tr > th:nth-child(2)>span>span>div+*");
+	private final By deviceCheckboxColumn=By.cssSelector("table.MuiTable-root:nth-child(1)>tbody>tr>td:nth-child(1)>span>span>input");
+	private final By deviceTableNameColumn = By.cssSelector("table.MuiTable-root:nth-child(1)>tbody>tr>td:nth-child(2)");
+	private final By deviceTableSerialColumn = By.cssSelector("table.MuiTable-root:nth-child(1)>tbody>tr>td:nth-child(3)");
+	private final By deviceTableIpColumn = By.cssSelector("table.MuiTable-root:nth-child(1)>tbody>tr>td:nth-child(4)");
+	private final By deviceTableModelColumn = By.cssSelector("table.MuiTable-root:nth-child(1)>tbody>tr>td:nth-child(5)");
+	private final By deviceTableRegistrationColumn = By.cssSelector("table.MuiTable-root:nth-child(1)>tbody>tr>td:nth-child(6)");
+	private final By deviceTableStatusColumn = By.cssSelector("table.MuiTable-root:nth-child(1)>tbody>tr>td:nth-child(8)");
+	private final By confirmDeviceOperation = By.cssSelector("[role='dialog']>div>button:nth-child(1)>span:nth-child(1)");
+	private final By cancelDeviceOperation = By.cssSelector("[role='dialog']>div>button:nth-child(2)>span:nth-child(1)");
+	private final By newDeviceAddButton = By.cssSelector("table > tbody > tr:nth-child(1) > td > div > button > span > svg");
+	private final By addDevicePageSerialNumbers = deviceTableNameColumn;
+	private final By addDevicePageAddButtons = By.cssSelector("table>tbody>tr>td:nth-child(7)>div>button>span>svg");
+
+	private final By editWindowDeviceName = By.cssSelector("form>div>div:nth-child(1)>div > div > div > input");
+	private final By editWindowTimeZone = By.cssSelector("form>div>div:nth-child(5)>div > div > div > input");
+	private final By timeZoneOptions = By.cssSelector("#menu-timeZone>div:nth-child(3)>ul>li");
+
+	private final By filterDeviceByName=By.cssSelector("div.MuiDialog-paperWidthSm>div:nth-child(2)>form>div>div:nth-child(1)>div>div>div>input");
+
+	public By getButtonsAboveTheTable() {
+		return buttonsAboveTheTable;
+	}
+
+	public WebElement getButtonsAboveTheTable(String buttonName) {
+		WebElement locator = null;
+		List<WebElement> buttons = driver.findElements(buttonsAboveTheTable);
+		switch (buttonName){
+			case "Refresh":
+				locator=buttons.get(0);
+				break;
+			case "Delete":
+				locator=buttons.get(1);
+				break;
+			case "Control":
+				locator=buttons.get(2);
+				break;
+			case "Setup":
+				locator=buttons.get(3);
+				break;
+			case "View and Get Device Info":
+				locator=buttons.get(4);
+				break;
+			case "Communication":
+				locator=buttons.get(5);
+				break;
+		}
+		return locator;
+	}
+
+	public By getDeviceSubMenu() {
+		return deviceSubMenu;
+	}
+
+	public By getDoorSubMenu() {
+		return doorSubMenu;
+	}
+
+	public By getReaderSubMenu() {
+		return readerSubMenu;
+	}
+
+	public By getAuxiliaryInputSubMenu() {
+		return auxiliaryInputSubMenu;
+	}
+
+	public By getAuxiliaryOutputSubMenu() {
+		return auxiliaryOutputSubMenu;
+	}
+
+	public List<WebElement> getButtonSubMenuOptions(){
+		return driver.findElements(buttonSubMenuOptions);
+	}
+
+	public WebElement getButtonSubMenuOptions(String option) {
+		List<WebElement> subMenuOptions = getButtonSubMenuOptions();
+		WebElement buttonMenuOption = null;
+		switch (option){
+			case "Reboot":
+			case "Set Device Time Zone":
+			case "Modify Ip Address":
+			case "Remote Normally Open":
+				buttonMenuOption = subMenuOptions.get(0);
+				break;
+			case "Synchronize Time":
+			case "Set as Registration Device":
+			case "Modify Communication Password":
+			case "Activate Lockdown":
+				buttonMenuOption = subMenuOptions.get(1);
+				break;
+			case "Enable":
+			case "Set Device In/Out State":
+			case "Deactivate Lockdown":
+				buttonMenuOption = subMenuOptions.get(2);
+				break;
+			case "Disable":
+			case "Modify The fingerPrint Threshold":
+			case "Enable Intraday Passage Mode Time Zone":
+				buttonMenuOption = subMenuOptions.get(3);
+				break;
+			case "Synchronize All Data to Device":
+			case "Disable Intraday Passage Mode Time Zone":
+				buttonMenuOption = subMenuOptions.get(4);
+				break;
+		}
+
+		return buttonMenuOption;
+	}
+
+	public By getDeviceTable() {
+		return deviceTable;
+	}
+
+	public By getDeviceTableRows() {
+		return deviceTableRows;
+	}
+
+	public By getDeviceCellValues() {
+		return deviceCellValues;
+	}
+
+	public By getDeviceNameColumnSorting() {
+		return deviceNameColumnSorting;
+	}
+
+	public By getDeviceSnColumnSorting() {
+		return deviceSnColumnSorting;
+	}
+
+	public By getDeviceTableNameColumn() {
+		return deviceTableNameColumn;
+	}
+
+	public By getDeviceTableSerialColumn() {
+		return deviceTableSerialColumn;
+	}
+
+	public By getDeviceTableIpColumn() {
+		return deviceTableIpColumn;
+	}
+
+	public By getDeviceTableModelColumn() {
+		return deviceTableModelColumn;
+	}
+
+	public By getDeviceTableRegistrationColumn() {
+		return deviceTableRegistrationColumn;
+	}
+
+	public By getDeviceTableStatusColumn() {
+		return deviceTableStatusColumn;
+	}
+
+	public By getDeviceTableHeaders() {
+		return deviceTableHeaders;
+	}
+
+	public By getConfirmDeviceOperation() {
+		return confirmDeviceOperation;
+	}
+
+	public By getCancelDeviceOperation() {
+		return cancelDeviceOperation;
+	}
+
+	public By getNewDeviceAddButton() {
+		return newDeviceAddButton;
+	}
+
+	public By getAddDevicePageSerialNumbers() {
+		return addDevicePageSerialNumbers;
+	}
+
+	public By getAddDevicePageAddButtons() {
+		return addDevicePageAddButtons;
+	}
+
+	public By getEditWindowDeviceName() {
+		return editWindowDeviceName;
+	}
+
+	public By getEditWindowTimeZone() {
+		return editWindowTimeZone;
+	}
+
+	public By getTimeZoneOptions() {
+		return timeZoneOptions;
+	}
+
+	public By getFilterDeviceByName() {
+		return filterDeviceByName;
+	}
+
+	public By getDeviceCheckboxColumn() {
+		return deviceCheckboxColumn;
+	}
+
+	public By getAddDeviceButton() {
+		return By.cssSelector(".app-main>div:nth-child(2)>div>div>div>div>div>a>svg>g>g");
+	}
+
+	public By getFilterDeviceButton(){
+		return By.cssSelector(".app-main>div:nth-child(2)>div>div>div>div>div>div>div>svg>path");
+	}
+
+	public void selectDevice(Actions actions, String serialNumToOperate, String operations) {
+
+		List<WebElement> names = driver.findElements(getDeviceTableSerialColumn());
+		boolean flag = false;
+		for(int i=0;i<names.size();i++){
+			if (names.get(i).getText().equals(serialNumToOperate)){
+				switch (operations){
+					case "select":
+						actions.moveToElement(driver.findElements(getDeviceCheckboxColumn()).get(i)).click().build().perform();
+						break;
+					case "update":
+						actions.moveToElement(driver.findElements(By.cssSelector("table.MuiTable-root:nth-child(1)>tbody>tr>td:nth-child(9)>div>button:nth-child(1)>span>svg>g>g")).get(i)).click().build().perform();
+						break;
+					case "delete":
+						actions.moveToElement(driver.findElements(By.cssSelector("table.MuiTable-root:nth-child(1)>tbody>tr>td:nth-child(9)>div>button:nth-child(2)>span>svg>g>g")).get(i)).click().build().perform();
+						break;
+				}
+
+			}
+		}
+	}
+
+	public void selectDeviceToOperate(Actions actions) {
+		actions.moveToElement(driver.findElements(getDeviceCheckboxColumn()).get(0)).click().build().perform();
+	}
+
+	//Device
+
+	//Door
+
+	private final By doorToOperate = By.cssSelector("table.MuiTable-root:nth-child(1)>tbody>tr:nth-child(1)>td:nth-child(1)>span>span>input");
+	private final By doorEditButton = By.cssSelector("table.MuiTable-root:nth-child(1)>tbody>tr:nth-child(1)>td:nth-child(9)>div>button>span:nth-child(1)");
+	private final By doorToDisable = By.cssSelector("table.MuiTable-root:nth-child(1)>tbody>tr:nth-child(2)>td:nth-child(1)>span>span>input");
+	private final By doorToLock = By.cssSelector("table.MuiTable-root:nth-child(1)>tbody>tr:nth-child(3)>td:nth-child(1)>span>span>input");
+	private final By doorMenuOptions = By.cssSelector("div.app-main>div:nth-child(2)>div>div>div>div:nth-child(2)>div>div>button>span:nth-child(1)");
+	private final By doorMoreOptions = By.cssSelector("div.app-main>div:nth-child(2)>div>div>div>div:nth-child(2)>div>div>button>svg");
+	private final By doorFilter = By.cssSelector("div.app-main>div:nth-child(2)>div>div>div>div:nth-child(2)>div>div>div>svg");
+	private final By doorOperationConfirm = By.cssSelector("[role='dialog']>div:nth-child(3)>button:nth-child(1)>span:nth-child(1)");
+	private final By doorOperationCancel = By.cssSelector("[role='dialog']>div:nth-child(3)>button:nth-child(2)>span:nth-child(1)");
+	private final By doorOpeningInterval = By.cssSelector("form>div>div>div>div>div>input");
+	private final By loadingWheel = By.cssSelector("#root > div.loader-container > div > div > svg");
+	private final By disabledDoorError = By.cssSelector("[role='none presentation']>div>div>div>div>div:nth-child(2)>div>div>p>b");
+	private final By doorNameToFilter = By.cssSelector("table.MuiTable-root:nth-child(1)>tbody>tr:nth-child(1)>td:nth-child(2)");
+	private final By doorSerialNoToFilter = By.cssSelector("table.MuiTable-root:nth-child(1)>tbody>tr:nth-child(2)>td:nth-child(4)");
+	private final By doorFilterNameField = By.cssSelector("form>div>div:nth-child(1)>div>div>div>input");
+	private final By doorFilterSerailNoField = By.cssSelector("form>div>div:nth-child(2)>div>div>div>input");
+	private final By doorEditWindowSensorType = By.cssSelector("form>div>div:nth-child(7)>div>div>div>input");
+	private final By doorEditWindowSensorDelay = By.cssSelector("form>div>div:nth-child(8)>div>div>div>input");
+	private final By doorSensorTypeDropDownOptions = By.cssSelector("[role='listbox']>li:nth-child(3)");
+
+	public By getDoorMenuOptions() {
+		return doorMenuOptions;
+	}
+
+	public WebElement getDoorMenuOptions(String option) {
+		List<WebElement> options = driver.findElements(getDoorMenuOptions());
+		WebElement select=null;
+
+			switch (option){
+				case "Refresh":
+					select=options.get(0);
+					break;
+				case "Remote Opening":
+					select=options.get(1);
+					break;
+				case "Remote Closing":
+					select=options.get(2);
+					break;
+				case "Enable":
+					select=options.get(3);
+					break;
+				case "Disable":
+					select=options.get(4);
+					break;
+				case "Cancel Alarm":
+					select=options.get(5);
+					break;
+				case "More":
+					select= driver.findElement(getDoorMoreOptions());
+					break;
+				case "Filter":
+					select= driver.findElement(getDoorFilter());
+					break;
+
+			}
+
+		return select;
+	}
+
+	public By getDoorMoreOptions() {
+		return doorMoreOptions;
+	}
+
+	public By getDoorFilter() {
+		return doorFilter;
+	}
+
+	public By getDoorToOperate() {
+		return doorToOperate;
+	}
+
+	public By getDoorToDisable() {
+		return doorToDisable;
+	}
+
+	public By getDoorToLock() {
+		return doorToLock;
+	}
+
+	public By getDoorEditButton() {
+		return doorEditButton;
+	}
+
+	public By getDoorOperationConfirm() {
+		return doorOperationConfirm;
+	}
+
+	public By getDoorOperationCancel() {
+		return doorOperationCancel;
+	}
+
+	public By getDoorOpeningInterval() {
+		return doorOpeningInterval;
+	}
+
+	public By getLoadingWheel() {
+		return loadingWheel;
+	}
+
+	public By getDisabledDoorError() {
+		return disabledDoorError;
+	}
+
+	public By getDoorNameToFilter() {
+		return doorNameToFilter;
+	}
+
+	public By getDoorSerialNoToFilter() {
+		return doorSerialNoToFilter;
+	}
+
+	public By getDoorFilterNameField() {
+		return doorFilterNameField;
+	}
+
+	public By getDoorFilterSerailNoField() {
+		return doorFilterSerailNoField;
+	}
+
+	public String getNameToFilter(){
+		return driver.findElement(getDoorNameToFilter()).getText();
+	}
+
+	public By getDoorEditWindowSensorType() {
+		return doorEditWindowSensorType;
+	}
+
+	public By getDoorEditWindowSensorDelay() {
+		return doorEditWindowSensorDelay;
+	}
+
+	public By getDoorSensorTypeDropDownOptions() {
+		return doorSensorTypeDropDownOptions;
+	}
+
+	//Door
+
+	//Reader
+
+	private final By readerTable = By.cssSelector("div.app-main>div:nth-child(2)>div>div>div>div:nth-child(3)>div>div>div>div>table");
+	private final By readerTableHeaders = By.cssSelector("div.app-main>div:nth-child(2)>div>div>div>div:nth-child(3)>div>div>div>div>table>thead>tr>th");
+	private final By readerTableEditButtons = By.cssSelector("table > tbody > tr > td:nth-child(8) > div > button > span:nth-child(1)");
+	private final By readerTableCheckBoxes = By.cssSelector("table > tbody > tr > td:nth-child(8) > div > button > span:nth-child(1)");
+	private final By readerTableNames = By.cssSelector("table > tbody > tr > td:nth-child(2)");
+	private final By readerEditWindowInOutStatus = By.cssSelector("form>div>div:nth-child(4)>div>div>div>input");
+	private final By readerEditWindowNameField = By.cssSelector("form>div>div:nth-child(1)>div>div>div>input");
+
+	public By getReaderTableHeaders() {
+		return readerTableHeaders;
+	}
+
+	public By getReaderTable() {
+		return readerTable;
+	}
+
+	public int noOfRows()
+	{
+		String rowsDisplayed = driver.findElement(getRowSelectionDropDown()).getText();
+		int noOfRows = Integer.parseInt(rowsDisplayed.split(" ")[0]);
+		System.out.println("No of Rows : "+noOfRows);
+
+		return noOfRows;
+	}
+
+	public By getReaderTableEditButtons() {
+		return readerTableEditButtons;
+	}
+
+	public By getReaderTableCheckBoxes() {
+		return readerTableCheckBoxes;
+	}
+
+	public By getReaderTableNames() {
+		return readerTableNames;
+	}
+
+	public By getReaderEditWindowInOutStatus() {
+		return readerEditWindowInOutStatus;
+	}
+
+	public By getReaderEditWindowNameField() {
+		return readerEditWindowNameField;
+	}
+
+	//
+
+	//Device Management
+
+	//Organization
+
+
+
+
+	private By addicon = By.xpath("//button[@title=\"Add\"]");
+	private By personwindow = By.cssSelector("div.MuiDialog-paper");
+	private By personFirstname = By.xpath("//input[@name=\"firstName\"]");
+
+	private By personLastname = By.xpath("//input[@name=\"lastName\"]");
+	private By personEmail = By.xpath("//input[@name=\"email\"]");
+	private By personcode = By.xpath("//input[@name=\"employeeCode\"]");
+	private By personPhoneNo = By.xpath("//input[@placeholder=\"Phone\"]");
+	private By personGender = By.xpath("//div[@id=\"mui-component-select-gender\"]");
+	private By personDepartment = By.xpath("//div[@id=\"mui-component-select-departmentId\"]");
+	private By personDesignation = By.xpath("//div[@id=\"mui-component-select-designationId\"]");
+	private By submitbutton = By.cssSelector("div.MuiDialogActions-spacing>button:nth-child(1)");
+	private By maleOption = By.xpath("//li[.=\"Male\"]");
+	//private By submitbutton = By.xpath("//button/span[text()=\"Submit\"]");
+	private By cancelbutton = By.xpath("//button[@type=\"button\"]/span[.=\"Cancel\"]");
+	private By closeicon = By.cssSelector(".close_icon");
+	private By toastmessage = By.xpath("//div[@class=\"Toastify\"]");
+	//	private By dept= By.cssSelector("li.MuiMenuItem-root:nth-child(8)");
+	private By dept= By.xpath("//div[@id='menu-departmentId']/div[3]/ul/li/span[1]");
+	private By deptListbox = By.xpath("//div[@id='menu-departmentId']/div[3]/ul/li/span[1]");
+	private By designationListbox=By.xpath("//ul[@role=\"listbox\"]/li/span[1]");
+	private By deptlistboxWindow= By.xpath("//ul[@role=\"listbox\"]");
+
+	private By listBox = By.xpath("//ul[@role=\"listbox\"]/li/span[1]");
+
+
+
+
+
+
+
+	private By designation= By.xpath("//span[.=\"TRT\"]");
+	private By alertMessage=By.xpath("//div[@role=\"alert\"]");
+	private By personColumnNames=By.xpath("//th[@class=\"MuiTableCell-root MuiTableCell-head jss650 MuiTableCell-alignLeft\"]/div") ;
+	private By  editIcon = By.xpath("//button[@title=\"Edit\"]");
+	private By editWindow = By.xpath("//img[@class=\"MuiAvatar-img\"]");
+	private By addressTab=By.xpath("(//button[@role=\"tab\"])[2]");
+
+
+
+
+
+	private By personAddresswindow = By.xpath("//div[contains(@id,\"vertical-tabpanel\")]");
+
+	private By personAddressline1= By.xpath("//input[@name=\"addressLine1\"]");
+
+	private By personAddressline2= By.xpath("//input[@name=\"addressLine2\"]");
+	private By personAddressline3= By.xpath("//input[@name=\"addressLine3\"]");
+	private By personCountry= By.xpath("//div[@id=\"mui-component-select-country\"]");
+	private By personState= By.xpath("//input[@name=\"state\"]");
+
+
+
+	private By personCity= By.xpath("//input[@name=\"city\"]");
+	private By personZipcode= By.xpath("//input[@name=\"areaCode\"]");
+
+
+	private By personLatitude= By.xpath("//input[@name=\"lattitude\"]");
+	private By personLongititude= By.xpath("//input[@name=\"longitude\"]");
+	private By personradius= By.xpath("//input[@name=\"radius\"]");
+	private By timeZone = By.xpath("//div[@id=\"mui-component-select-timeZone\"]");
+
+
+	private By dataRefresh = By.xpath("//tbody/tr[1]/td[3]");
+
+
+
+	private By firstPagearrow = By.xpath("//span[@title=\"First Page\"]");
+
+	private By lastPagearrow = By.xpath("//span[@title=\"Last Page\"]");
+
+
+	private By previousPagearrow = By.xpath("//span[@title=\"Previous Page\"]");
+
+	private By nextPagearrow = By.xpath("//span[@title=\"Next Page\"]");
+
+	private By recordsCount = By.xpath("//span[@class=\"MuiTypography-root MuiTypography-caption\"]");
+
+	private By rowvalues = By.cssSelector("#menu- > div > ul > li");
+
+	private By recordscountDropdown = By.cssSelector(".MuiSelect-selectMenu > div");
+
+	private By Filter_button = By.xpath("//button[@title=\"Filter\"]");
+
+
+
+	private By Apply_button = By.xpath("//span[.=\"Apply\"]");
+
+	private By Reset_button = By.xpath("//span[.=\"Reset\"]");
+
+	private By noRecordsFound=By.xpath("//td[.=\"No Records Found\"]");
+
+	private By filtercloseicon = By.xpath("//h4[text()='Filter']/../following-sibling::*");
+
+	private By editwindowCloseicon = By.xpath("//*[@class=\"close_icon\"]");
+
+
+
+	private By deleteicon = By.xpath("//table//button[@title=\"Delete\"]");
+
+	private By okButton = By.xpath("//span[.=\"OK\"]");
+
+	private By selectallcheckBox = By.xpath("//thead/tr/th[1]/span/span[1]");
+
+	private By deleteAllRecords = By.xpath("//button[@title=\"Refresh\"]/../..//button[@title=\"Delete\"]");
+
+	private By departmentSubModule = By.xpath("//span[.=\"Person\"]/../../../../..//div[3]//span");
+
+	private By departmentName = By.xpath("//input[@name=\"name\"]");
+
+	private By parentDropDown = By.xpath("//div[contains(@id,\"mui-component-select-parent\")]");
+
+	private By departmentCode = By.xpath("//input[@name=\"code\"]");
+
+	private By description = By.xpath("//textarea[@name=\"description\"]");
+
+	private By deptColumnNames = By.xpath("//table/thead/tr/th/span/div");
+
+	private By sortingColumns = By.xpath("//*[contains(@class,\"MuiSvgIcon-root MuiTableSortLabel-icon MuiTableSortLabel-iconDirection\")]");
+
+	private By designationSubModule = By.xpath("//span[.=\"Person\"]/../../../../..//div[4]//span");
+
+	private By roleSubModule = By.xpath("//span[.=\"Person\"]/../../../../..//div[5]//span");
+
+	private By roleFilterCloseIcon = By.xpath("//article[text()='Filter']/../following-sibling::*");
+
+	public By getRoleFilterCloseIcon() {
+		return roleFilterCloseIcon;
+	}
+	public By getRoleSubModule() {
+		return roleSubModule;
+	}
+	public By getDesignationSubModule() {
+		return designationSubModule;
+	}
+	public By getSortingColumns() {
+		return sortingColumns;
+	}
+	public By getDeptColumnNames() {
+		return deptColumnNames;
+	}
+	public By getParentDropDown() {
+		return parentDropDown;
+	}
+	public By getDepartmentName() {
+		return departmentName;
+	}
+	public By getDepartmentCode() {
+		return departmentCode;
+	}
+	public By getDescription() {
+		return description;
+	}
+
+	public By getDepartmentSubModule() {
+		return departmentSubModule;
+	}
+	public By getDeleteAllRecords() {
+		return deleteAllRecords;
+	}
+	public By getSelectallcheckBox() {
+		return selectallcheckBox;
+	}
+	public By getOkButton() {
+		return okButton;
+	}
+	public By getDeleteicon() {
+		return deleteicon;
+	}
+	public By getCancelButton() {
+		return cancelButton;
+	}
+
+	private By cancelButton = By.xpath("//span[.=\"Cancel\"]");
+
+
+	public By getFiltercloseicon() {
+		return filtercloseicon;
+	}
+
+	private By activateIcon = By.xpath("//table//button[@title=\"Activate Account\"]");
+
+
+	public By getActivateIcon() {
+		return activateIcon;
+	}
+	public By getNoRecordsFound() {
+		return noRecordsFound;
+	}
+	public By getFilter_button() {
+		return Filter_button;
+	}
+	public By getApplybutton() {
+		return Apply_button;
+	}
+	public By getResetbutton() {
+		return Reset_button;
+	}
+
+	public By getRowvalues() {
+		return rowvalues;
+	}
+
+
+
+	public By getRecordscountDropdown() {
+		return recordscountDropdown;
+	}
+	public By getRecordsCount() {
+		return recordsCount;
+	}
+	public By getRefreshButton() {
+		return refreshButton;
+	}
+
+	public By getdeptlistboxWindow()
+	{
+		return deptlistboxWindow;
+	}
+
+	public By getDesignationListbox() {
+		return designationListbox;
+	}
+	public By getdeptListbox()
+	{
+
+		return deptListbox;
+	}
+
+	public By getPersonsubmodule() {
+
+		return personsubmodule;
+	}
+
+	public By getorganizationsection() {
+
+		return organizationsection;
+	}
+
+
+	public By getnorecordselement() {
+
+		return noRecordsFoundpage;
+	}
+
+	public By getpersonwindow()
+	{
+		return personwindow;
+	}
+
+	public By getaddicon()
+	{
+		return addicon;
+	}
+
+	public By getpersonfirstnametextfield()
+	{
+		return personFirstname;
+
+	}
+	public By getpersonlastnametextfield()
+	{
+		return personLastname;
+
+	}
+	public By getpersonEmailfield()
+	{
+		return personEmail;
+
+	}
+	public By getpersonphoneNotextfield()
+	{
+		return personPhoneNo;
+
+	}
+	public By getpersoncodetextfield()
+	{
+		return personcode;
+
+	}
+
+	public By getpersondeptfield()
+	{
+		return personDepartment;
+
+	}
+	public By getpersonGenderfield()
+	{
+		return personGender;
+
+	}
+	public By getpersondesigantionfield()
+	{
+		return personDesignation;
+
+	}
+	public By getsubmitbutton()
+	{
+		return submitbutton;
+
+	}
+
+
+	public By getcancelbutton()
+	{
+		return cancelbutton;
+
+	}
+	public By getcloseicon()
+	{
+		return closeicon;
+
+	}
+	public By gettoastmsg()
+	{
+		return toastmessage;
+	}
+
+	public By getmaleoption()
+	{
+		return maleOption;
+	}
+	public By getdept()
+	{
+		return dept;
+	}
+	public By getdesignation()
+	{
+		return designation;
+	}
+
+	public By getalertmessage()
+	{
+		return alertMessage;
+	}
+	public By getcolumnNames()
+	{
+		return personColumnNames;
+	}
+
+	public By geteditIcon()
+	{
+		return editIcon;
+	}
+	public By geteditWindow()
+	{
+		return editWindow;
+	}
+
+
+	public By getAddressTab() {
+		return addressTab;
+	}
+
+	public By getPersonAddresswindow() {
+		return personAddresswindow;
+	}
+
+	public By getPersonAddressline1() {
+		return personAddressline1;
+	}
+
+	public By getPersonAddressline2() {
+		return personAddressline2;
+	}
+
+	public By getPersonAddressline3() {
+		return personAddressline3;
+	}
+
+	public By getPersonCountry() {
+		return personCountry;
+	}
+
+	public By getPersonCity() {
+		return personCity;
+	}
+
+	public By getTimeZone() {
+		return timeZone;
+	}
+
+	public By getAddressType() {
+		return addressType;
+	}
+
+	public By getPersonState() {
+		return personState;
+	}
+	public By getPersonLatitude() {
+		return personLatitude;
+	}
+	public By getPersonLongititude() {
+		return personLongititude;
+	}
+
+	public By getPersonZipcode() {
+		return personZipcode;
+	}
+	public By getPersonradius() {
+		return personradius;
+	}
+
+	public By getlistBox() {
+		return listBox;
+	}
+
+	public By getCountryListBox(String country) {
+
+		return By.xpath("//span[.=\""+country+"\"]");
+
+
+	}
+
+	public By getTimeZone(String timezone)
+	{
+		return By.xpath("//span[.=\""+timezone+"\"]");
+	}
+
+	public By getSiteType(String sitetype)
+	{
+		return By.xpath("//span[.=\""+sitetype+"\"]");
+	}
+
+	public By getDataRefresh() {
+		return dataRefresh;
+	}
+
+	public By getFirstPagearrow() {
+		return firstPagearrow;
+	}
+
+
+
+	public By getLastPagearrow() {
+		return lastPagearrow;
+	}
+	public By getPreviousPagearrow() {
+		return previousPagearrow;
+	}
+	public By getNextPagearrow() {
+		return nextPagearrow;
+	}
+
+	public By getEditwindowCloseicon() {
+		return editwindowCloseicon;
+	}
+
+}
+//Device Management
+
+	//Reports 
+

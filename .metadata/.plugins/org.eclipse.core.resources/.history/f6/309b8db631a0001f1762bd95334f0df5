@@ -1,0 +1,3 @@
+Feature: Test login functionality
+
+Scenario: Check login is successfull with valid credentials 

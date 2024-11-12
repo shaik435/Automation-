@@ -1,0 +1,68 @@
+
+URL: http://127.0.0.1/
+ExpectedURL: http://127.0.0.1/login/?next=/
+
+#ETP_TC_01
+AdminUsername: admin
+AdminPassword: admin
+
+InvalidUsername: xyz
+InvalidPassword: abc
+
+
+//ETP_TC_21
+HelpDocumentURL: http://127.0.0.1/files/help/EasytimeproHelpforAdmin.pdf
+NewPassword: Admin@123
+
+
+//ETP_TC_27
+EmpUN: 1
+EmpDefaultPW: 123456
+
+//
+PWSetByTheAdmin: Emp@123
+
+
+//ETP_TC_31
+EmpEmail: test@automation.com
+EmpPhoneNumber: 9876543210
+
+//34
+EmpHelpDocumentURL: http://127.0.0.1/files/help/EasytimeproHelpforEmployee.pdf
+
+//ETP_TC_35
+PWSetByTheEmp: Zkteco@123
+
+
+//
+Position= tester 
+HolidayLocation = bangalore 
+AreaName = hyderbad
+Employeeid = 10001
+FirstName:sekhar
+Department: testing 
+Employeetype:permanent
+LastName:reddy
+DateOfJoining:2024-01-18
+Department :testing
+TemporaryEmployeeId:10002
+OutdoorEmployeeid :10003
+EmployeeProfile: 10004
+OutdoorMng:10005
+EmployeePicture:10006
+EmployeeAdmin:10007
+Devicepassword:12345
+Employeenewpassword:12345
+AdminEmployee:10008
+Employeenew:10009
+EmployeePwd:Admin@123
+RoleCode:1
+RoleName:manager
+Rolecode2:2
+RoleNamet:TL
+Rolecode3:3
+RoleNameh:hR
+
+
+
+>>>>>>> Stashed changes

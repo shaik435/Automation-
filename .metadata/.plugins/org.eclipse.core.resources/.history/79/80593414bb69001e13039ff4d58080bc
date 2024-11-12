@@ -1,0 +1,153 @@
+package stepDefinations;
+
+import io.cucumber.java.Before;
+import io.cucumber.java.After;
+import io.cucumber.java.en.Given;
+
+import io.cucumber.java.en.Then;
+import io.cucumber.java.en.When;
+import io.cucumber.junit.Cucumber;
+import io.opentelemetry.exporter.logging.SystemOutLogRecordExporter;
+import utilities.BrowserActions;
+import utilities.BrowserDriver;
+
+import java.time.Duration;
+
+import org.junit.Assert;
+import org.junit.runner.RunWith;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.ui.ExpectedCondition;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
+import pageObjects.*;
+
+@SuppressWarnings("all")
+@RunWith(Cucumber.class)
+
+public class Employeeloginsteps extends BrowserDriver {
+
+   private WebDriver driver;
+   private Employeelogin login;
+   private WebDriverWait webwait;
+  
+   
+   @Before("@ETP_Login")
+   public void start()
+   {
+	   driver=intializedriver();
+	   driver.manage().window().maximize();	
+	   
+	   login = new Employeelogin(driver);
+	   
+	   
+   }
+   
+   
+  @After("@ETP_Login")
+  public void stop() throws InterruptedException
+  {
+	  Thread.sleep(3000);
+	  driver.close();
+  }
+    
+  
+//  @Login_0001
+      
+    @Given("^Enter easyTimePro URl in browser$")
+    public void enter_easyTimePro_URl_in_browser() throws InterruptedException {
+    	driver.get("http://127.0.0.1/login/?next=/");
+    	
+    	WebDriverWait webwait = new WebDriverWait(driver, Duration.ofSeconds(10));
+    	WebElement Employeelogin = driver.findElement(login.getemployeeTab());
+    	webwait.until(ExpectedConditions.visibilityOf(Employeelogin));
+    	
+    }
+
+    @Then("^Employee Login Page should display$")
+    public void employee_login_Page_should_display() {
+    	
+    }
+    @Then("Employee login page should display")
+    public void employee_login_page_should_display() {
+    	driver.findElement(login.getemployeeTab()).isDisplayed();
+    }
+    
+    
+//  @Login_0002
+    @Then("Above mentioned components should display in Login Page")
+    public void above_mentioned_components_should_display_in_Login_Page() {
+    	driver.findElement(login.getZkTecoLogo()).isDisplayed();
+    	driver.findElement(login.geteasyTimeProLogo()).isDisplayed();
+    	driver.findElement(login.getadminTab()).isDisplayed();
+    	driver.findElement(login.getemployeeTab()).isDisplayed();
+    }
+    
+//    @Login_0003
+    
+    @Then("Username text field,password text field and login button should display")
+    public void username_text_field_password_text_field_and_login_button_should_display() {
+        driver.findElement(login.getusername()).isDisplayed();
+        driver.findElement(login.getpassword()).isDisplayed();
+        driver.findElement(login.getloginButton()).isDisplayed();
+    }
+ 
+//  @Login_0004
+    
+    @When("Enter username and password into username and password text field respectively")
+    public void enter_username_and_password_into_username_and_password_text_field_respectively() {
+    	 driver.findElement(login.getusername()).sendKeys("admin");
+         driver.findElement(login.getpassword()).sendKeys("admin");
+    }
+
+    @When("Click on login button")
+    public void click_on_login_button() {
+    	driver.findElement(login.getloginButton()).click();
+    }
+
+    @Then("User should be able to login and HomePage should display")
+    public void user_should_be_able_to_login_and_HomePage_should_display() throws InterruptedException {
+//    	WebElement homePage = driver.findElement(login.getHomePage());
+//    	WebDriverWait webwait = new WebDriverWait(driver, Duration.ofSeconds(60));
+//    	webwait.until(ExpectedConditions.visibilityOf(homePage));
+//    	homePage.isDisplayed();
+    	
+    	Thread.sleep(3000);
+    	driver.findElement(login.getHomePage()).isDisplayed();
+    }
+    
+//  @Login_0005
+    
+    @When("Enter Invalid username and password")
+    public void enter_Invalid_username_and_password() {
+    	 driver.findElement(login.getusername()).sendKeys("XYZ");
+         driver.findElement(login.getpassword()).sendKeys("ABC");
+    }
+
+    @Then("Error message should display as Login failed, username or password is wrong.")
+    public void error_message_should_display_as_Login_failed_username_or_password_is_wrong() throws InterruptedException {
+    	WebElement ele= driver.findElement(login.getinvalidCredentialError());
+    	WebDriverWait webwait = new WebDriverWait(driver, Duration.ofSeconds(10));
+    	webwait.until(ExpectedConditions.visibilityOf(ele));
+    	
+    	ele.isDisplayed();
+    }
+    
+    @Given("click on personnel module")
+    public void iAmInPersonnelModule() {
+        driver.findElement(login.getPersonnelmodule()).click();
+//        driver.findElement(login.getPersonnelmanagament()).click();
+//       driver.findElement(login.getPersonnelemployee()).click();
+//        
+    }
+    
+    @When("I create an employee")
+    public void iCreateAnEmployee() {
+      
+    }
+
+    @Then("I am able to see the {string} message")
+    public void iSeeCreatedEmployeeSuccessfullyMessage(String message) {
+        
+    }	
+}

@@ -1,0 +1,239 @@
+package pageObjects;
+
+import org.openqa.selenium.By;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.support.PageFactory;
+
+public class personnelObject {
+	public personnelObject(WebDriver driver) {
+		PageFactory.initElements(driver, this);
+	}
+	
+	private final By personnelmanagement= By.xpath("//a[@app='personnel']");
+	public By getPersonnelmanagement() {
+		return personnelmanagement;
+	}
+	
+	private final By Departmentsection = By.xpath("(//span[.='Department'])[1]");
+	public By getDepartmentsection() {
+		return Departmentsection;
+	}
+	
+	private final By Deptadd = By.xpath("//a[.='Add']");
+	public By Deptadd() {
+		return Deptadd;
+	}
+	
+	private final By Deptname = By.xpath("//input[@name='dept_name']");
+	public By Deptname() {
+		return Deptname;
+	}
+	private final By Deptconfirm = By.xpath("//input[@name='dept_name']");
+	public By Deptconfirm() {
+		return Deptconfirm;
+	}
+	private final By Deptdropdown = By.cssSelector("[id^=\"department\"][class=\"layui-form-select tree-select\"]");
+	public By Deptdropdown() {
+		return Deptdropdown;	
+	}
+	private final By Deptcrtdown = By.cssSelector("[id^=\"department\"][class=\"ztree scrollbar\"]>li:nth-child(2)>a>span+span");
+	public By Deptcrtdown() {
+		return Deptcrtdown;
+
+	}
+	private final By personnelEmployee = By.xpath("//li[contains(@class, 'layui-nav-item') and contains(@class, 'side-menu-group') and contains(@class, 'layui-nav-itemed') and contains(@title, 'Employee Management')]");
+	public By getPersonnelEmployee() {
+		return personnelEmployee;
+	}
+	
+	private final By Employee = By.xpath("//*[@id=\"side_menu_nav\"]/li[2]/dl/dd[1]/a/span");
+	
+	public By getEmployee() {
+		return Employee;
+	}
+	private final By addEmployee = By.cssSelector("#employee_fluid li:nth-child(1)>a");
+	public By getaddEmployee() {
+		return addEmployee;
+	}
+	
+	private final By personnelemployeedropdown = By.cssSelector("[id^=\"position\"][class=\"layui-form-select tree-select\"]");
+	public By getPersonnelemployeedropdown() {
+		return personnelemployeedropdown;
+	}
+	
+	private final By personnelemployeecreatedposition = By.cssSelector("[id^=\"position\"][class=\"ztree scrollbar\"]>li:nth-child(2)>a>span+span");
+	public By getPersonnelemployeecreatedposition() {
+		return personnelemployeecreatedposition;
+	}
+	
+
+	private final By Holidaylocation = By.cssSelector("a[link='/personnel/location/'][title='Holiday Location']");
+	public By getHolidaylocation() {
+		return Holidaylocation;
+	}
+	
+	private final By Personnelholidayaddbutton = By.cssSelector("a[id*='location_'][title='Add']");
+	public By getPersonnelholidayaddbutton() {
+		return Personnelholidayaddbutton;
+	}
+	
+	private final By personnelholidayname = By.cssSelector("#id_location_name");
+	public By getPersonnelholidayname() {
+		return personnelholidayname;
+	}
+	
+	private final By personnelholidayconfirmbutton = By.cssSelector(".layui-layer-btn0");
+	public By getPersonnelholidayconfirmbutton() {
+		return personnelholidayconfirmbutton;
+	}
+ 
+	private final By personnelholidaydropdown = By.cssSelector("[id^=\"location\"][class=\"layui-form-select tree-select\"]");
+	 public By getPersonnelholidaydropdown() {
+			return personnelholidaydropdown;
+		}
+	 
+	 private final By Personnelholidaydrop = By.cssSelector("[id^=\"location\"][class=\"ztree scrollbar\"]>li:nth-child(2)>a>span+span");
+	 public By getPersonnelholidaydrop() {
+			return Personnelholidaydrop;				
+		}
+	 
+	 private final By PersonnelArea = By.cssSelector("a[link='/personnel/area/'][title='Area']");
+	 public By getPersonnelArea() {
+			return PersonnelArea;
+		}
+
+	 private final By personnelAreaAddbutton = By.cssSelector("a[id*='area_'][title='Add']");
+	 public By getPersonnelAreaAddbutton() {
+			return personnelAreaAddbutton;
+		}
+	 private final By personnelareaname = By.cssSelector("#id_area_name");
+	  public By getPersonnelareaname() {
+			return personnelareaname;
+		}
+
+	 private final By Personnelareadropdown = By.cssSelector("[id^=\"area\"][class=\"layui-form-select tree-select\"]");
+	  public By getPersonnelareadropdown() {
+			return Personnelareadropdown;
+		}
+	  
+	  private final By personneldropdown = By.cssSelector("[id^=\"area\"][class=\"ztree scrollbar\"]>li:nth-child(2)>a>span+span");
+	  public By getPersonneldropdown() {
+			return personneldropdown;
+		}
+	  
+	 private final By employeeid = By.xpath("(//div[@class='layui-input-inline '])[1]/input");
+	   public By getEmployeeid() {
+			return employeeid;
+		}  
+
+	private final By employeefirstname = By.xpath("(//div[@class='layui-input-inline '])[2]/input");
+	 public By getEmployeefirstname() {
+			return employeefirstname;
+		} 
+	
+	 
+	private final By departmentDD = By.xpath("(//div[@class='layui-input-inline '])[3]");
+	public By getdepartmentDD() {
+					return departmentDD;
+	}
+	 
+	private final By Departmentdown = By.xpath("//div[@class=\"tree-ul\"]//span[text()='Department']/../..");
+	 public By getDepartmentdown() {
+			return Departmentdown;
+		} 
+	 
+	private final By employeelastname = By.xpath("(//div[@class='layui-input-inline '])[4]/input");
+	 public By getemployeelastname() {
+			return employeelastname;
+		} 
+	 
+	 
+	 private final By positionDD = By.xpath("(//div[@class='layui-input-inline '])[5]");
+		public By getpositionDD() {
+						return positionDD;
+		}
+		 
+		private final By positiondown = By.xpath("//div[@class=\"tree-ul\"]//span[text()='Position']/../..");
+		 public By getpositiondown() {
+				return positiondown;
+			} 
+	 
+	 
+		 private final By areaDD = By.xpath("(//div[@class='layui-input-inline '])[6]");
+			public By getareaDD() {
+							return areaDD;
+			}
+			 
+			private final By areadown = By.xpath("//div[@class=\"tree-ul\"]//span[text()='Not Authorized']/../..");
+			 public By getareadown() {
+					return areadown;
+				} 
+			 
+			 
+			 private final By confirmbutton = By.cssSelector(".layui-layer-btn0");
+				public By getConfirmbutton() {
+					return confirmbutton;
+				}
+			
+				private final By succesfullmessage = By.xpath("//div[text()='Successful']");
+				 public By getSuccesfullmessage() {
+						return succesfullmessage;
+					}
+					private final By EmploymentType = By.xpath("(//div[@class='layui-input-inline '])[7]");
+					public By getEmploymentType() {
+						return EmploymentType;					
+					}
+
+					private final By EmployeeTypedropdown = By.xpath("//dd[.=\"Permanent\"]");
+					public By getEmployeeTypedropdown() {
+						return EmployeeTypedropdown;
+					}
+					private final By Holidaytype = By.xpath("(//div[@class='layui-input-inline '])[7]");
+					 public By getHolidaytype() {
+							return Holidaytype;
+						}
+					 private final By Holidaylocationexisted = By.xpath("(//div[@class='layui-input-inline '])[9]");
+					 public By getHolidaylocationexisted() {
+							return Holidaylocationexisted;
+						}
+					 private final By holidaydrop = By.xpath("//div[@class=\"tree-ul\"]//span[text()='Location']/../..");
+					 public By getHolidaydrop() {
+							return holidaydrop;
+						}
+				
+	 
+	 
+	 
+	 
+	 
+	 
+	 
+	 
+	 
+	 
+	 
+	 
+	 
+	 
+	 
+	 
+	 
+
+
+	
+}
+
+	
+	
+	
+
+
+
+
+
+
+
+
+
+	
+

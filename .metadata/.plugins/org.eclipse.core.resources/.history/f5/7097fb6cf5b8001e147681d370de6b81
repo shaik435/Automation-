@@ -1,0 +1,123 @@
+package pageObjects;
+
+import org.openqa.selenium.By;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.support.PageFactory;
+
+public class loginObject {
+	private WebDriver driver;
+	public loginObject(WebDriver driver) {
+		this.driver = driver;
+		PageFactory.initElements(driver, this);
+	}
+	
+	private final By loginPage=By.xpath("//div[@class='easy-logo-box']");
+	public By getLoginPage() {
+		return loginPage;
+	}
+	
+	private final By username=By.id("id_username");
+	public By getusername() {
+		return username;
+	}
+	
+	private final By password=By.id("admin_password");
+	public By getpassword() {
+		return password;
+	}
+	
+	private final By loginButton=By.id("id_login");
+	public By getloginButton() {
+		return loginButton;
+	}
+	
+	private final By zkTecoLogo=By.xpath("//div//*[@alt='ZKTeco Logo']");
+	public By getZkTecoLogo() {
+		return zkTecoLogo;
+	}
+
+	private final By easyTimeProLogo=By.xpath("//div[@class='easy-logo-box']");
+	public By geteasyTimeProLogo() {
+		return easyTimeProLogo;
+	}
+	
+	private final By adminTab=By.partialLinkText("Admin Login");
+	public By getadminTab() {
+		return adminTab;
+	}
+	
+	private final By employeeTab=By.partialLinkText("Employee Login");
+	public By getemployeeTab() {
+		return employeeTab;
+	}
+	
+	private final By etpLogoWithDashboardLink=By.xpath("//a[@id=\"id_worktable\"]");
+	public By getetpLogoWithDashboardLink() {
+		return etpLogoWithDashboardLink;
+	}
+	
+	private final By PersonnelModule=By.linkText("Personnel");
+	public By getPersonnelModule() {
+		return PersonnelModule;
+	}
+	
+	private final By DeviceModule=By.linkText("Device");
+	public By getDeviceModule() {
+		return DeviceModule;
+	}
+	
+	private final By AttendanceModule=By.linkText("Attendance");
+	public By getAttendanceModule() {
+		return AttendanceModule;
+	}
+	
+	private final By AccessModule=By.linkText("Access");
+	public By getAccessModule() {
+		return AccessModule;
+	}
+	
+	private final By SystemModule=By.linkText("System");
+	public By getSystemModule() {
+		return SystemModule;
+	}
+	
+	
+	private final By Guidelink=By.xpath("//div[text()='Guide']");
+	public By getGuidelink() {
+		return Guidelink;
+	}
+	
+	private final By Userprofile=By.xpath("/html/body/div[1]/div[1]/ul[2]/li[3]");
+	public By getUserprofile() {
+		return Userprofile;
+	}
+	
+	private final By personnel= By.xpath("//a[@app='personnel']");
+	public By getPersonnel() {
+		return personnel;
+	}
+	
+	private final By personnelposition = By.cssSelector("a[link='/personnel/position/'][title='Position']"); 
+	public By getPersonnelposition() {
+		return personnelposition;
+	}
+	private final By Addbutton = By.xpath("//a[@id='position_47656e6572616c416374696f6e4e6577']");
+	public By getAddbutton() {
+		return Addbutton;
+	}
+	private final By Addpositionname = By.xpath("//*[@id=\"id_position_name\"]");
+	public By getAddposition() {
+		return Addpositionname;
+	}
+	
+    private final By Confirmbutton = By.xpath("//*[@id=\"layui-layer2\"]/div[3]/a[1]");
+    public By getConfirmbutton() {
+		return Confirmbutton;
+	}
+
+	
+
+
+	
+	
+}

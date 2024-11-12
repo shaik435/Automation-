@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<section name="Workbench">
+	<section name="MavenProjectImportWizardPage">
+		<list key="rootDirectory">
+			<item value="C:\Users\Dadapeer\Downloads\storage-service"/>
+			<item value="D:\Dada123\easytimepro"/>
+			<item value="C:\New_ETP\31Jan\easytimepro"/>
+			<item value="C:\New_ETP\01feb\easytimepro 5"/>
+			<item value="C:\New_ETP\29Jan"/>
+			<item value="C:\Users\Dadapeer\Desktop\Needto_fix\easytimepro 4"/>
+			<item value="C:\Users\Dadapeer\Desktop\Merged_one\easytimepro 3"/>
+			<item value="C:\Users\Dadapeer\Desktop\testdada\EsyTimePro"/>
+			<item value="C:\Git\25Jan\easytimepro"/>
+			<item value="C:\Git_Dadapeer\easytimepro"/>
+			<item value="C:\ETP_Automation\easytimepro"/>
+			<item value="C:\Users\Dadapeer\Desktop\New folder\easytimepro"/>
+			<item value="D:\easytimepro"/>
+			<item value="C:\easytime"/>
+			<item value="C:\easytime\easytimepro"/>
+		</list>
+		<list key="projectNameTemplate">
+			<item value="[artifactId]"/>
+			<item value="[artifactId]-TRUNK"/>
+			<item value="[artifactId]-[version]"/>
+			<item value="[groupId].[artifactId]"/>
+			<item value="[groupId].[artifactId]-[version]"/>
+			<item value="[name]"/>
+		</list>
+	</section>
+	<section name="org.eclipse.m2e.core.pom.overview">
+	</section>
+	<section name="org.eclipse.m2e.core.pom.dependencies">
+	</section>
+	<section name="org.eclipse.m2e.core.ui.internal.dialogs.MavenRepositorySearchDialog">
+		<item key="width" value="480"/>
+		<item key="height" value="529"/>
+		<item key="x" value="443"/>
+		<item key="y" value="12"/>
+	</section>
+	<section name="MavenProjectWizardLocationPage">
+		<list key="location">
+			<item value="C:\Users\Dadapeer\eclipse-workspace\Introduction\target\javaproject-0.0.1-SNAPSHOT.jar"/>
+			<item value="C:\Users\Dadapeer\eclipse-workspace\Introduction\target\test-classes"/>
+			<item value="D:\Automation\acms\acms"/>
+		</list>
+		<list key="projectNameTemplate">
+			<item value="[artifactId]"/>
+			<item value="[artifactId]-TRUNK"/>
+			<item value="[artifactId]-[version]"/>
+			<item value="[groupId].[artifactId]"/>
+			<item value="[groupId].[artifactId]-[version]"/>
+			<item value="[name]"/>
+		</list>
+	</section>
+	<section name="MavenProjectWizardArchetypePage">
+		<item key="catalog" value="All Catalogs"/>
+		<list key="projectNameTemplate">
+			<item value="[artifactId]"/>
+			<item value="[artifactId]-TRUNK"/>
+			<item value="[artifactId]-[version]"/>
+			<item value="[groupId].[artifactId]"/>
+			<item value="[groupId].[artifactId]-[version]"/>
+			<item value="[name]"/>
+		</list>
+	</section>
+	<section name="Maven2ProjectWizardArchifactPage">
+		<list key="package">
+		</list>
+		<list key="groupId">
+		</list>
+		<list key="artifactId">
+		</list>
+		<list key="projectNameTemplate">
+			<item value="[artifactId]"/>
+			<item value="[artifactId]-TRUNK"/>
+			<item value="[artifactId]-[version]"/>
+			<item value="[groupId].[artifactId]"/>
+			<item value="[groupId].[artifactId]-[version]"/>
+			<item value="[name]"/>
+		</list>
+		<list key="version">
+			<item value="0.0.1-SNAPSHOT"/>
+		</list>
+	</section>
+	<section name="MavenProjectWizardArtifactPage">
+		<list key="groupId">
+			<item value="Cucumberjava"/>
+		</list>
+		<list key="name">
+		</list>
+		<list key="artifactId">
+			<item value="Cucumberjava"/>
+		</list>
+		<list key="projectNameTemplate">
+			<item value="[artifactId]"/>
+			<item value="[artifactId]-TRUNK"/>
+			<item value="[artifactId]-[version]"/>
+			<item value="[groupId].[artifactId]"/>
+			<item value="[groupId].[artifactId]-[version]"/>
+			<item value="[name]"/>
+		</list>
+		<list key="version">
+			<item value="0.0.1-SNAPSHOT"/>
+		</list>
+	</section>
+	<section name="wizardPage">
+		<list key="groupId">
+			<item value="Zktecobiometric"/>
+		</list>
+		<list key="name">
+		</list>
+		<list key="artifactId">
+			<item value="javaproject"/>
+		</list>
+		<list key="version">
+			<item value="0.0.1-SNAPSHOT"/>
+		</list>
+	</section>
+</section>
